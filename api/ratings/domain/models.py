@@ -8,14 +8,29 @@ class Rating:
         self.rating = rating
 
 class Book:
-    def __init__(self, id: UUID, title: str, author: str):
+    def __init__(self, id: UUID, title: str, author: str, ratings: list[Rating] = None):
         self.id = id
         self.title = title
         # TODO: author will be its own entity (authors might share names, have descriptions and other data)
         self.author = author
-        # TODO: we'll likely track an average rating
-        self.ratings = list[Rating] = []
+        # TODO: will need to track average rating, number of ratings, etc.
+        # This can be calculated directly for now, but will need to be stored in the future
+        self.ratings = ratings if ratings is not None else []
 
-    # TODO: check if the user already rated the book
-    def rate(self, user_id: UUID, rating: Rating):
+    def rate(self, user_id: UUID, rating: Rating) -> None:
+        """ Rate the book, if the user has already rated it, update the rating """
+        existing_rating = next((r for r in self.ratings if r.user_id == user_id), None)
+        if existing_rating:
+            existing_rating.rating = rating.rating
+            return
         self.ratings.append(rating)
+
+    def set_ratings(self, ratings: list[Rating]) -> None:
+        """ Set the ratings for the book, for lazy loading or other purposes """
+        self.ratings = ratings
+
+    def get_average_rating(self) -> float:
+        """ Get the average rating of the book """
+        if not self.ratings:
+            return 0.0
+        return sum(r.rating for r in self.ratings) / len(self.ratings)
