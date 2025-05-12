@@ -1,6 +1,6 @@
 import pytest
 from uuid import uuid4
-from ratings.domain.models import Rating, Book
+from api.ratings.domain.models import Rating, Book
 
 def test_rating_initialization():
     rating_id = uuid4()

@@ -1,6 +1,9 @@
 from uuid import UUID
 
+# Ratings aren't value objects as they are mutable (should they be?)
+# However, Books are the  aggregate root and should be the only entity that can change the ratings
 class Rating:
+    """ Represents a rating given by a user to a book """
     def __init__(self, id: UUID, book_id: UUID, user_id: UUID, rating: float):
         self.id = id
         self.book_id = book_id
@@ -12,6 +15,7 @@ class Book:
         self.id = id
         self.title = title
         # TODO: author will be its own entity (authors might share names, have descriptions and other data)
+        # TODO: should be a list of authors
         self.author = author
         # TODO: will need to track average rating, number of ratings, etc.
         # This can be calculated directly for now, but will need to be stored in the future

@@ -5,7 +5,7 @@ from api.ratings.domain.models import Rating
 
 class RatingRepo(ABC):
     @abstractmethod
-    def get_rating_by_user_and_book(self, user_id: str, book_id: str):
+    def get_rating_by_user_and_book(self, user_id: str, book_id: str) -> Rating:
         """
         Get a rating by user and book.
         :param user_id: The ID of the user who rated the book.
@@ -15,7 +15,7 @@ class RatingRepo(ABC):
         pass
 
     @abstractmethod
-    def create_rating(rating: Rating):
+    def create_rating(rating: Rating) -> None:
         """
         Create a new rating in the repository.
         :param rating: The rating object to create.
@@ -24,7 +24,7 @@ class RatingRepo(ABC):
         pass
 
     @abstractmethod
-    def update_rating(rating: Rating):
+    def update_rating(rating: Rating) -> None:
         """
         Update a rating in the repository.
         :param rating: The rating object to update.
