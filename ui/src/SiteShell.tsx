@@ -1,7 +1,15 @@
-import { AppShell, Burger, Button, Group, Skeleton } from "@mantine/core";
+import {
+  AppShell,
+  Burger,
+  Button,
+  Center,
+  Group,
+  Skeleton,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import AabLogo from "../public/logo.svg";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Image } from "@mantine/core";
 
 import Home from "./pages/Home";
 import Book from "./pages/Book";
@@ -35,10 +43,17 @@ export default function SiteShell() {
         collapsed: { desktop: true, mobile: !opened },
       }}
     >
-      <AppShell.Header>
+      <AppShell.Header style={{ backgroundColor: "Blue" }}>
         <Group h="100%" px="md">
           <Group justify="space-between" style={{ flex: 1 }}>
-            <h1>Bad Reads</h1>
+            <Image
+              h={70}
+              src="/logo.svg"
+              color="orange"
+              style={{ paddingBottom: "0.25rem" }}
+            />
+
+            <h1 style={{ color: "orange" }}>Bad Reads</h1>
             <Group ml="xl" gap={0} visibleFrom="sm">
               <Nav />
             </Group>
