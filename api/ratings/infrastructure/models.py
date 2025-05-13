@@ -1,4 +1,4 @@
-from sqlalchemy import UUID, Column, Float, Integer, String
+from sqlalchemy import UUID, Column, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from api.infrastructure.db.database import Base
 
@@ -19,7 +19,7 @@ class RatingModel(Base):
     __tablename__ = "ratings"
 
     id = Column(UUID, primary_key=True, index=True)
-    book_id = Column(UUID, index=True)
+    book_id = Column(UUID, ForeignKey("books.id"), index=True)
     user_id = Column(UUID, index=True)
     rating = Column(Float, index=False)
 
