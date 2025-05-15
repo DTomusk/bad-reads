@@ -1,0 +1,40 @@
+from uuid import UUID
+import pytest
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+from api.infrastructure.db.database import Base
+from api.ratings.infrastructure.models import BookModel
+from api.ratings.infrastructure.repositories.sqlite_book_repo import SqliteBookRepo
+from api.ratings.infrastructure.repositories.sqlite_rating_repo import SqliteRatingRepo
+
+TEST_DB_URL = "sqlite:///./test.db"  # DB for testing purposes
+
+engine = create_engine(TEST_DB_URL, connect_args={"check_same_thread": False})
+
+TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+book1 = BookModel(id=UUID("1eefb0a4-1c2e-4f3b-8d5e-1f7a0c6b8d9f"), title="1984", author="George Orwell")
+book2 = BookModel(id=UUID("2eefb0a4-1c2e-4f3b-8d5e-1f7a0c6b8d9f"), title="Brave New World", author="Aldous Huxley")
+book3 = BookModel(id=UUID("3eefb0a4-1c2e-4f3b-8d5e-1f7a0c6b8d9f"), title="Fahrenheit 451", author="Ray Bradbury")
+
+@pytest.fixture(scope="function")
+def db_session():
+    Base.metadata.create_all(bind=engine)
+    session = TestingSessionLocal()
+
+    # seed data
+    session.add_all([book1, book2, book3])
+    session.commit()
+
+    yield session
+    session.close()
+    Base.metadata.drop_all(bind=engine)
+
+@pytest.fixture
+def book_repo(db_session):
+    return SqliteBookRepo(session=db_session)
+
+@pytest.fixture
+def rating_repo(db_session):
+    return SqliteRatingRepo(session=db_session)
