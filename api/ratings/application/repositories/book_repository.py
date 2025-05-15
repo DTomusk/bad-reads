@@ -12,3 +12,11 @@ class BookRepo(ABC):
         :return: The book object.
         """
         pass
+
+    @abstractmethod
+    def get_books(self) -> list[Book]:
+        """
+        Get all books.
+        :return: A list of book objects.
+        """
+        pass

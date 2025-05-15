@@ -28,5 +28,9 @@ class RateBook:
             self.rating_repository.create_rating(new_rating)
         # Update the book's ratings
         book.rate(user_id, rating)
+        # TODO: consider how we store the book's ratings
+        # although we want to access ratings through the book
+        # we can still handle them independently
+
         # Save changes to the book in the repository
-        self.book_repository.update_book(book)
+        # self.book_repository.update_book(book)

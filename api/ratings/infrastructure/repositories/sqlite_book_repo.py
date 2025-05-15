@@ -15,5 +15,26 @@ class SqliteBookRepo(BookRepo):
         :param book_id: The ID of the book to retrieve.
         :return: The book object.
         """
-        return self.session.query(BookModel).filter(BookModel.id == book_id).first()
+        result = self.session.query(BookModel).filter(BookModel.id == book_id).first()
+        if result:
+            return Book(
+                id=result.id,
+                title=result.title,
+                author=result.author,
+            )
+    
+    def get_books(self) -> list[Book]:
+        """
+        Get all books.
+        :return: A list of book objects.
+        """
+        result = self.session.query(BookModel).all()
+        return [
+            Book(
+                id=book.id,
+                title=book.title,
+                author=book.author,
+            )
+            for book in result
+        ]
         

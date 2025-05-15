@@ -2,6 +2,7 @@ from uuid import UUID, uuid4
 from fastapi import Depends
 
 from api.infrastructure.db.database import get_session
+from api.ratings.application.use_cases.get_books import GetBooks
 from api.ratings.application.use_cases.rate_book import RateBook
 from api.ratings.infrastructure.repositories.sqlite_book_repo import SqliteBookRepo
 from api.ratings.infrastructure.repositories.sqlite_rating_repo import SqliteRatingRepo
@@ -24,6 +25,12 @@ def rate_book_use_case(book_repo=Depends(get_books_repo), rating_repo=Depends(ge
     Dependency to provide the RateBook use case.
     """
     return RateBook(book_repository=book_repo, rating_repository=rating_repo)
+
+def get_books_use_case(book_repo=Depends(get_books_repo)):
+    """
+    Dependency to provide the GetBooks use case.
+    """
+    return GetBooks(book_repository=book_repo)
 
 def get_current_user():
     # Mocking this until we have users
