@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import MagicMock
 from uuid import uuid4
-from api.ratings.application.use_cases.get_book_details import GetBookDetails
+from api.books.application.use_cases.get_book_details import GetBookDetails
 
 @pytest.fixture
 def book_id():

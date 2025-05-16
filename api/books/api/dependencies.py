@@ -2,10 +2,10 @@ from uuid import UUID, uuid4
 from fastapi import Depends
 
 from api.infrastructure.db.database import get_session
-from api.ratings.application.use_cases.get_books import GetBooks
-from api.ratings.application.use_cases.rate_book import RateBook
-from api.ratings.infrastructure.repositories.sqlite_book_repo import SqliteBookRepo
-from api.ratings.infrastructure.repositories.sqlite_rating_repo import SqliteRatingRepo
+from api.books.application.use_cases.get_books import GetBooks
+from api.books.application.use_cases.rate_book import RateBook
+from api.books.infrastructure.repositories.sqlite_book_repo import SqliteBookRepo
+from api.books.infrastructure.repositories.sqlite_rating_repo import SqliteRatingRepo
 
 
 def get_ratings_repo(session=Depends(get_session)):

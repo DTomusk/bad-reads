@@ -1,4 +1,4 @@
-from api.ratings.application.repositories.book_repository import BookRepo
+from api.books.application.repositories.book_repository import BookRepo
 
 
 class GetBooks:
@@ -6,4 +6,5 @@ class GetBooks:
         self.book_repository = book_repository
 
     def execute(self):
+        # TODO: add pagination, filtering, sorting etc.
         return self.book_repository.get_books()

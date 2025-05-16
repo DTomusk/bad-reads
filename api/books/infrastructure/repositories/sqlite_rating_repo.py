@@ -1,6 +1,6 @@
-from api.ratings.application.repositories.rating_repository import RatingRepo
-from api.ratings.domain.models import Rating
-from api.ratings.infrastructure.models import RatingModel
+from api.books.application.repositories.rating_repository import RatingRepo
+from api.books.domain.models import Rating, RatingScore
+from api.books.infrastructure.models import RatingModel
 
 
 class SqliteRatingRepo(RatingRepo):
@@ -23,7 +23,7 @@ class SqliteRatingRepo(RatingRepo):
                 id=result.id,
                 book_id=result.book_id,
                 user_id=result.user_id,
-                rating=result.rating,
+                score=RatingScore(result.rating),
             )
         return None
 
@@ -37,7 +37,7 @@ class SqliteRatingRepo(RatingRepo):
             id=rating.id,
             book_id=rating.book_id,
             user_id=rating.user_id,
-            rating=rating.rating,
+            rating=rating.score.value,
         )
         self.session.add(rating_model)
         self.session.commit()
@@ -50,7 +50,7 @@ class SqliteRatingRepo(RatingRepo):
         """
         rating_model = self.session.query(RatingModel).filter(RatingModel.id == rating.id).first()
         if rating_model:
-            rating_model.rating = rating.rating
+            rating_model.rating = rating.score.value
             self.session.commit()
         else:
             raise ValueError("Rating not found")

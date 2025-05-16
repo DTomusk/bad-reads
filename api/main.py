@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from api.infrastructure.db.database import Base, engine
-from api.ratings.api.routes import router as rating_router
+from api.books.api.routes import router as books_router
 
 
 Base.metadata.create_all(bind=engine)
@@ -13,7 +13,7 @@ app = FastAPI(
 )
 
 app.include_router(
-    rating_router,
-    prefix="/ratings",
-    tags=["ratings"]
+    books_router,
+    prefix="/books",
+    tags=["books"]
 )

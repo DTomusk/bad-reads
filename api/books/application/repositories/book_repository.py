@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from api.ratings.domain.models import Book
+from api.books.domain.models import Book
 
 
 class BookRepo(ABC):
@@ -18,5 +18,14 @@ class BookRepo(ABC):
         """
         Get all books.
         :return: A list of book objects.
+        """
+        pass
+
+    @abstractmethod
+    def update_book(self, book: Book) -> Book:
+        """
+        Update a book.
+        :param book: The book object to update.
+        :return: The updated book object.
         """
         pass

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from api.ratings.domain.models import Rating
+from api.books.domain.models import Rating
 
 
 class RatingRepo(ABC):

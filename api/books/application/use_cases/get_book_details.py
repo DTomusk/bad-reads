@@ -1,6 +1,6 @@
 from uuid import UUID
-from api.ratings.application.repositories.book_repository import BookRepo
-from api.ratings.application.repositories.rating_repository import RatingRepo
+from api.books.application.repositories.book_repository import BookRepo
+from api.books.application.repositories.rating_repository import RatingRepo
 
 
 class GetBookDetails:
