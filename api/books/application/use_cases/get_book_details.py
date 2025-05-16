@@ -15,16 +15,10 @@ class GetBookDetails:
         if not book:
             raise ValueError("Book not found")
         
-        return book
+        # Get the ratings for the book
+        ratings = self.rating_repository.get_ratings_by_book_id(book_id)
 
-        # # Get the ratings for the book
-        # ratings = self.rating_repository.get_ratings_by_book_id(book_id)
-
-        # # Calculate the average rating
-        # average_rating = sum(rating.rating for rating in ratings) / len(ratings) if ratings else 0
-
-        # return {
-        #     "book": book,
-        #     "average_rating": average_rating,
-        #     "ratings": ratings,
-        # }
+        return {
+             "book": book,
+             "ratings": ratings,
+        }

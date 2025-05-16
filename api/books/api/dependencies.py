@@ -1,6 +1,7 @@
 from uuid import UUID, uuid4
 from fastapi import Depends
 
+from api.books.application.use_cases.get_book_details import GetBookDetails
 from api.infrastructure.db.database import get_session
 from api.books.application.use_cases.get_books import GetBooks
 from api.books.application.use_cases.rate_book import RateBook
@@ -32,6 +33,8 @@ def get_books_use_case(book_repo=Depends(get_books_repo)):
     """
     return GetBooks(book_repository=book_repo)
 
-def get_current_user():
-    # Mocking this until we have users
-    return UUID("5bf2b03f-f375-44a4-93e9-3603e991178f") 
+def get_book_details_use_case(book_repo=Depends(get_books_repo), rating_repo=Depends(get_ratings_repo)):
+    """
+    Dependency to provide the GetBookDetails use case.
+    """
+    return GetBookDetails(book_repository=book_repo, rating_repository=rating_repo)

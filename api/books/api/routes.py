@@ -1,13 +1,12 @@
 from uuid import UUID
 from fastapi import APIRouter, Depends
 
-from api.books.api.dependencies import get_books_use_case, get_current_user, rate_book_use_case
+from api.books.api.dependencies import get_book_details_use_case, get_books_use_case, rate_book_use_case
+from api.users.api.auth import get_current_user
 
 
 router = APIRouter()
 
-# TODO: this comes up as ratings get, however it returns books
-# do we need to have a separate books router 
 @router.get("/")
 async def get_books(get_books=Depends(get_books_use_case)):
     """
@@ -16,7 +15,15 @@ async def get_books(get_books=Depends(get_books_use_case)):
     books = get_books.execute()
     return books
 
-@router.post("/{book_id}")
+@router.get("/{book_id}")
+async def get_book_details(book_id: UUID, get_book_details=Depends(get_book_details_use_case)):
+    """
+    Get details of a book by its ID.
+    """
+    book = get_book_details.execute(book_id=book_id)
+    return book
+
+@router.post("/{book_id}/rate")
 async def rate_book(book_id: UUID, score: float, rate_book=Depends(rate_book_use_case), user_id=Depends(get_current_user)):
     """
     Rate a book by its ID.

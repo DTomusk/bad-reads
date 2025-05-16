@@ -15,6 +15,15 @@ class RatingRepo(ABC):
         pass
 
     @abstractmethod
+    def get_ratings_by_book_id(self, book_id: str) -> list[Rating]:
+        """
+        Get all ratings for a book.
+        :param book_id: The ID of the book to get ratings for.
+        :return: A list of rating objects.
+        """
+        pass
+    
+    @abstractmethod
     def create_rating(rating: Rating) -> None:
         """
         Create a new rating in the repository.

@@ -26,6 +26,15 @@ class SqliteRatingRepo(RatingRepo):
                 score=RatingScore(result.rating),
             )
         return None
+    
+    def get_ratings_by_book_id(self, book_id: str) -> list[Rating]:
+        """
+        Get all ratings for a book.
+        :param book_id: The ID of the book to get ratings for.
+        :return: A list of rating objects.
+        """
+        result = self.session.query(RatingModel).filter(RatingModel.book_id == book_id).all()
+        return [Rating(id=result.id, book_id=result.book_id, user_id=result.user_id, score=RatingScore(result.rating)) for result in result]
 
     def create_rating(self, rating: Rating):
         """
