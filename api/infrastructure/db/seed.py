@@ -1,10 +1,14 @@
 # Just to create some data to play around with
 # to be removed at a later stage
 
+import random
 from sqlalchemy.orm import Session
+from api.books.application.use_cases.rate_book import RateBook
 from api.infrastructure.db.database import Base, engine, SessionLocal
-from api.books.infrastructure.models import AuthorModel, BookModel
+from api.books.infrastructure.models import AuthorModel, BookModel, RatingModel
 import uuid
+
+from api.users.infrastructure.models import UserModel
 
 BOOKS = [
     {"title": "To Kill a Mockingbird", "author": "Harper Lee"},
@@ -32,6 +36,14 @@ BOOKS = [
     {"title": "The Count of Monte Cristo", "author": "Alexandre Dumas"},
     {"title": "The Old Man and the Sea", "author": "Ernest Hemingway"},
     {"title": "The Scarlet Letter", "author": "Nathaniel Hawthorne"},
+]
+
+USERS = [
+    {"email": "test@test.com", "password": "test"},
+    {"email": "test2@test.com", "password": "test"},
+    {"email": "test3@test.com", "password": "test"},
+    {"email": "test4@test.com", "password": "test"},
+    {"email": "test5@test.com", "password": "test"},
 ]
 
 Base.metadata.create_all(bind=engine)
@@ -83,5 +95,28 @@ def seed_books():
     finally:
         session.close()
 
+def seed_users():
+    session: Session = SessionLocal()
+    user_counter = 0
+    try:
+        for user in USERS:
+            user_obj = session.query(UserModel).filter(UserModel.email == user["email"]).first()
+            if not user_obj:
+                user_obj = UserModel(
+                    id=uuid.uuid4(),
+                    email=user["email"],
+                    hashed_password=user["password"]
+                )
+                session.add(user_obj)
+                user_counter += 1
+        session.commit()
+        print(f"Seeded {user_counter} users successfully.")
+    except Exception as e:
+        session.rollback()
+        print(f"Error seeding users: {e}")
+    finally:
+        session.close()
+
 if __name__ == "__main__":
     seed_books()
+    seed_users()
