@@ -3,9 +3,8 @@
 
 import random
 from sqlalchemy.orm import Session
-from api.books.application.use_cases.rate_book import RateBook
 from api.infrastructure.db.database import Base, engine, SessionLocal
-from api.books.infrastructure.models import AuthorModel, BookModel, RatingModel
+from api.books.infrastructure.models import AuthorModel, BookModel
 import uuid
 
 from api.users.infrastructure.models import UserModel
@@ -38,6 +37,7 @@ BOOKS = [
     {"title": "The Scarlet Letter", "author": "Nathaniel Hawthorne"},
 ]
 
+# Note: You can't log in as these users because these aren't valid hashed passwords
 USERS = [
     {"email": "test@test.com", "password": "test"},
     {"email": "test2@test.com", "password": "test"},
