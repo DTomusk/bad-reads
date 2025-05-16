@@ -1,3 +1,4 @@
+from sqlalchemy import UUID
 from sqlalchemy.orm import Session
 
 from api.books.application.repositories.book_repository import BookRepo
@@ -26,12 +27,16 @@ class SqliteBookRepo(BookRepo):
                 sum_of_ratings=result.sum_of_ratings
             )
     
-    def get_books(self) -> list[Book]:
+    def get_books(self, page: int = 1, page_size: int = 10, sort_by: str = "title", sort_order: str = "asc") -> list[Book]:
         """
         Get all books.
         :return: A list of book objects.
         """
-        result = self.session.query(BookModel).all()
+        result = (self.session.query(BookModel)
+            .order_by(getattr(BookModel, sort_by).asc() if sort_order == "asc" else getattr(BookModel, sort_by).desc())
+            .offset((page - 1) * page_size)
+            .limit(page_size)
+            .all())
         return [
             Book(
                 id=book.id,
@@ -43,6 +48,19 @@ class SqliteBookRepo(BookRepo):
             )
             for book in result
         ]
+    
+    def get_books_by_author(self, author_id: UUID, page: int = 1, page_size: int = 10, sort_by: str = "title", sort_order: str = "asc") -> list[Book]:
+        """
+        Get books by author.
+        :return: A list of book objects.
+        """
+        result = (self.session.query(BookModel)
+            .filter(BookModel.author_id == author_id)
+            .order_by(getattr(BookModel, sort_by).asc() if sort_order == "asc" else getattr(BookModel, sort_by).desc())
+            .offset((page - 1) * page_size)
+            .limit(page_size)
+            .all())
+        return result
 
     def update_book(self, book: Book) -> Book:
         """

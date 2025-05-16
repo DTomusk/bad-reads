@@ -5,6 +5,14 @@ class GetBooks:
     def __init__(self, book_repository: BookRepo):
         self.book_repository = book_repository
 
-    def execute(self):
-        # TODO: add pagination, filtering, sorting etc.
-        return self.book_repository.get_books()
+    def execute(
+            self, 
+            page: int = 1, 
+            page_size: int = 10, 
+            sort_by: str = "title", 
+            sort_order: str = "asc",
+            author_id: str = None,
+        ):
+        if author_id:
+            return self.book_repository.get_books_by_author(author_id, page, page_size, sort_by, sort_order)
+        return self.book_repository.get_books(page, page_size, sort_by, sort_order)
