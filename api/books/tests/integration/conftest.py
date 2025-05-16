@@ -18,9 +18,9 @@ author1 = AuthorModel(id=UUID("1fefb0a4-1c2e-4f3b-8d5e-1f7a0c6b8d9f"), name="Geo
 author2 = AuthorModel(id=UUID("2fefb0a4-1c2e-4f3b-8d5e-1f7a0c6b8d9f"), name="Aldous Huxley")
 author3 = AuthorModel(id=UUID("3fefb0a4-1c2e-4f3b-8d5e-1f7a0c6b8d9f"), name="Ray Bradbury")
 
-book1 = BookModel(id=UUID("1eefb0a4-1c2e-4f3b-8d5e-1f7a0c6b8d9f"), title="1984", authors=[author1])
-book2 = BookModel(id=UUID("2eefb0a4-1c2e-4f3b-8d5e-1f7a0c6b8d9f"), title="Brave New World", authors=[author2])
-book3 = BookModel(id=UUID("3eefb0a4-1c2e-4f3b-8d5e-1f7a0c6b8d9f"), title="Fahrenheit 451", authors=[author3])
+book1 = BookModel(id=UUID("1eefb0a4-1c2e-4f3b-8d5e-1f7a0c6b8d9f"), title="1984", authors=[author1], average_rating=0, number_of_ratings=0, sum_of_ratings=0)
+book2 = BookModel(id=UUID("2eefb0a4-1c2e-4f3b-8d5e-1f7a0c6b8d9f"), title="Brave New World", authors=[author2], average_rating=0, number_of_ratings=0, sum_of_ratings=0)
+book3 = BookModel(id=UUID("3eefb0a4-1c2e-4f3b-8d5e-1f7a0c6b8d9f"), title="Fahrenheit 451", authors=[author3], average_rating=0, number_of_ratings=0, sum_of_ratings=0)
 
 @pytest.fixture(scope="function")
 def db_session():
