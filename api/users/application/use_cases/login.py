@@ -14,6 +14,6 @@ class Login:
         if not user or not self.hasher.verify(password, user.hashed_password):
             raise ValueError("Invalid credentials.")
         
-        token = self.token_service.create_token(data={"sub": user.id}, expires_minutes=30)
+        token = self.token_service.create_token(data={"sub": str(user.id)}, expires_minutes=30)
         return token
         

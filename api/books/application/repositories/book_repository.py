@@ -7,7 +7,7 @@ from api.books.domain.models import Book
 
 class BookRepo(ABC):
     @abstractmethod
-    def get_book_by_id(self, book_id: str) -> Book:
+    def get_book_by_id(self, book_id: UUID) -> Book:
         """
         Get a book by its ID.
         :param book_id: The ID of the book to retrieve.

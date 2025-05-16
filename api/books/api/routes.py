@@ -8,11 +8,11 @@ from api.users.api.auth import get_current_user
 router = APIRouter()
 
 @router.get("/")
-async def get_books(get_books=Depends(get_books_use_case)):
+async def get_books(get_books=Depends(get_books_use_case), page: int = 1, page_size: int = 10, sort_by: str = "title", sort_order: str = "asc", author_id: UUID = None):
     """
     Get all books.
     """
-    books = get_books.execute()
+    books = get_books.execute(page, page_size, sort_by, sort_order, author_id)
     return books
 
 @router.get("/{book_id}")

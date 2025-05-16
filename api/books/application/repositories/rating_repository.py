@@ -1,11 +1,13 @@
 from abc import ABC, abstractmethod
 
+from sqlalchemy import UUID
+
 from api.books.domain.models import Rating
 
 
 class RatingRepo(ABC):
     @abstractmethod
-    def get_rating_by_user_and_book(self, user_id: str, book_id: str) -> Rating:
+    def get_rating_by_user_and_book(self, user_id: UUID, book_id: UUID) -> Rating:
         """
         Get a rating by user and book.
         :param user_id: The ID of the user who rated the book.
@@ -15,14 +17,14 @@ class RatingRepo(ABC):
         pass
 
     @abstractmethod
-    def get_ratings_by_book_id(self, book_id: str) -> list[Rating]:
+    def get_ratings_by_book_id(self, book_id: UUID) -> list[Rating]:
         """
         Get all ratings for a book.
         :param book_id: The ID of the book to get ratings for.
         :return: A list of rating objects.
         """
         pass
-    
+
     @abstractmethod
     def create_rating(rating: Rating) -> None:
         """

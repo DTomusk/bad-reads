@@ -1,3 +1,4 @@
+from sqlalchemy import UUID
 from api.books.application.repositories.rating_repository import RatingRepo
 from api.books.domain.models import Rating, RatingScore
 from api.books.infrastructure.models import RatingModel
@@ -7,7 +8,7 @@ class SqliteRatingRepo(RatingRepo):
     def __init__(self, session):
         self.session = session
 
-    def get_rating_by_user_and_book(self, user_id, book_id) -> Rating:
+    def get_rating_by_user_and_book(self, user_id: UUID, book_id: UUID) -> Rating:
         """
         Get a rating by user ID and book ID.
         :param user_id: The ID of the user.
@@ -27,7 +28,7 @@ class SqliteRatingRepo(RatingRepo):
             )
         return None
     
-    def get_ratings_by_book_id(self, book_id: str) -> list[Rating]:
+    def get_ratings_by_book_id(self, book_id: UUID) -> list[Rating]:
         """
         Get all ratings for a book.
         :param book_id: The ID of the book to get ratings for.

@@ -1,0 +1,32 @@
+import re
+from pydantic import BaseModel, field_validator
+
+class RegistrationRequest(BaseModel):
+    email: str
+    password: str
+    confirm_password: str
+
+    @field_validator('email')
+    def validate_email(cls, v):
+        if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', v):
+            raise ValueError('Invalid email address')
+        return v
+    
+    @field_validator('password')
+    def validate_password(cls, v):
+        if not re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$', v):
+            raise ValueError('Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character')
+        return v
+    
+    @field_validator('confirm_password')
+    def validate_confirm_password(cls, v, info):
+        if 'password' not in info.data:
+            raise ValueError('Password is required')
+        if v != info.data['password']:
+            raise ValueError('Passwords do not match')
+        return v
+    
+    
+    
+    
+
