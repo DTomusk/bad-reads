@@ -33,6 +33,7 @@ class RatingModel(Base):
     book_id = Column(UUID, ForeignKey("books.id"), index=True)
     user_id = Column(UUID, index=True)
     rating = Column(Float, index=False)
+    review = Column(String, index=False)
 
     book = relationship("BookModel", back_populates="ratings")
 

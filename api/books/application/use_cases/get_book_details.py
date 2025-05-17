@@ -8,7 +8,7 @@ class GetBookDetails:
         self.book_repository = book_repository
         self.rating_repository = rating_repository
 
-    def execute(self, book_id: UUID):
+    def execute(self, book_id: UUID) -> dict:
         """ Get book details by its ID """
         # Get the book details
         book = self.book_repository.get_book_by_id(book_id)

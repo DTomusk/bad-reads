@@ -1,6 +1,6 @@
 from sqlalchemy import UUID
 from api.books.application.repositories.rating_repository import RatingRepo
-from api.books.domain.models import Rating, RatingScore
+from api.books.domain.models import Rating, RatingScore, Review
 from api.books.infrastructure.models import RatingModel
 
 
@@ -25,6 +25,7 @@ class SqliteRatingRepo(RatingRepo):
                 book_id=result.book_id,
                 user_id=result.user_id,
                 score=RatingScore(result.rating),
+                review=Review(result.review) if result.review else None
             )
         return None
     
@@ -35,7 +36,13 @@ class SqliteRatingRepo(RatingRepo):
         :return: A list of rating objects.
         """
         result = self.session.query(RatingModel).filter(RatingModel.book_id == book_id).all()
-        return [Rating(id=result.id, book_id=result.book_id, user_id=result.user_id, score=RatingScore(result.rating)) for result in result]
+        return [Rating(
+            id=result.id, 
+            book_id=result.book_id, 
+            user_id=result.user_id, 
+            score=RatingScore(result.rating), 
+            review=Review(result.review) if result.review else None) 
+            for result in result]
 
     def create_rating(self, rating: Rating):
         """
@@ -48,6 +55,7 @@ class SqliteRatingRepo(RatingRepo):
             book_id=rating.book_id,
             user_id=rating.user_id,
             rating=rating.score.value,
+            review=rating.review.text if rating.review else None
         )
         self.session.add(rating_model)
         self.session.commit()
@@ -61,6 +69,7 @@ class SqliteRatingRepo(RatingRepo):
         rating_model = self.session.query(RatingModel).filter(RatingModel.id == rating.id).first()
         if rating_model:
             rating_model.rating = rating.score.value
+            rating_model.review = rating.review.text if rating.review else None
             self.session.commit()
         else:
             raise ValueError("Rating not found")

@@ -8,15 +8,24 @@ class RatingScore:
     def __post_init__(self):
         if self.value < 0 or self.value > 5:
             raise ValueError("Rating score must be between 0 and 5")
+        
+@dataclass(frozen=True)
+class Review:
+    text: str
+
+    def __post_init__(self):
+        if len(self.text) > 1000:
+            raise ValueError("Review text must be less than 1000 characters")
 
 class Rating:
     """ Represents a rating given by a user to a book """
-    def __init__(self, id: UUID, book_id: UUID, user_id: UUID, score: RatingScore):
+    def __init__(self, id: UUID, book_id: UUID, user_id: UUID, score: RatingScore, review: Review | None = None):
         self.id = id
         self.book_id = book_id
         self.user_id = user_id
         self.score = score
-
+        self.review = review
+    
 class Author:
     def __init__(self, id: UUID, name: str):
         self.id = id

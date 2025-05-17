@@ -1,10 +1,18 @@
 import pytest
 from uuid import uuid4
-from api.books.domain.models import Rating, Book, Author, RatingScore
+from api.books.domain.models import Rating, Book, Author, RatingScore, Review
 
 def test_rating_score_initialization():
     score = RatingScore(4.5)
     assert score.value == 4.5
+
+def test_review_initialization():
+    review = Review("This is a test review")
+    assert review.text == "This is a test review"
+
+def test_review_length_validation():
+    with pytest.raises(ValueError):
+        Review("This is a test review that is too long and should raise an error" * 100)
 
 def test_rating_score_validation():
     with pytest.raises(ValueError):
@@ -24,6 +32,21 @@ def test_rating_initialization():
     assert rating.book_id == book_id
     assert rating.user_id == user_id
     assert rating.score == score
+
+def test_rating_with_review_initialization():
+    rating_id = uuid4()
+    book_id = uuid4()
+    user_id = uuid4()
+    score = RatingScore(4.5)
+    review = Review("This is a test review")
+
+    rating = Rating(id=rating_id, book_id=book_id, user_id=user_id, score=score, review=review)
+
+    assert rating.id == rating_id
+    assert rating.book_id == book_id
+    assert rating.user_id == user_id
+    assert rating.score == score
+    assert rating.review == review
 
 def test_book_initialization():
     book_id = uuid4()
