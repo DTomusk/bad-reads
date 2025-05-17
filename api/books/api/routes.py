@@ -33,5 +33,5 @@ async def rate_book(
     """
     Rate a book by its ID.
     """
-    rate_book.execute(book_id=book_id, user_id=user_id, score=rate_request.score, review=rate_request.review)
+    rate_book.execute(book_id=book_id, user_id=user_id, score=rate_request.score)
     return {"message": "Book rated successfully"}

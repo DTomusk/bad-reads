@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import datetime
 from uuid import UUID
 
 @dataclass(frozen=True)
@@ -8,23 +9,25 @@ class RatingScore:
     def __post_init__(self):
         if self.value < 0 or self.value > 5:
             raise ValueError("Rating score must be between 0 and 5")
-        
-@dataclass(frozen=True)
-class Review:
-    text: str
-
-    def __post_init__(self):
-        if len(self.text) > 1000:
-            raise ValueError("Review text must be less than 1000 characters")
 
 class Rating:
     """ Represents a rating given by a user to a book """
-    def __init__(self, id: UUID, book_id: UUID, user_id: UUID, score: RatingScore, review: Review | None = None):
+    def __init__(self, id: UUID, book_id: UUID, user_id: UUID, score: RatingScore):
         self.id = id
         self.book_id = book_id
         self.user_id = user_id
         self.score = score
-        self.review = review
+
+# Note: reviews are a superset of ratings
+# People can see reviews and interact with them, but not ratings
+# Each review must have a rating, but each rating does not have to have a review
+class Review:
+    """ Represents a review given by a user to a book """
+    def __init__(self, id: UUID, text: str, rating_id: UUID, date_created: datetime):
+        self.id = id
+        self.text = text
+        self.rating_id = rating_id
+        self.date_created = date_created
     
 class Author:
     def __init__(self, id: UUID, name: str):

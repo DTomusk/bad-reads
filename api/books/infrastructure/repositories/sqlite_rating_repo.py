@@ -24,8 +24,7 @@ class SqliteRatingRepo(RatingRepo):
                 id=result.id,
                 book_id=result.book_id,
                 user_id=result.user_id,
-                score=RatingScore(result.rating),
-                review=Review(result.review) if result.review else None
+                score=RatingScore(result.rating)
             )
         return None
     
@@ -40,8 +39,8 @@ class SqliteRatingRepo(RatingRepo):
             id=result.id, 
             book_id=result.book_id, 
             user_id=result.user_id, 
-            score=RatingScore(result.rating), 
-            review=Review(result.review) if result.review else None) 
+            score=RatingScore(result.rating)
+            ) 
             for result in result]
 
     def create_rating(self, rating: Rating):
@@ -55,7 +54,6 @@ class SqliteRatingRepo(RatingRepo):
             book_id=rating.book_id,
             user_id=rating.user_id,
             rating=rating.score.value,
-            review=rating.review.text if rating.review else None
         )
         self.session.add(rating_model)
         self.session.commit()
@@ -69,7 +67,6 @@ class SqliteRatingRepo(RatingRepo):
         rating_model = self.session.query(RatingModel).filter(RatingModel.id == rating.id).first()
         if rating_model:
             rating_model.rating = rating.score.value
-            rating_model.review = rating.review.text if rating.review else None
             self.session.commit()
         else:
             raise ValueError("Rating not found")

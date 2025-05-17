@@ -10,7 +10,7 @@ class RateBook:
         self.book_repository = book_repository
         self.rating_repository = rating_repository
 
-    def execute(self, book_id: UUID, user_id: UUID, score: float, review: str | None = None) -> Book:
+    def execute(self, book_id: UUID, user_id: UUID, score: float) -> Book:
         """ User rates a book """
         # Check if the book exists
         book = self.book_repository.get_book_by_id(book_id)
@@ -22,10 +22,7 @@ class RateBook:
         if existing_rating:
             raise ValueError("Book already rated by user")
         else:
-            if review:
-                new_rating = Rating(uuid4(), book_id, user_id, RatingScore(score), Review(review))
-            else:
-                new_rating = Rating(uuid4(), book_id, user_id, RatingScore(score))
+            new_rating = Rating(uuid4(), book_id, user_id, RatingScore(score))
             self.rating_repository.create_rating(new_rating)
             book.add_rating(new_rating)
             self.book_repository.update_book(book)
