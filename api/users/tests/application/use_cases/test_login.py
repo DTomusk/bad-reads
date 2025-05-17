@@ -51,7 +51,7 @@ def test_login_success(login, mock_user_repository, mock_hasher, mock_token_serv
     assert token == "mocked_token", "Token should match the mocked token"
     mock_user_repository.get_by_email.assert_called_once_with(email)
     mock_hasher.verify.assert_called_once_with(password, "hashed_password")
-    mock_token_service.create_token.assert_called_once_with(data={"sub": mock_user_repository.get_by_email.return_value.id}, expires_minutes=30)
+    mock_token_service.create_token.assert_called_once_with(data={"sub": str(mock_user_repository.get_by_email.return_value.id)}, expires_minutes=30)
 
 def test_login_invalid_email(login):
     # Arrange

@@ -11,9 +11,13 @@ def test_get_book_details_integration(book_repo, rating_repo):
     result = use_case.execute(book_id=book1.id)
 
     # Assert
-    assert result.id == book1.id
-    assert result.title == book1.title
-    assert result.authors == [author1]
-    assert result.average_rating == 0
-    assert result.number_of_ratings == 0
-    assert result.sum_of_ratings == 0
+    assert result is not None
+    assert result['book'] is not None
+    assert result['ratings'] is not None    
+    assert result['book'].id == book1.id
+    assert result['book'].title == book1.title
+    assert result['book'].authors == [author1]
+    assert result['book'].average_rating == 0
+    assert result['book'].number_of_ratings == 0
+    assert result['book'].sum_of_ratings == 0
+    

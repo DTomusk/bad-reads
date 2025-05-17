@@ -32,7 +32,15 @@ def test_get_book_details_returns_book(mock_book_repository, mock_rating_reposit
 
     # Assert
     mock_book_repository.get_book_by_id.assert_called_once_with(book_id)
-    assert result == mock_book
+    assert result is not None
+    assert result['book'] is not None
+    assert result['ratings'] is not None
+    assert result['book'].id == mock_book.id
+    assert result['book'].title == mock_book.title
+    assert result['book'].authors == mock_book.authors
+    assert result['book'].average_rating == mock_book.average_rating
+    assert result['book'].number_of_ratings == mock_book.number_of_ratings
+    assert result['book'].sum_of_ratings == mock_book.sum_of_ratings
 
 def test_get_book_details_raises_if_book_not_found(mock_rating_repository, book_id):
     # Arrange

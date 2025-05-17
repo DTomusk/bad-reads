@@ -12,11 +12,10 @@ async def register_user(registration_request: RegistrationRequest, register_user
     user = register_user_use_case.execute(email=registration_request.email, password=registration_request.password)
     return {"id": str(user.id), "email": user.email.email}
 
-# TODO: renamed email to username, need to reconsider
 @router.post("/login")
 async def login_user(form_data: OAuth2PasswordRequestForm=Depends(), login_use_case=Depends(get_login_use_case)):
     """Login a user and return a JWT token."""
-    username = form_data.username
+    email = form_data.username
     password = form_data.password
-    token = login_use_case.execute(email=username, password=password)
+    token = login_use_case.execute(email=email, password=password)
     return {"access_token": token, "token_type": "Bearer"}
