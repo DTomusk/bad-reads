@@ -1,4 +1,4 @@
-from sqlalchemy import UUID, Column, Float, ForeignKey, Integer, String, Table
+from sqlalchemy import UUID, Column, DateTime, Float, ForeignKey, Integer, String, Table
 from sqlalchemy.orm import relationship
 from api.infrastructure.db.database import Base
 
@@ -22,6 +22,7 @@ class BookModel(Base):
     
     ratings = relationship("RatingModel", back_populates="book")
     authors = relationship("AuthorModel", secondary=book_authors, back_populates="books")
+    reviews = relationship("ReviewModel", back_populates="book")
 
     def __repr__(self):
         return f"<BookModel(id={self.id}, title={self.title})>"
@@ -33,12 +34,26 @@ class RatingModel(Base):
     book_id = Column(UUID, ForeignKey("books.id"), index=True)
     user_id = Column(UUID, index=True)
     rating = Column(Float, index=False)
-    review = Column(String, index=False)
 
     book = relationship("BookModel", back_populates="ratings")
+    reviews = relationship("ReviewModel", back_populates="rating")
 
     def __repr__(self):
         return f"<RatingModel(id={self.id}, book_id={self.book_id}, user_id={self.user_id}, rating={self.rating})>"
+    
+class ReviewModel(Base):
+    __tablename__ = "reviews"
+
+    id = Column(UUID, primary_key=True, index=True)
+    book_id = Column(UUID, ForeignKey("books.id"), index=True)
+    user_id = Column(UUID, ForeignKey("users.id"), index=True)
+    text = Column(String, index=False)
+    rating_id = Column(UUID, ForeignKey("ratings.id"), index=True)
+    date_created = Column(DateTime, index=False)
+
+    book = relationship("BookModel", back_populates="reviews")
+    user = relationship("UserModel", back_populates="reviews")
+    rating = relationship("RatingModel", back_populates="reviews")
     
 class AuthorModel(Base):
     __tablename__ = "authors"

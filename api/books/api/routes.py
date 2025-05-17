@@ -1,8 +1,9 @@
 from uuid import UUID
 from fastapi import APIRouter, Depends
 
-from api.books.api.dependencies import get_book_details_use_case, get_books_use_case, rate_book_use_case
+from api.books.api.dependencies import get_book_details_use_case, get_books_use_case, rate_book_use_case, review_book_use_case
 from api.books.api.schemas.rate_request import RateRequest
+from api.books.api.schemas.review_request import ReviewRequest
 from api.users.api.auth import get_current_user
 
 
@@ -35,3 +36,16 @@ async def rate_book(
     """
     rate_book.execute(book_id=book_id, user_id=user_id, score=rate_request.score)
     return {"message": "Book rated successfully"}
+
+@router.post("/{book_id}/review")
+async def review_book(
+        book_id: UUID, 
+        review_request: ReviewRequest,
+        review_book=Depends(review_book_use_case), 
+        user_id=Depends(get_current_user)):
+    """
+    Review a book by its ID.
+    """
+    review_book.execute(book_id=book_id, user_id=user_id, text=review_request.text, score=review_request.score)
+    return {"message": "Book reviewed successfully"}
+
