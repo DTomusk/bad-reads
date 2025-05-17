@@ -12,13 +12,17 @@ def test_review_initialization():
     rating_id = uuid4()
     text = "This is a test review"
     date_created = datetime.now(timezone.utc)
+    book_id = uuid4()
+    user_id = uuid4()
 
-    review = Review(id=review_id, text=text, rating_id=rating_id, date_created=date_created)
+    review = Review(id=review_id, book_id=book_id, user_id=user_id, text=text, rating_id=rating_id, date_created=date_created)
 
     assert review.id == review_id
     assert review.text == text
     assert review.rating_id == rating_id
     assert review.date_created == date_created
+    assert review.book_id == book_id
+    assert review.user_id == user_id
 
 def test_rating_score_validation():
     with pytest.raises(ValueError):

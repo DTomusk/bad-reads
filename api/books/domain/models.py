@@ -23,8 +23,10 @@ class Rating:
 # Each review must have a rating, but each rating does not have to have a review
 class Review:
     """ Represents a review given by a user to a book """
-    def __init__(self, id: UUID, text: str, rating_id: UUID, date_created: datetime):
+    def __init__(self, id: UUID, book_id: UUID, user_id: UUID, text: str, rating_id: UUID, date_created: datetime):
         self.id = id
+        self.book_id = book_id
+        self.user_id = user_id
         self.text = text
         self.rating_id = rating_id
         self.date_created = date_created
