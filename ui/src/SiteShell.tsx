@@ -7,7 +7,6 @@ import {
   Skeleton,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import AabLogo from "../public/logo.svg";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Image } from "@mantine/core";
 
@@ -48,7 +47,7 @@ export default function SiteShell() {
           <Group justify="space-between" style={{ flex: 1 }}>
             <Image
               h={70}
-              src="/logo.svg"
+              src="/bad-reads-logo.svg"
               color="orange"
               style={{ paddingBottom: "0.25rem" }}
             />

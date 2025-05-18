@@ -36,7 +36,7 @@ export default function Home() {
   return (
     <>
       <Center>
-        <Group>
+        <Group justify="center">
           {test.map((item) => (
             <BookCard {...item} />
           ))}
