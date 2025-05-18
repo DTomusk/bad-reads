@@ -43,7 +43,13 @@ export default function BookCard({
           </Group>
         </Stack>
       </Modal>
-      <Card shadow="sm" padding="lg" radius="md" withBorder>
+      <Card
+        shadow="sm"
+        padding="lg"
+        radius="md"
+        withBorder
+        style={{ width: "20rem", height: "20rem" }}
+      >
         <Card.Section>
           <Image src={picture} height={160} alt={`${title} image`} />
         </Card.Section>

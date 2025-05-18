@@ -1,5 +1,6 @@
 import {
   AppShell,
+  AppShellFooter,
   Burger,
   Button,
   Center,
@@ -14,6 +15,9 @@ import Home from "./pages/Home";
 import Book from "./pages/Book";
 import Login from "./pages/Login";
 import Nav from "./components/Nav";
+import Footer from "./components/Footer";
+import BadReadLogo from "./components/BadReadLogo";
+import { height } from "@fortawesome/free-solid-svg-icons/faHome";
 
 const router = createBrowserRouter([
   {
@@ -46,13 +50,7 @@ export default function SiteShell() {
         <Group h="100%" px="md">
           <Group justify="space-between" style={{ flex: 1 }}>
             <Group>
-              <Image
-                h={70}
-                src="/bad-reads-logo.svg"
-                color="orange"
-                style={{ paddingBottom: "0.25rem" }}
-              />
-
+              <BadReadLogo />
               <h1 style={{ color: "orange" }}>Bad Reads</h1>
             </Group>
             <Group ml="xl" gap={0} visibleFrom="sm">
@@ -69,6 +67,8 @@ export default function SiteShell() {
       <AppShell.Main>
         <RouterProvider router={router} />
       </AppShell.Main>
+
+      <Footer />
     </AppShell>
   );
 }

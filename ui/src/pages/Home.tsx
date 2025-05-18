@@ -55,6 +55,12 @@ export default function Home() {
           {test.map((item) => (
             <BookCard {...item} />
           ))}
+          {test.map((item) => (
+            <BookCard {...item} />
+          ))}
+          {test.map((item) => (
+            <BookCard {...item} />
+          ))}
         </Group>
       </Center>
     </>
