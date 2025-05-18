@@ -11,14 +11,7 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { useNavigate } from "react-router-dom";
 import RatingGroup from "./RatingGroup";
-
-interface IBookCard {
-  title: string;
-  author: string;
-  picture?: string;
-  description: string;
-  uuid: string;
-}
+import { TBook } from "../types/book";
 
 export default function BookCard({
   title,
@@ -26,7 +19,7 @@ export default function BookCard({
   picture = "",
   description,
   uuid,
-}: IBookCard) {
+}: TBook) {
   const navigate = useNavigate();
   const [
     ratingModalOpened,
@@ -52,7 +45,7 @@ export default function BookCard({
       </Modal>
       <Card shadow="sm" padding="lg" radius="md" withBorder>
         <Card.Section>
-          <Image src={picture} height={160} alt="Norway" />
+          <Image src={picture} height={160} alt={`${title} image`} />
         </Card.Section>
 
         <Group justify="space-between" mt="md" mb="xs">
