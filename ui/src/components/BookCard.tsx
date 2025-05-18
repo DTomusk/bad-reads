@@ -53,7 +53,7 @@ export default function BookCard({
           <Badge color="orange">{author}</Badge>
         </Group>
 
-        <Text size="sm" c="dimmed">
+        <Text size="sm" c="dimmed" lineClamp={6}>
           {description}
         </Text>
 

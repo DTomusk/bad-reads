@@ -45,14 +45,16 @@ export default function SiteShell() {
       <AppShell.Header style={{ backgroundColor: "Blue" }}>
         <Group h="100%" px="md">
           <Group justify="space-between" style={{ flex: 1 }}>
-            <Image
-              h={70}
-              src="/bad-reads-logo.svg"
-              color="orange"
-              style={{ paddingBottom: "0.25rem" }}
-            />
+            <Group>
+              <Image
+                h={70}
+                src="/bad-reads-logo.svg"
+                color="orange"
+                style={{ paddingBottom: "0.25rem" }}
+              />
 
-            <h1 style={{ color: "orange" }}>Bad Reads</h1>
+              <h1 style={{ color: "orange" }}>Bad Reads</h1>
+            </Group>
             <Group ml="xl" gap={0} visibleFrom="sm">
               <Nav />
             </Group>
