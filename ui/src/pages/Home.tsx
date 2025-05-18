@@ -1,6 +1,7 @@
-import { Center, Group, Stack } from "@mantine/core";
+import { Autocomplete, Center, Group, Stack, Title } from "@mantine/core";
 import BookCard from "../components/BookCard";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 const test = [
   {
     title: "Book 1",
@@ -36,32 +37,50 @@ export default function Home() {
   return (
     <>
       <Center>
-        <Group justify="center">
-          {test.map((item) => (
-            <BookCard {...item} />
-          ))}
-          {test.map((item) => (
-            <BookCard {...item} />
-          ))}
-          {test.map((item) => (
-            <BookCard {...item} />
-          ))}
-          {test.map((item) => (
-            <BookCard {...item} />
-          ))}
-          {test.map((item) => (
-            <BookCard {...item} />
-          ))}
-          {test.map((item) => (
-            <BookCard {...item} />
-          ))}
-          {test.map((item) => (
-            <BookCard {...item} />
-          ))}
-          {test.map((item) => (
-            <BookCard {...item} />
-          ))}
-        </Group>
+        <Stack>
+          <Title
+            style={{
+              color: "var(--mantine-color-orange-filled)",
+              alignSelf: "center",
+            }}
+          >
+            Welcome to Bad Reads
+          </Title>
+          <Autocomplete
+            placeholder="Search for bad books"
+            leftSection={<FontAwesomeIcon icon={faMagnifyingGlass} />}
+            data={[]}
+            size="xl"
+            visibleFrom="xs"
+            style={{ alignSelf: "center", width: "50rem" }}
+          />
+          <Group justify="center">
+            {test.map((item) => (
+              <BookCard {...item} />
+            ))}
+            {test.map((item) => (
+              <BookCard {...item} />
+            ))}
+            {test.map((item) => (
+              <BookCard {...item} />
+            ))}
+            {test.map((item) => (
+              <BookCard {...item} />
+            ))}
+            {test.map((item) => (
+              <BookCard {...item} />
+            ))}
+            {test.map((item) => (
+              <BookCard {...item} />
+            ))}
+            {test.map((item) => (
+              <BookCard {...item} />
+            ))}
+            {test.map((item) => (
+              <BookCard {...item} />
+            ))}
+          </Group>
+        </Stack>
       </Center>
     </>
   );
