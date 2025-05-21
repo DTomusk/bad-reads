@@ -14,6 +14,10 @@ With your venv activated, navigate to the api folder in a terminal and run:
 
 `pip install -r requirements.txt`
 
+## Migrating the db 
+
+In order to get your local db up-to-date, make sure you're on the latest version of the code and run `alembic upgrade head`. This will ensure that all migrations have been applied to your database.
+
 ## Seeding the db 
 
 From the root folder (bad-reads) run: 
