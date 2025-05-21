@@ -1,11 +1,8 @@
 from fastapi import FastAPI
 
-from api.infrastructure.db.database import Base, engine
 from api.books.api.routes import router as books_router
 from api.users.api.routes import router as users_router
 
-
-Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="Book Rating API",
