@@ -1,13 +1,16 @@
 from fastapi import FastAPI
+from src.config import get_settings
 
 from src.books.api.routes import router as books_router
 from src.users.api.routes import router as users_router
 
+settings = get_settings()
 
 app = FastAPI(
     title="Book Rating API",
     description="API for rating books",
-    version="1.0.0"
+    version="1.0.0",
+    debug=settings.DEBUG
 )
 
 app.include_router(
