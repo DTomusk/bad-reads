@@ -6,19 +6,19 @@ The API currently runs on Python 3.11, so it's advised to create a virtual envir
 
 To create a Python 3.11 venv, make sure that you have Python 3.11 installed and that it's in your PATH if you're on Windows (I don't know anything about Mac or Linux). Then you'll want to run the command:
 
-python3.11 -m venv venv_name
+`python3.11 -m venv venv_name`
 
-Run venv_name\scripts\activate to activate the virtual environment
+Run `venv_name\scripts\activate` to activate the virtual environment
 
 With your venv activated, navigate to the api folder in a terminal and run: 
 
-pip install -r requirements.txt
+`pip install -r requirements.txt`
 
 ## Seeding the db 
 
 From the root folder (bad-reads) run: 
 
-python -m api.infrastructure.db.seed
+`python -m api.infrastructure.db.seed`
 
 This will populate the db with a number of books, authors and users which you can use to play around the API with
 
@@ -26,7 +26,7 @@ This will populate the db with a number of books, authors and users which you ca
 
 From either the root or api folder, doesn't really matter, run:
 
-pytest 
+`pytest`
 
 This will run all the unit tests 
 
@@ -34,6 +34,6 @@ This will run all the unit tests
 
 From the root folder, run: 
 
-uvicorn api.main:app --reload
+`uvicorn api.main:app --reload`
 
 Use --reload for hot reloads when developing
