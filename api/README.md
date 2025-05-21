@@ -20,4 +20,20 @@ From the root folder (bad-reads) run:
 
 python -m api.infrastructure.db.seed
 
-This will populate the db with a number of books, authors and users 
+This will populate the db with a number of books, authors and users which you can use to play around the API with
+
+## Running unit tests 
+
+From either the root or api folder, doesn't really matter, run:
+
+pytest 
+
+This will run all the unit tests 
+
+## Running the api 
+
+From the root folder, run: 
+
+uvicorn api.main:app --reload
+
+Use --reload for hot reloads when developing
