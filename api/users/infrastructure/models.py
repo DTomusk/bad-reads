@@ -11,3 +11,7 @@ class UserModel(Base):
     hashed_password = Column(String)
 
     reviews = relationship("ReviewModel", back_populates="user")
+    ratings = relationship("RatingModel", back_populates="user")
+
+    def __repr__(self):
+        return f"<UserModel(id={self.id}, email={self.email})>"

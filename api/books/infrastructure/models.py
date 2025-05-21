@@ -1,6 +1,7 @@
 from sqlalchemy import UUID, Column, DateTime, Float, ForeignKey, Integer, String, Table
 from sqlalchemy.orm import relationship
 from api.infrastructure.db.database import Base
+from api.users.infrastructure.models import UserModel
 
 
 # Association table for the many-to-many relationship between books and authors
@@ -32,10 +33,11 @@ class RatingModel(Base):
 
     id = Column(UUID, primary_key=True, index=True)
     book_id = Column(UUID, ForeignKey("books.id"), index=True)
-    user_id = Column(UUID, index=True)
+    user_id = Column(UUID, ForeignKey("users.id"), index=True)
     rating = Column(Float, index=False)
 
     book = relationship("BookModel", back_populates="ratings")
+    user = relationship("UserModel", back_populates="ratings")
     reviews = relationship("ReviewModel", back_populates="rating")
 
     def __repr__(self):
