@@ -36,8 +36,4 @@ This will run all the unit tests
 
 ## Running the api 
 
-From the root folder, run: 
-
-`uvicorn api.main:app --reload`
-
-Use --reload for hot reloads when developing
+From api run `python -m run`
