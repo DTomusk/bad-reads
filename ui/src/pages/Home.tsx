@@ -1,39 +1,41 @@
-import { Autocomplete, Center, Group, Stack, Title } from "@mantine/core";
+import { Autocomplete, Center, Group, Stack, Title, Loader, Text } from "@mantine/core";
 import BookCard from "../components/BookCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-const test = [
-  {
-    title: "Book 1",
-    description: "lorem ipsum text to continue here",
-    author: "Jane Doe",
-    picture: "/cats/cat-film.jpeg",
-    uuid: "asdf",
-  },
-  {
-    title: "Book 2",
-    description: "lorem ipsum text to continue here",
-    picture: "/cats/cat-food.jpeg",
-    author: "John Smith",
-    uuid: "qwer",
-  },
-  {
-    title: "Book 3",
-    description: "lorem ipsum text to continue here",
-    picture: "/cats/cat-shop.jpg",
-    author: "Emily Blunt",
-    uuid: "zxcv",
-  },
-  {
-    title: "Book 4",
-    description: "lorem ipsum text to continue here",
-    picture: "/cats/cat-sport.jpg",
-    author: "Taylor Swift",
-    uuid: "tyui",
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { TBook } from "../types/book";
+
+async function fetchBooks(): Promise<TBook[]> {
+  // TODO: define base url elsewhere
+  const response = await fetch('http://127.0.0.1:8000/api/books');
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  return response.json();
+}
 
 export default function Home() {
+  const { data: books, isLoading, error } = useQuery({
+    queryKey: ['books'],
+    queryFn: fetchBooks
+  });
+
+  if (isLoading) {
+    return (
+      <Center>
+        <Loader size="xl" />
+      </Center>
+    );
+  }
+
+  if (error) {
+    return (
+      <Center>
+        <Text c="red">Error loading books: {(error as Error).message}</Text>
+      </Center>
+    );
+  }
+
   return (
     <>
       <Center>
@@ -55,29 +57,8 @@ export default function Home() {
             style={{ alignSelf: "center", width: "50rem" }}
           />
           <Group justify="center">
-            {test.map((item) => (
-              <BookCard {...item} />
-            ))}
-            {test.map((item) => (
-              <BookCard {...item} />
-            ))}
-            {test.map((item) => (
-              <BookCard {...item} />
-            ))}
-            {test.map((item) => (
-              <BookCard {...item} />
-            ))}
-            {test.map((item) => (
-              <BookCard {...item} />
-            ))}
-            {test.map((item) => (
-              <BookCard {...item} />
-            ))}
-            {test.map((item) => (
-              <BookCard {...item} />
-            ))}
-            {test.map((item) => (
-              <BookCard {...item} />
+            {books?.map((book) => (
+              <BookCard key={book.uuid} {...book} />
             ))}
           </Group>
         </Stack>

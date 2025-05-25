@@ -1,5 +1,5 @@
 @echo off
 
-start "" cmd /k "cd api && python -m run"
+start "Running API" cmd /k "cd api && python -m run"
 
-start "" cmd /k "cd ui && npm run dev"
+start "Running UI" cmd /k "cd ui && npm run dev"
