@@ -1,5 +1,6 @@
 from fastapi import Depends
 
+from src.books.infrastructure.repositories.author_repo import AuthorRepo
 from src.books.application.use_cases.search_books import SearchBooks
 from src.books.application.use_cases.get_book_details import GetBookDetails
 from src.books.application.use_cases.review_book import ReviewBook
@@ -29,11 +30,17 @@ def get_books_repo(session=Depends(get_session)):
     """
     return BookRepo(session=session)
 
-def get_external_books_service():
+def get_authors_repo(session=Depends(get_session)):
+    """
+    Dependency to provide the Authors repository.
+    """
+    return AuthorRepo(session=session)
+
+def get_external_books_service(author_repo=Depends(get_authors_repo)):
     """
     Dependency to provide the ExternalBooksService.
     """
-    return GoogleBooksApiService()
+    return GoogleBooksApiService(author_repo=author_repo)
 
 def rate_book_use_case(book_repo=Depends(get_books_repo), rating_repo=Depends(get_ratings_repo)):
     """
