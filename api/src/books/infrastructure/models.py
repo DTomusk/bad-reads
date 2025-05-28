@@ -20,6 +20,8 @@ class BookModel(Base):
     average_rating = Column(Float, index=False)
     number_of_ratings = Column(Integer, index=False)
     sum_of_ratings = Column(Float, index=False)
+    isbn = Column(String, index=True)
+    description = Column(String, index=False)
     
     ratings = relationship("RatingModel", back_populates="book")
     authors = relationship("AuthorModel", secondary=book_authors, back_populates="books")
