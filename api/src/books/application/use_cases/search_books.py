@@ -1,18 +1,27 @@
-from api.src.books.domain.models import Book
+from src.books.application.services.external_books_service import AbstractBooksService
+from src.books.domain.models import Book
 from src.books.application.repositories.book_repository import AbstractBookRepo
 
 class SearchBooks:
-    def __init__(self, book_repository: AbstractBookRepo):
+    def __init__(self, book_repository: AbstractBookRepo, external_books_service: AbstractBooksService):
         self.book_repository = book_repository
+        self.external_books_service = external_books_service
 
     def execute(
             self, 
             query: str,
-            page: int = 1,
             page_size: int = 10,
-            sort_by: str = "title",
-            sort_order: str = "asc",
         ) -> list[Book]:
-        # Note: this grabs all books in the database and does a fuzzy search on the title in memory
-        # TODO: we should use a more efficient search method e.g. a database index
-        db_books = self.book_repository.search_books(page, page_size, sort_by, sort_order)
+        # TODO: figure out pagination 
+        db_books = self.book_repository.search_books(query, page_size)
+
+        external_books = self.external_books_service.search_books(query, page_size)
+
+        # Search for books that are not in the database and add them to the database
+        for external_book in external_books:
+            if not self.book_repository.get_book_by_isbn(external_book.isbn):
+                self.book_repository.add_book(external_book)
+
+        # TODO: this could give us more than page_size books and it could give us duplicates
+        return db_books + external_books
+

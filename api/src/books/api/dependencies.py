@@ -1,6 +1,6 @@
-from uuid import UUID, uuid4
 from fastapi import Depends
 
+from src.books.application.use_cases.search_books import SearchBooks
 from src.books.application.use_cases.get_book_details import GetBookDetails
 from src.books.application.use_cases.review_book import ReviewBook
 from src.books.infrastructure.repositories.review_repo import ReviewRepo
@@ -9,7 +9,7 @@ from src.books.application.use_cases.get_books import GetBooks
 from src.books.application.use_cases.rate_book import RateBook
 from src.books.infrastructure.repositories.book_repo import BookRepo
 from src.books.infrastructure.repositories.rating_repo import RatingRepo
-        
+from src.books.infrastructure.services.google_books_api_service import GoogleBooksApiService
 
 def get_ratings_repo(session=Depends(get_session)):
     """
@@ -28,6 +28,12 @@ def get_books_repo(session=Depends(get_session)):
     Dependency to provide the Books repository.
     """
     return BookRepo(session=session)
+
+def get_external_books_service():
+    """
+    Dependency to provide the ExternalBooksService.
+    """
+    return GoogleBooksApiService()
 
 def rate_book_use_case(book_repo=Depends(get_books_repo), rating_repo=Depends(get_ratings_repo)):
     """
@@ -52,3 +58,9 @@ def get_book_details_use_case(book_repo=Depends(get_books_repo), rating_repo=Dep
     Dependency to provide the GetBookDetails use case.
     """
     return GetBookDetails(book_repository=book_repo, rating_repository=rating_repo)
+
+def search_books_use_case(book_repo=Depends(get_books_repo), external_books_service=Depends(get_external_books_service)):
+    """
+    Dependency to provide the SearchBooks use case.
+    """
+    return SearchBooks(book_repository=book_repo, external_books_service=external_books_service)

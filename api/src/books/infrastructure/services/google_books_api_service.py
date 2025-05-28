@@ -8,8 +8,8 @@ class GoogleBooksApiService(AbstractBooksService):
     def __init__(self):
         pass
 
-    def search_books(self, query: str, max_results: int = 10) -> list[Book]:
-        url = f"https://www.googleapis.com/books/v1/volumes?q={query}&maxResults={max_results}"
+    def search_books(self, query: str, page_size: int = 10) -> list[Book]:
+        url = f"https://www.googleapis.com/books/v1/volumes?q={query}&maxResults={page_size}"
         response = httpx.get(url)
         response.raise_for_status()
         books_data = response.json().get("items", [])
@@ -33,6 +33,8 @@ class GoogleBooksApiService(AbstractBooksService):
                 continue
 
             # Create Author objects from author names
+            # TODO: check repo if author exists, if not, create new author
+            # otherwise we can get duplicates
             authors = []
             for author_name in volume_info.get("authors", []):
                 authors.append(Author(id=uuid.uuid4(), name=author_name))
