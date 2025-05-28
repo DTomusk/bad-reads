@@ -5,7 +5,7 @@ from sqlalchemy import UUID
 from src.books.domain.models import Book
 
 
-class BookRepo(ABC):
+class AbstractBookRepo(ABC):
     @abstractmethod
     def get_book_by_id(self, book_id: UUID) -> Book:
         """

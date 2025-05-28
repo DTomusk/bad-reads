@@ -1,9 +1,9 @@
-from src.books.application.repositories.book_repository import BookRepo
+from src.books.application.repositories.book_repository import AbstractBookRepo
 from src.books.domain.models import Book
 
 
 class GetBooks:
-    def __init__(self, book_repository: BookRepo):
+    def __init__(self, book_repository: AbstractBookRepo):
         self.book_repository = book_repository
 
     def execute(

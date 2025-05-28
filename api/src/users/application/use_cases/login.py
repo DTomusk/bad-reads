@@ -1,10 +1,10 @@
-from src.users.application.repositories.user_repository import UserRepository
+from src.users.application.repositories.user_repository import AbstractUserRepository
 from src.users.application.utilities.hasher import Hasher
 from src.users.application.utilities.token_service import TokenService
 
 
 class Login:
-    def __init__(self, user_repository: UserRepository, hasher: Hasher, token_service: TokenService):
+    def __init__(self, user_repository: AbstractUserRepository, hasher: Hasher, token_service: TokenService):
         self.user_repository = user_repository
         self.hasher = hasher
         self.token_service = token_service

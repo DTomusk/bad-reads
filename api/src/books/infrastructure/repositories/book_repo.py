@@ -1,12 +1,12 @@
 from sqlalchemy import UUID
 from sqlalchemy.orm import Session
 
-from src.books.application.repositories.book_repository import BookRepo
+from src.books.application.repositories.book_repository import AbstractBookRepo
 from src.books.domain.models import Book
 from src.books.infrastructure.models import BookModel, AuthorModel
 
 
-class SqliteBookRepo(BookRepo):
+class BookRepo(AbstractBookRepo):
     def __init__(self, session: Session):
         self.session = session
 
