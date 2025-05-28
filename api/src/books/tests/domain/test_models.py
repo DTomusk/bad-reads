@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 import pytest
 from uuid import uuid4
-from src.books.domain.models import Rating, Book, Author, RatingScore, Review
+from src.books.domain.models import ISBN13, Rating, Book, Author, RatingScore, Review
 
 def test_rating_score_initialization():
     score = RatingScore(4.5)
@@ -43,12 +43,25 @@ def test_rating_initialization():
     assert rating.user_id == user_id
     assert rating.score == score
 
+def test_isbn13_initialization():
+    isbn = ISBN13("9783161484100")
+    assert isbn.value == "9783161484100"
+
+def test_isbn13_standardization():
+    isbn = ISBN13("978-3-16-148410-0")
+    assert isbn.value == "9783161484100"
+
+def test_isbn13_checksum():
+    with pytest.raises(ValueError):
+        ISBN13("978-3-16-148410-1")
+
 def test_book_initialization():
     book_id = uuid4()
     title = "Test Book"
     author1 = Author(id=uuid4(), name="Test Author 1")
     author2 = Author(id=uuid4(), name="Test Author 2")
     authors = [author1, author2]
+    isbn = ISBN13("978-3-16-148410-0")
 
     book = Book(
         id=book_id,
@@ -56,7 +69,8 @@ def test_book_initialization():
         authors=authors,
         average_rating=0.0,
         number_of_ratings=0,
-        sum_of_ratings=0.0
+        sum_of_ratings=0.0,
+        isbn=isbn
     )
 
     assert book.id == book_id
@@ -65,6 +79,7 @@ def test_book_initialization():
     assert book.average_rating == 0.0
     assert book.number_of_ratings == 0
     assert book.sum_of_ratings == 0.0
+    assert book.isbn == isbn
 
 def test_book_add_rating():
     book_id = uuid4()
@@ -75,7 +90,8 @@ def test_book_add_rating():
         authors=[Author(id=uuid4(), name="Test Author")],
         average_rating=0.0,
         number_of_ratings=0,
-        sum_of_ratings=0.0
+        sum_of_ratings=0.0,
+        isbn=ISBN13("978-3-16-148410-0")
     )
 
     rating = Rating(
@@ -100,7 +116,8 @@ def test_book_update_rating():
         authors=[Author(id=uuid4(), name="Test Author")],
         average_rating=0.0,
         number_of_ratings=0,
-        sum_of_ratings=0.0
+        sum_of_ratings=0.0,
+        isbn=ISBN13("978-3-16-148410-0")
     )
 
     # Add initial rating
@@ -134,7 +151,8 @@ def test_book_remove_rating():
         authors=[Author(id=uuid4(), name="Test Author")],
         average_rating=4.0,
         number_of_ratings=1,
-        sum_of_ratings=4.0
+        sum_of_ratings=4.0,
+        isbn=ISBN13("978-3-16-148410-0")
     )
 
     rating = Rating(
