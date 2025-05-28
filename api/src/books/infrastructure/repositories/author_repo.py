@@ -27,6 +27,7 @@ class AuthorRepo(AbstractAuthorRepo):
             return self._create_author_from_db_result(result)
 
     # TODO: authors can have the same name, we need a better way to distinguish them when querying external api
+    # TODO: authors can be identified by different names (e.g. J.K. Rowling and Joanne Rowling), need to figure that one out 
     def get_author_by_name(self, name: str) -> Author:
         result = self.session.query(AuthorModel).filter(AuthorModel.name == name).first()
         if result:
