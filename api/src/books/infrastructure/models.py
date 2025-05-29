@@ -27,6 +27,10 @@ class BookModel(Base):
     authors = relationship("AuthorModel", secondary=book_authors, back_populates="books")
     reviews = relationship("ReviewModel", back_populates="book")
 
+    __table_args__ = (
+        Index('ix_books_title_trgm', title, postgresql_using='gin'),
+    )
+
     def __repr__(self):
         return f"<BookModel(id={self.id}, title={self.title})>"
     
@@ -64,6 +68,7 @@ class AuthorModel(Base):
 
     id = Column(UUID, primary_key=True, index=True)
     name = Column(String, index=True)
+    normalized_name = Column(String, index=True)
 
     books = relationship("BookModel", secondary=book_authors, back_populates="authors")
 
