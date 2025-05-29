@@ -37,15 +37,24 @@ class BookRepo(AbstractBookRepo):
             book: A Book domain model instance
             
         """
-        return BookModel(
+        # First get the author models for all authors
+        author_models = []
+        for author in book.authors:
+            author_model = self.session.query(AuthorModel).filter(AuthorModel.id == author.id).first()
+            if author_model:
+                author_models.append(author_model)
+
+        book_model = BookModel(
             id=book.id,
             title=book.title,
             average_rating=book.average_rating,
             number_of_ratings=book.number_of_ratings,
             sum_of_ratings=book.sum_of_ratings,
             isbn=str(book.isbn),
-            description=book.description
+            description=book.description,
+            authors=author_models  # Set up the many-to-many relationship
         )
+        return book_model
     
     def get_book_by_id(self, book_id: UUID) -> Book:
         """

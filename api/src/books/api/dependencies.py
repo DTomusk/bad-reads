@@ -66,8 +66,8 @@ def get_book_details_use_case(book_repo=Depends(get_books_repo), rating_repo=Dep
     """
     return GetBookDetails(book_repository=book_repo, rating_repository=rating_repo)
 
-def search_books_use_case(book_repo=Depends(get_books_repo), external_books_service=Depends(get_external_books_service)):
+def search_books_use_case(book_repo=Depends(get_books_repo), external_books_service=Depends(get_external_books_service), author_repo=Depends(get_authors_repo)):
     """
     Dependency to provide the SearchBooks use case.
     """
-    return SearchBooks(book_repository=book_repo, external_books_service=external_books_service)
+    return SearchBooks(book_repository=book_repo, external_books_service=external_books_service, author_repository=author_repo)

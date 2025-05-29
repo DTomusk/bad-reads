@@ -30,7 +30,8 @@ class AuthorRepo(AbstractAuthorRepo):
             return self._create_author_from_db_result(result)
 
     def get_author_by_name(self, name: str) -> Author:
-        result = self.session.query(AuthorModel).filter(AuthorModel.normalized_name == name).first()
+        normalized_name = self._normalize_author_name(name)
+        result = self.session.query(AuthorModel).filter(AuthorModel.normalized_name == normalized_name).first()
         if result:
             return self._create_author_from_db_result(result)
 
