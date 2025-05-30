@@ -3,7 +3,7 @@ from typing import Optional
 
 from src.users.domain.models import User
 
-class UserRepository(ABC):
+class AbstractUserRepository(ABC):
     @abstractmethod
     def get_by_email(self, email: str) -> Optional[User]:
         """Get a user by email."""

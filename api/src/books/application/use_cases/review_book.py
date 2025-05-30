@@ -1,13 +1,13 @@
 from datetime import datetime, timezone
 from uuid import UUID, uuid4
-from src.books.application.repositories.book_repository import BookRepo
-from src.books.application.repositories.rating_repository import RatingRepo
-from src.books.application.repositories.review_repository import ReviewRepo
+from src.books.application.repositories.book_repository import AbstractBookRepo
+from src.books.application.repositories.rating_repository import AbstractRatingRepo
+from src.books.application.repositories.review_repository import AbstractReviewRepo
 from src.books.domain.models import Rating, RatingScore, Review
 
 # TODO: add a case for updating a review and a case for adding a review to a book that has already been rated
 class ReviewBook:
-    def __init__(self, book_repository: BookRepo, rating_repository: RatingRepo, review_repository: ReviewRepo):
+    def __init__(self, book_repository: AbstractBookRepo, rating_repository: AbstractRatingRepo, review_repository: AbstractReviewRepo):
         self.book_repository = book_repository
         self.rating_repository = rating_repository
         self.review_repository = review_repository

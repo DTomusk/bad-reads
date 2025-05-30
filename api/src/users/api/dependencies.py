@@ -3,13 +3,13 @@ from fastapi import Depends
 from src.infrastructure.db.database import get_session
 from src.users.application.use_cases.login import Login
 from src.users.application.use_cases.register_user import RegisterUser
-from src.users.infrastructure.repositories.sqlite_user_repository import SqliteUserRepository
+from src.users.infrastructure.repositories.user_repository import UserRepository
 from src.users.infrastructure.utilities.bcrypt_hasher import BCryptHasher
 from src.users.infrastructure.utilities.jwt_token_service import JWTTokenService
 
 
 def get_user_repository(session=Depends(get_session)):
-    return SqliteUserRepository(session=session)
+    return UserRepository(session=session)
 
 def get_bcrypt_hasher():
     return BCryptHasher()

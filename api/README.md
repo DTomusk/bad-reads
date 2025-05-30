@@ -14,6 +14,10 @@ With your venv activated, navigate to the api folder in a terminal and run:
 
 `pip install -r requirements.txt`
 
+## Setting up the db
+
+This project uses postgres by default. If you want to just use the default config locally, make sure your db is called postgres, the port ist 5432 and the password is mypassword (this is the connection string: postgresql://postgres:mypassword@localhost:5432/postgres which is the same as in config.py). You can, however, define a .env file and put your own connection string in there.
+
 ## Migrating the db 
 
 In order to get your local db up-to-date, make sure you're on the latest version of the code and run `alembic upgrade head`. This will ensure that all migrations have been applied to your database.
@@ -22,7 +26,7 @@ In order to get your local db up-to-date, make sure you're on the latest version
 
 From the root folder (bad-reads) run: 
 
-`python -m api.infrastructure.db.seed`
+`python -m src.infrastructure.db.seed`
 
 This will populate the db with a number of books, authors and users which you can use to play around the API with
 

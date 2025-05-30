@@ -8,7 +8,7 @@ load_dotenv()
 
 class Settings(BaseSettings):
     # Database settings
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./local.db")
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "postgresql://postgres:mypassword@localhost:5432/postgres")
     
     # JWT settings
     JWT_SECRET: str = os.getenv("JWT_SECRET", "SECRET")

@@ -4,7 +4,7 @@ from uuid import UUID
 from src.books.domain.models import Review
 
 
-class ReviewRepo(ABC):
+class AbstractReviewRepo(ABC):
     @abstractmethod
     def create_review(self, review: Review) -> None:
         """

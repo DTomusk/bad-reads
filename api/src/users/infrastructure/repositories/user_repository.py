@@ -1,11 +1,11 @@
 from sqlalchemy.orm import Session
 
-from src.users.application.repositories.user_repository import UserRepository
+from src.users.application.repositories.user_repository import AbstractUserRepository
 from src.users.domain.models import User
 from src.users.infrastructure.models import UserModel
 
 
-class SqliteUserRepository(UserRepository):
+class UserRepository(AbstractUserRepository):
     def __init__(self, session: Session):
         self.session = session
     

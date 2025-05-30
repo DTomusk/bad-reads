@@ -5,7 +5,7 @@ from sqlalchemy import UUID
 from src.books.domain.models import Rating
 
 
-class RatingRepo(ABC):
+class AbstractRatingRepo(ABC):
     @abstractmethod
     def get_rating_by_user_and_book(self, user_id: UUID, book_id: UUID) -> Rating:
         """

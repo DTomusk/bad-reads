@@ -1,11 +1,11 @@
 from sqlalchemy import UUID
-from src.books.application.repositories.rating_repository import RatingRepo
-from src.books.domain.models import Rating, RatingScore, Review
+from src.books.application.repositories.rating_repository import AbstractRatingRepo
+from src.books.domain.models import Rating, RatingScore
 from src.books.infrastructure.models import RatingModel
+from sqlalchemy.orm import Session
 
-
-class SqliteRatingRepo(RatingRepo):
-    def __init__(self, session):
+class RatingRepo(AbstractRatingRepo):
+    def __init__(self, session: Session):
         self.session = session
 
     def get_rating_by_user_and_book(self, user_id: UUID, book_id: UUID) -> Rating:

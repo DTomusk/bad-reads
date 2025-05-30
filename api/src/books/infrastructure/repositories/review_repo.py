@@ -2,12 +2,12 @@ from uuid import UUID
 
 from sqlalchemy.orm import Session
 
-from src.books.application.repositories.review_repository import ReviewRepo
+from src.books.application.repositories.review_repository import AbstractReviewRepo
 from src.books.domain.models import Review
 from src.books.infrastructure.models import ReviewModel
 
 
-class SqliteReviewRepo(ReviewRepo):
+class ReviewRepo(AbstractReviewRepo):
     def __init__(self, session: Session):
         self.session = session
 
