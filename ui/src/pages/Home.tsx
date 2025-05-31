@@ -2,23 +2,11 @@ import { Autocomplete, Center, Group, Stack, Title, Loader, Text } from "@mantin
 import BookCard from "../components/BookCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { useQuery } from "@tanstack/react-query";
-import { TBook } from "../types/book";
+import { useBooks } from "../hooks/useBooks";
 
-async function fetchBooks(): Promise<TBook[]> {
-  // TODO: define base url elsewhere
-  const response = await fetch('http://127.0.0.1:8000/api/books');
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-  return response.json();
-}
 
 export default function Home() {
-  const { data: books, isLoading, error } = useQuery({
-    queryKey: ['books'],
-    queryFn: fetchBooks
-  });
+  const { data: books, isLoading, error } = useBooks();
 
   if (isLoading) {
     return (
