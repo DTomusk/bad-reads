@@ -1,18 +1,4 @@
-import {
-  Anchor,
-  Button,
-  Center,
-  Checkbox,
-  Divider,
-  Group,
-  Paper,
-  PaperProps,
-  PasswordInput,
-  Stack,
-  Text,
-  TextInput,
-  Title,
-} from "@mantine/core";
+import { Center, Paper, Title } from "@mantine/core";
 import LoginForm from "../components/LoginForm";
 
 export default function LoginPage() {

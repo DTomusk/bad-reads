@@ -3,20 +3,27 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "packageManager": "pnpm@8.15.4",
   "scripts": {
     "dev": "vite",
+    "start": "serve dist",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@babel/generator": "^7.27.3",
+    "@babel/template": "^7.27.2",
+    "@babel/traverse": "^7.27.4",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@mantine/core": "7.17.1",
+    "@mantine/form": "^8.0.2",
     "@mantine/hooks": "7.17.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^7.2.0"
+    "react-router-dom": "^7.2.0",
+    "serve": "^14.2.4"
   },
   "devDependencies": {
     "@types/react": "^19.0.7",

@@ -1,15 +1,6 @@
-import {
-  AppShell,
-  AppShellFooter,
-  Burger,
-  Button,
-  Center,
-  Group,
-  Skeleton,
-} from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { AppShell, Group } from "@mantine/core";
+// import { useDisclosure } from "@mantine/hooks";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Image } from "@mantine/core";
 
 import Home from "./pages/Home";
 import Book from "./pages/Book";
@@ -17,7 +8,6 @@ import Login from "./pages/Login";
 import Nav from "./components/Nav";
 import Footer from "./components/Footer";
 import BadReadLogo from "./components/BadReadLogo";
-import { height } from "@fortawesome/free-solid-svg-icons/faHome";
 
 const router = createBrowserRouter([
   {
@@ -34,7 +24,7 @@ const router = createBrowserRouter([
   },
 ]);
 export default function SiteShell() {
-  const [opened, { toggle }] = useDisclosure();
+  // const [opened, { toggle }] = useDisclosure();
 
   return (
     <AppShell
@@ -43,7 +33,7 @@ export default function SiteShell() {
       navbar={{
         width: 300,
         breakpoint: "sm",
-        collapsed: { desktop: true, mobile: !opened },
+        collapsed: { desktop: true, mobile: false },
       }}
     >
       <AppShell.Header style={{ backgroundColor: "Blue" }}>
