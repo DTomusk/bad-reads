@@ -12,6 +12,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { useNavigate } from "react-router-dom";
 import RatingGroup from "./RatingGroup";
 import { TBook } from "../types/book";
+import { useAuth } from "../hooks/useAuth";
 
 export default function BookCard({
   title,
@@ -25,6 +26,7 @@ export default function BookCard({
     ratingModalOpened,
     { open: openRatingModal, close: closeRatingModal },
   ] = useDisclosure(false);
+  const isLoggedIn = useAuth();
 
   return (
     <>
@@ -72,7 +74,13 @@ export default function BookCard({
           >
             More
           </Button>
-          <Button color="orange" mt="md" radius="md" onClick={openRatingModal}>
+          <Button
+            color="orange"
+            mt="md"
+            radius="md"
+            onClick={openRatingModal}
+            disabled={!isLoggedIn}
+          >
             Rate
           </Button>
         </Group>
