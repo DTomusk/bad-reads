@@ -11,13 +11,16 @@ import {
 import { useForm } from "@mantine/form";
 import { upperFirst, useToggle } from "@mantine/hooks";
 import { useLogin } from "../hooks/useLogin";
+import { useRegister } from "../hooks/useRegister";
 import { useNavigate } from "react-router-dom";
 
+// TODO: should we separate login and register?
 export default function LoginForm() {
   const [type, toggle] = useToggle(["login", "register"]);
   const navigate = useNavigate();
-  const { mutate: login, isPending } = useLogin();
-  
+  const { mutate: login, isPending: isLoginPending } = useLogin();
+  const { mutate: register, isPending: isRegisterPending } = useRegister();
+
   const form = useForm({
     initialValues: {
       email: "",
@@ -57,8 +60,24 @@ export default function LoginForm() {
         }
       );
     } else {
-      // TODO: Implement registration
-      console.log("Registration not implemented yet");
+      register(
+        {
+          email: values.email,
+          password: values.password,
+          confirm_password: values.password,
+        },
+        {
+          onSuccess: (data) => {
+            // TODO: Show success message to user, maybe a banner
+            console.log("Registration successful:", data);
+            toggle();
+          },
+          onError: (error) => {
+            // TODO: Show error message to user
+            console.error("Registration failed:", error);
+          },
+        }
+      );
     }
   };
 
@@ -136,7 +155,7 @@ export default function LoginForm() {
           radius="xl" 
           size="lg" 
           color="orange"
-          loading={isPending}
+          loading={type === "login" ? isLoginPending : isRegisterPending}
         >
           {upperFirst(type)}
         </Button>
