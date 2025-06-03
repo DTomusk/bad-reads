@@ -1,6 +1,6 @@
 import pytest
 import httpx
-from unittest.mock import patch, Mock
+from unittest.mock import MagicMock, patch, Mock
 from src.books.infrastructure.services.google_books_api_service import GoogleBooksApiService
 from src.books.domain.models import Book, Author, ISBN13
 
@@ -42,10 +42,35 @@ def mock_google_books_response():
         ]
     }
 
+@pytest.fixture
+def mock_google_books_response_no_authors():
+    return {
+        "items": [
+            {
+                "volumeInfo": {
+                    "title": "Test Book",
+                    "authors": [],
+                    "industryIdentifiers": [
+                        {
+                            "type": "ISBN_13",
+                            "identifier": "9780306406157"
+                        }
+                    ]
+                }
+            }
+        ]
+    }
 
 @pytest.fixture
-def service():
-    return GoogleBooksApiService()
+def mock_author_repository():
+    repo = MagicMock()
+    repo.get_author_by_name = MagicMock(return_value=None)
+    repo.add_author = MagicMock(side_effect=lambda author: author)
+    return repo
+
+@pytest.fixture
+def service(mock_author_repository):
+    return GoogleBooksApiService(mock_author_repository)
 
 
 def test_search_books_success(service, mock_google_books_response):
@@ -85,6 +110,16 @@ def test_search_books_success(service, mock_google_books_response):
         assert second_book.description == "Another Description"
         assert isinstance(second_book.isbn, ISBN13)
         assert str(second_book.isbn) == "9780306406164"
+
+def test_search_books_no_authors(service, mock_google_books_response_no_authors):
+    with patch('httpx.get') as mock_get:
+        mock_response = Mock()
+        mock_response.json.return_value = mock_google_books_response_no_authors
+        mock_response.raise_for_status = Mock()
+        mock_get.return_value = mock_response
+
+        books = service.search_books("test query")
+        assert len(books) == 0
 
 
 def test_search_books_no_results(service):

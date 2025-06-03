@@ -33,6 +33,10 @@ class GoogleBooksApiService(AbstractBooksService):
             if isbn is None:
                 continue
 
+            # Don't add books without authors to the database
+            if not volume_info.get("authors") or len(volume_info.get("authors")) == 0:
+                continue
+
             # Create Author objects from author names
             # TODO: check repo if author exists, if not, create new author
             # otherwise we can get duplicates
