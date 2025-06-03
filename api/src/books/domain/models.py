@@ -78,6 +78,7 @@ class Book:
             sum_of_ratings: float,
             isbn: ISBN13,
             description: str | None = None,
+            picture_url: str | None = None,
             ):
         self.id = id
         self.title = title
@@ -87,6 +88,7 @@ class Book:
         self.sum_of_ratings = sum_of_ratings
         self.isbn = isbn
         self.description = description
+        self.picture_url = picture_url
 
     def add_rating(self, rating: Rating) -> None:
         """ Add a rating to the book """

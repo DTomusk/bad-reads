@@ -22,6 +22,7 @@ class BookModel(Base):
     sum_of_ratings = Column(Float, index=False)
     isbn = Column(String, index=True)
     description = Column(String, index=False)
+    picture_url = Column(String, index=False)
     
     ratings = relationship("RatingModel", back_populates="book")
     authors = relationship("AuthorModel", secondary=book_authors, back_populates="books")

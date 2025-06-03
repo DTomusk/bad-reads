@@ -27,7 +27,8 @@ class BookRepo(AbstractBookRepo):
             number_of_ratings=result.number_of_ratings,
             sum_of_ratings=result.sum_of_ratings,
             isbn=result.isbn,
-            description=result.description
+            description=result.description,
+            picture_url=result.picture_url
         )
     
     def _create_book_model_from_domain_model(self, book: Book) -> BookModel:
@@ -52,6 +53,7 @@ class BookRepo(AbstractBookRepo):
             sum_of_ratings=book.sum_of_ratings,
             isbn=str(book.isbn),
             description=book.description,
+            picture_url=book.picture_url,
             authors=author_models  # Set up the many-to-many relationship
         )
         return book_model

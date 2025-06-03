@@ -47,7 +47,7 @@ class GoogleBooksApiService(AbstractBooksService):
                     author = Author(id=uuid.uuid4(), name=author_name)
                     self.author_repo.add_author(author)
                 authors.append(author)
-                
+
             book = Book(
                 id=uuid.uuid4(),
                 title=volume_info.get("title", ""),
@@ -57,6 +57,7 @@ class GoogleBooksApiService(AbstractBooksService):
                 sum_of_ratings=0.0,
                 isbn=isbn,
                 description=volume_info.get("description"),
+                picture_url=volume_info.get("imageLinks", {}).get("thumbnail")
             )
             books.append(book)
 
