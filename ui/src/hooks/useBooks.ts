@@ -8,3 +8,10 @@ export const useBooks = () => {
         queryFn: () => fetcher<TBook[]>("/books"),
     });
 }
+
+export const useBookSearch = (query: string) => {
+    return useQuery({
+        queryKey: ["books", query],
+        queryFn: () => fetcher<TBook[]>(`/books/search?query=${query}`),
+    });
+}

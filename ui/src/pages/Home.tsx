@@ -1,12 +1,15 @@
-import { Autocomplete, Center, Group, Stack, Title, Loader, Text } from "@mantine/core";
+import { TextInput, Center, Group, Stack, Title, Loader, Text } from "@mantine/core";
 import BookCard from "../components/BookCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { useBooks } from "../hooks/useBooks";
-
+import { useBooks, useBookSearch } from "../hooks/useBooks";
+import { useState } from "react";
 
 export default function Home() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeSearch, setActiveSearch] = useState("");
   const { data: books, isLoading, error } = useBooks();
+  const { data: searchResults } = useBookSearch(activeSearch);
 
   if (isLoading) {
     return (
@@ -24,6 +27,14 @@ export default function Home() {
     );
   }
 
+  const displayBooks = activeSearch ? searchResults || [] : books || [];
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      setActiveSearch(searchQuery);
+    }
+  };
+
   return (
     <>
       <Center>
@@ -36,16 +47,18 @@ export default function Home() {
           >
             Welcome to Bad Reads
           </Title>
-          <Autocomplete
+          {/*TODO: This used to be an autocomplete, consider adding it back in*/}
+          <TextInput
             placeholder="Search for bad books"
             leftSection={<FontAwesomeIcon icon={faMagnifyingGlass} />}
-            data={[]}
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.currentTarget.value)}
+            onKeyDown={handleKeyPress}
             size="xl"
-            visibleFrom="xs"
             style={{ alignSelf: "center", width: "50rem" }}
           />
           <Group justify="center">
-            {books?.map((book) => (
+            {displayBooks.map((book) => (
               <BookCard key={book.uuid} {...book} />
             ))}
           </Group>
