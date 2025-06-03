@@ -21,6 +21,9 @@ class SearchBooks:
 
         # Search for books that are not in the database and add them to the database
         for external_book in external_books:
+            # Don't add books without authors to the database
+            if not external_book.authors:
+                continue
             for author in external_book.authors:
                 existing_author = self.author_repository.get_author_by_name(author.name)
                 if not existing_author:
