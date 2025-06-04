@@ -10,6 +10,8 @@ class GoogleBooksApiService(AbstractBooksService):
         self.author_repo = author_repo
 
     def search_books(self, query: str, page_size: int = 10) -> list[Book]:
+        if page_size == 0:
+            return []
         url = f"https://www.googleapis.com/books/v1/volumes?q={query}&maxResults={page_size}"
         response = httpx.get(url)
         response.raise_for_status()

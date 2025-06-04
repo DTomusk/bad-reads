@@ -1,5 +1,6 @@
-from fastapi import Depends
+from fastapi import BackgroundTasks, Depends
 
+from src.infrastructure.services.background_task_queue import FastAPIBackgroundTaskQueue
 from src.books.infrastructure.repositories.author_repo import AuthorRepo
 from src.books.application.use_cases.search_books import SearchBooks
 from src.books.application.use_cases.get_book_details import GetBookDetails
@@ -42,6 +43,12 @@ def get_external_books_service(author_repo=Depends(get_authors_repo)):
     """
     return GoogleBooksApiService(author_repo=author_repo)
 
+def get_background_task_queue():
+    """
+    Dependency to provide the BackgroundTaskQueue.
+    """
+    return FastAPIBackgroundTaskQueue(background_tasks=BackgroundTasks())
+
 def rate_book_use_case(book_repo=Depends(get_books_repo), rating_repo=Depends(get_ratings_repo)):
     """
     Dependency to provide the RateBook use case.
@@ -66,8 +73,8 @@ def get_book_details_use_case(book_repo=Depends(get_books_repo), rating_repo=Dep
     """
     return GetBookDetails(book_repository=book_repo, rating_repository=rating_repo)
 
-def search_books_use_case(book_repo=Depends(get_books_repo), external_books_service=Depends(get_external_books_service), author_repo=Depends(get_authors_repo)):
+def search_books_use_case(book_repo=Depends(get_books_repo), external_books_service=Depends(get_external_books_service), author_repo=Depends(get_authors_repo), background_task_queue=Depends(get_background_task_queue)):
     """
     Dependency to provide the SearchBooks use case.
     """
-    return SearchBooks(book_repository=book_repo, external_books_service=external_books_service, author_repository=author_repo)
+    return SearchBooks(book_repository=book_repo, external_books_service=external_books_service, author_repository=author_repo, background_task_queue=background_task_queue)
