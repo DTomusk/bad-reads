@@ -17,9 +17,11 @@ class BookModel(Base):
 
     id = Column(UUID, primary_key=True, index=True)
     title = Column(String, index=True)
-    average_rating = Column(Float, index=False)
+    average_love_rating = Column(Float, index=False)
+    average_shit_rating = Column(Float, index=False)
     number_of_ratings = Column(Integer, index=False)
-    sum_of_ratings = Column(Float, index=False)
+    sum_of_love_ratings = Column(Float, index=False)
+    sum_of_shit_ratings = Column(Float, index=False)
     
     ratings = relationship("RatingModel", back_populates="book")
     authors = relationship("AuthorModel", secondary=book_authors, back_populates="books")
@@ -34,7 +36,8 @@ class RatingModel(Base):
     id = Column(UUID, primary_key=True, index=True)
     book_id = Column(UUID, ForeignKey("books.id"), index=True)
     user_id = Column(UUID, ForeignKey("users.id"), index=True)
-    rating = Column(Float, index=False)
+    love_score = Column(Float, index=False)
+    shit_score = Column(Float, index=False)
 
     book = relationship("BookModel", back_populates="ratings")
     user = relationship("UserModel", back_populates="ratings")
