@@ -6,46 +6,69 @@ import {
   Pill,
   Divider,
   ActionIcon,
+  Center,
+  Loader,
+  Text,
 } from "@mantine/core";
-import { TBook } from "../types/book";
 import RatingGroup from "../components/RatingGroup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useBook } from "../hooks/useBooks";
+
 export default function Book() {
   const navigate = useNavigate();
-  const testBook: TBook = {
-    title: "Book 2",
-    description: "lorem ipsum text to continue here",
-    picture: "/cats/cat-film.jpeg",
-    author: "John Smith",
-    uuid: "qwer",
-  };
+  const { id } = useParams();
+  const { data: book, isLoading, error } = useBook(id || "");
+
+  console.log("Book data:", book);
+  console.log("Book ID:", id);
+
+  if (isLoading) {
+    return (
+      <Center>
+        <Loader size="xl" />
+      </Center>
+    );
+  }
+
+  if (error || !book) {
+    return (
+      <Center>
+        <Text c="red">Error loading book: {(error as Error)?.message || "Book not found"}</Text>
+      </Center>
+    );
+  }
+
   return (
     <Stack>
-      <ActionIcon
-        variant="subtle"
-        size="xl"
-        onClick={() => navigate("/")}
-        color="orange"
+        <ActionIcon
+          variant="subtle"
+          size="xl"
+          onClick={() => navigate("/")}
+          color="orange"
       >
         <FontAwesomeIcon icon={faArrowLeft} size="3x" />
       </ActionIcon>
       <Group justify="center">
         <Group>
-          <Image
-            src={testBook.picture}
+          {/*<Image
+            src={book.picture}
             height={500}
-            alt={`${testBook.title} image`}
-          />
+            alt={`${book.title} image`}
+          />*/}
           <Paper>
-            <h1>{testBook.title}</h1>
+            <h1>{book.title}</h1>
             <Divider my="md" />
 
-            <Pill size="xl">{testBook.author}</Pill>
+            {book.authors && book.authors.length > 0 ? (
+              <Pill size="xl">{book.authors.map((author) => author.name).join(", ")}</Pill>
+            ) : (
+              <Text c="dimmed">No authors listed</Text>
+            )}
             <Divider my="md" />
 
-            <p>{testBook.description}</p>
+            {/*<p>{book.description}</p>*/}
             <RatingGroup changeFunction={() => {}} />
           </Paper>
         </Group>

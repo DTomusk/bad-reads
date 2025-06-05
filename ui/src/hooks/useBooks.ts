@@ -8,3 +8,13 @@ export const useBooks = () => {
         queryFn: () => fetcher<TBook[]>("/books"),
     });
 }
+
+export const useBook = (id: string) => {
+    return useQuery({
+        queryKey: ["book", id],
+        queryFn: async () => {
+            const response = await fetcher<{ book: TBook, ratings: any[] }>(`/books/${id}`);
+            return response.book;
+        },
+    });
+}
