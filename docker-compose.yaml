@@ -1,0 +1,52 @@
+services:
+  frontend:
+    image: ui
+    ports:
+      - "3000:3000"
+    networks:
+      - front-tier
+      - back-tier
+
+  backend:
+    image: api
+    ports:
+      - "8000:8000"
+    networks:
+      - back-tier
+
+  database:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=baduser
+      - POSTGRES_PASSWORD=badpassword
+      - POSTGRES_DB=bad_read_db
+    ports:
+      - "5432:5432"
+    networks:
+      - back-tier
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  migrate:
+    image: python:latest
+    depends_on:
+      - database
+    working_dir: /api
+    volumes:
+      - ./api:/api
+    environment:
+      DATABASE_URL: postgresql://postgres:mypassword@localhost:5432/postgres
+    command: >
+      sh -c "
+        pip install -r requirements.txt &&
+        alembic upgrade head
+      "
+    networks:
+      - back-tier
+
+volumes:
+  postgres_data:
+
+networks:
+  front-tier: {}
+  back-tier: {}
