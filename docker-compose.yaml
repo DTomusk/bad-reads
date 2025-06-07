@@ -1,6 +1,6 @@
 services:
   frontend:
-    image: ui
+    build: ./ui
     ports:
       - "3000:3000"
     networks:
@@ -8,7 +8,7 @@ services:
       - back-tier
 
   backend:
-    image: api
+    build: ./api
     ports:
       - "8000:8000"
     networks:

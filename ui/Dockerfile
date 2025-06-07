@@ -7,6 +7,7 @@ RUN corepack prepare pnpm@latest --activate
 WORKDIR /opt/ui
 COPY pnpm-lock.yaml /opt/ui
 RUN pnpm fetch
+RUN pnpm install -g serve
 
 COPY . /opt/ui
 RUN pnpm run build
