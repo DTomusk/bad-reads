@@ -1,39 +1,44 @@
 import {
   AppShell,
-  AppShellFooter,
-  Burger,
-  Button,
-  Center,
   Group,
-  Skeleton,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Image } from "@mantine/core";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Book from "./pages/Book";
 import Login from "./pages/Login";
+import Search from "./pages/Search";
 import Nav from "./components/Nav";
 import Footer from "./components/Footer";
 import BadReadLogo from "./components/BadReadLogo";
-import { height } from "@fortawesome/free-solid-svg-icons/faHome";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/book/:id",
-    element: <Book />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
+    element: <SiteShell />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/book/:id",
+        element: <Book />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/search",
+        element: <Search />,
+      },
+    ],
   },
 ]);
-export default function SiteShell() {
+
+function SiteShell() {
   const [opened, { toggle }] = useDisclosure();
 
   return (
@@ -46,12 +51,12 @@ export default function SiteShell() {
         collapsed: { desktop: true, mobile: !opened },
       }}
     >
-      <AppShell.Header style={{ backgroundColor: "Blue" }}>
+      <AppShell.Header style={{ backgroundColor: "black" }}>
         <Group h="100%" px="md">
           <Group justify="space-between" style={{ flex: 1 }}>
             <Group>
               <BadReadLogo />
-              <h1 style={{ color: "orange" }}>Bad Reads</h1>
+              <h1 style={{ color: "white" }}>Bad Reads</h1>
             </Group>
             <Group ml="xl" gap={0} visibleFrom="sm">
               <Nav />
@@ -65,10 +70,14 @@ export default function SiteShell() {
       </AppShell.Navbar>
 
       <AppShell.Main>
-        <RouterProvider router={router} />
+        <Outlet />
       </AppShell.Main>
 
       <Footer />
     </AppShell>
   );
+}
+
+export default function App() {
+  return <RouterProvider router={router} />;
 }

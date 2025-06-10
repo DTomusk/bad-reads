@@ -7,6 +7,7 @@ import {
   Group,
   Stack,
   Modal,
+  Grid,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useNavigate } from "react-router-dom";
@@ -49,41 +50,49 @@ export default function BookCard({
         padding="lg"
         radius="md"
         withBorder
-        style={{ width: "20rem", height: "20rem" }}
+        style={{ width: "100%", maxWidth: "800px", height: "10rem" }}
       >
-        <Card.Section>
-          <Image 
-            src={picture_url} 
-            height={160} 
-            alt={`${title} image`} 
-            fit="contain"
-          />
-        </Card.Section>
+        <Grid gutter="md" style={{ height: "100%" }}>
+          <Grid.Col span="content">
+            <Card.Section>
+              <Image 
+                src={picture_url} 
+                height="100%"
+                alt={`${title} image`} 
+                fit="contain"
+              />
+            </Card.Section>
+          </Grid.Col>
 
-        <Group justify="space-between" mt="md" mb="xs">
-          <Text fw={500}>{title}</Text>
-          <Badge color="orange">{authors.map((author) => author.name).join(", ")}</Badge>
-        </Group>
+          <Grid.Col span="auto">
+            <Stack justify="space-between" h="100%">
+              <div>
+                <Group justify="space-between" mb="xs">
+                  <Text fw={500} size="lg">{title}</Text>
+                  <Badge color="orange">{authors.map((author) => author.name).join(", ")}</Badge>
+                </Group>
+              </div>
 
-        <Group justify="center">
-          <Button
-            color="blue"
-            mt="md"
-            radius="md"
-            onClick={() => navigate(`book/${id}`)}
-          >
-            More
-          </Button>
-          <Button
-            color="orange"
-            mt="md"
-            radius="md"
-            onClick={openRatingModal}
-            disabled={!isLoggedIn}
-          >
-            Rate
-          </Button>
-        </Group>
+              <Group justify="center" mt="auto">
+                <Button
+                  color="blue"
+                  radius="md"
+                  onClick={() => navigate(`book/${id}`)}
+                >
+                  More
+                </Button>
+                <Button
+                  color="orange"
+                  radius="md"
+                  onClick={openRatingModal}
+                  disabled={!isLoggedIn}
+                >
+                  Rate
+                </Button>
+              </Group>
+            </Stack>
+          </Grid.Col>
+        </Grid>
       </Card>
     </>
   );

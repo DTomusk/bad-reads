@@ -1,7 +1,10 @@
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { faHome } from "@fortawesome/free-solid-svg-icons/faHome";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { NavLink } from "@mantine/core";
+import { NavLink, TextInput, Group } from "@mantine/core";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const navigationData = [
   { label: "Home", icon: <FontAwesomeIcon icon={faHome} />, link: "/" },
@@ -9,14 +12,23 @@ const navigationData = [
 ];
 
 export default function Nav() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery("");
+    }
+  };
+
   const links = navigationData.map((item) => (
-    <div style={{ display: "flex", flexDirection: "row", padding: "0.5rem" }}>
+    <div key={item.label} style={{ display: "flex", flexDirection: "row", padding: "0.5rem" }}>
       <NavLink
-        color="orange"
+        color="white"
         style={{ padding: "0.5rem" }}
         variant="subtle"
         href={item.link}
-        key={item.label}
         label={item.label}
         leftSection={item.icon}
         active={true}
@@ -25,5 +37,17 @@ export default function Nav() {
     </div>
   ));
 
-  return <>{links} </>;
+  return (
+    <Group justify="space-between" align="center" style={{ width: "100%" }}>
+      <TextInput
+        placeholder="Search for bad books"
+        leftSection={<FontAwesomeIcon icon={faMagnifyingGlass} />}
+        value={searchQuery}
+        onChange={(event) => setSearchQuery(event.currentTarget.value)}
+        onKeyDown={handleKeyPress}
+        style={{ width: "300px" }}
+      />
+      <Group>{links}</Group>
+    </Group>
+  );
 }
