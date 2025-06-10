@@ -9,6 +9,16 @@ export const useBooks = () => {
     });
 }
 
+export const useBook = (id: string) => {
+    return useQuery({
+        queryKey: ["book", id],
+        queryFn: async () => {
+            const response = await fetcher<{ book: TBook, ratings: any[] }>(`/books/${id}`);
+            return response.book;
+        },
+    });
+}
+
 export const useBookSearch = (query: string) => {
     return useQuery({
         queryKey: ["books", query],

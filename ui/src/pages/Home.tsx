@@ -59,7 +59,7 @@ export default function Home() {
           />
           <Group justify="center">
             {displayBooks.map((book) => (
-              <BookCard key={book.uuid} {...book} />
+              <BookCard key={book.id} {...book} />
             ))}
           </Group>
         </Stack>

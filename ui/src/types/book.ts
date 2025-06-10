@@ -1,7 +1,12 @@
+import { TAuthor } from "./author";
+
 export type TBook = {
     title: string;
-    author: string;
+    authors: TAuthor[];
+    average_rating: number;
+    number_of_ratings: number;
+    sum_of_ratings: number;
     picture_url?: string;
     description: string;
-    uuid: string;
+    id: string;
 }

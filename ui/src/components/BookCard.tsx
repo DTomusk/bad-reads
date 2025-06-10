@@ -16,10 +16,9 @@ import { useAuth } from "../hooks/useAuth";
 
 export default function BookCard({
   title,
-  author,
+  authors,
   picture_url = "",
-  description,
-  uuid,
+  id,
 }: TBook) {
   const navigate = useNavigate();
   const [
@@ -63,19 +62,15 @@ export default function BookCard({
 
         <Group justify="space-between" mt="md" mb="xs">
           <Text fw={500}>{title}</Text>
-          <Badge color="orange">{author}</Badge>
+          <Badge color="orange">{authors.map((author) => author.name).join(", ")}</Badge>
         </Group>
-
-        <Text size="sm" c="dimmed" lineClamp={6}>
-          {description}
-        </Text>
 
         <Group justify="center">
           <Button
             color="blue"
             mt="md"
             radius="md"
-            onClick={() => navigate(`book/${uuid}`)}
+            onClick={() => navigate(`book/${id}`)}
           >
             More
           </Button>
