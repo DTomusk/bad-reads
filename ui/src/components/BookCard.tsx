@@ -17,7 +17,7 @@ import { useAuth } from "../hooks/useAuth";
 export default function BookCard({
   title,
   author,
-  picture = "",
+  picture_url = "",
   description,
   uuid,
 }: TBook) {
@@ -53,7 +53,12 @@ export default function BookCard({
         style={{ width: "20rem", height: "20rem" }}
       >
         <Card.Section>
-          <Image src={picture} height={160} alt={`${title} image`} />
+          <Image 
+            src={picture_url} 
+            height={160} 
+            alt={`${title} image`} 
+            fit="contain"
+          />
         </Card.Section>
 
         <Group justify="space-between" mt="md" mb="xs">

@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import MagicMock
 from uuid import uuid4
 from src.books.application.use_cases.rate_book import RateBook
-from src.books.domain.models import Rating, Book, Author, RatingScore
+from src.books.domain.models import ISBN13, Rating, Book, Author, RatingScore
 
 @pytest.fixture
 def book_id():
@@ -20,7 +20,8 @@ def mock_book(book_id):
         authors=[Author(id=uuid4(), name="Test Author")],
         average_rating=0.0,
         number_of_ratings=0,
-        sum_of_ratings=0.0
+        sum_of_ratings=0.0,
+        isbn=ISBN13("978-3-16-148410-0")
     )
 
 @pytest.fixture

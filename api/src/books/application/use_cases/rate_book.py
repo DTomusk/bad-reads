@@ -1,12 +1,12 @@
 from uuid import UUID, uuid4
 
-from src.books.application.repositories.book_repository import BookRepo
-from src.books.application.repositories.rating_repository import RatingRepo
+from src.books.application.repositories.book_repository import AbstractBookRepo
+from src.books.application.repositories.rating_repository import AbstractRatingRepo
 from src.books.domain.models import Book, Rating, RatingScore, Review
 
 
 class RateBook:
-    def __init__(self, book_repository: BookRepo, rating_repository: RatingRepo):
+    def __init__(self, book_repository: AbstractBookRepo, rating_repository: AbstractRatingRepo):
         self.book_repository = book_repository
         self.rating_repository = rating_repository
 
