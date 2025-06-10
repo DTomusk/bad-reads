@@ -17,6 +17,8 @@ class SearchBooks:
             page_size: int = 10,
         ) -> list[Book]:
         # TODO: figure out pagination 
+        if not query:
+            return []
         db_books = self.book_repository.search_books(query, page_size)
 
         number_of_books_to_search = page_size - len(db_books)
