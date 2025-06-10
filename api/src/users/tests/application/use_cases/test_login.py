@@ -2,7 +2,7 @@ from unittest.mock import MagicMock
 from uuid import uuid4
 import pytest
 
-from src.users.application.repositories.user_repository import UserRepository
+from src.users.application.repositories.user_repository import AbstractUserRepository
 from src.users.application.use_cases.login import Login
 from src.users.application.utilities.hasher import Hasher
 from src.users.application.utilities.token_service import TokenService
@@ -10,7 +10,7 @@ from src.users.domain.models import Email, User
 
 
 @pytest.fixture
-def mock_user_repository() -> UserRepository:
+def mock_user_repository() -> AbstractUserRepository:
     """Fixture for a mocked UserRepository."""
     mock_repo = MagicMock()
     mock_repo.get_by_email.return_value = None
