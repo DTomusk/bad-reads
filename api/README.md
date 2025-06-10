@@ -41,3 +41,13 @@ This will run all the unit tests
 ## Running the api 
 
 From api run `python -m run`
+
+# Running the API with Docker 
+
+## Setting up Postgres with Docker 
+Run the following with docker cli to set up postgres 
+
+`docker pull postgres:latest`
+
+`docker run -d -e POSTGRES_PASSWORD=mypassword -e POSTGRES_USER=postgres -p 5432:5432 postgres:latest
+alembic upgrade head`
