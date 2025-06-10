@@ -9,6 +9,7 @@ import {
   Center,
   Loader,
   Text,
+  Flex,
 } from "@mantine/core";
 import RatingGroup from "../components/RatingGroup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -50,16 +51,22 @@ export default function Book() {
       >
         <FontAwesomeIcon icon={faArrowLeft} size="3x" />
       </ActionIcon>
-      <Group justify="center">
-        <Group>
-          {/*<Image
-            src={book.picture}
-            height={500}
-            alt={`${book.title} image`}
-          />*/}
-          <Paper>
-            <h1>{book.title}</h1>
-            <Divider my="md" />
+      <Group justify="center"> 
+        <Flex justify="center" 
+        w={{base: "100%", md: "80%", lg: "50%"}}
+        gap={{base: "0", md: "md"}}
+        direction={{base: "column", md: "row"}}>
+            <Image
+              src={book.picture_url}
+              h="100%"
+              w="auto"
+              fit="contain"
+              style={{ flexGrow: 1 }}
+              alt={`${book.title} image`}
+            />
+            <Paper style={{ flexGrow: 2 }}>
+              <h1>{book.title}</h1>
+              <Divider my="md" />
 
             {book.authors && book.authors.length > 0 ? (
               <Pill size="xl">{book.authors.map((author) => author.name).join(", ")}</Pill>
@@ -68,10 +75,10 @@ export default function Book() {
             )}
             <Divider my="md" />
 
-            {/*<p>{book.description}</p>*/}
-            <RatingGroup changeFunction={() => {}} />
-          </Paper>
-        </Group>
+            <p>{book.description}</p>
+              <RatingGroup changeFunction={() => {}} />
+            </Paper>
+        </Flex>
       </Group>
     </Stack>
   );
