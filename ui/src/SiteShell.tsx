@@ -71,7 +71,7 @@ function SiteShell() {
         <Nav />
       </AppShell.Navbar>
 
-      <AppShell.Main>
+      <AppShell.Main bg="teal.0">
         <Outlet />
       </AppShell.Main>
 

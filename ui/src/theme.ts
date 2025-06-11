@@ -74,14 +74,4 @@ export const theme = createTheme({
   defaultRadius: 'md',
   black: '#000000',
   white: '#FFFFFF',
-  components: {
-    AppShell: {
-      styles: {
-        main: {
-          background: 'teal.2',
-          color: '#FFFFFF',
-        },
-      },
-    },
-  },
 });

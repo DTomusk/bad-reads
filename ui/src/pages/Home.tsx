@@ -1,6 +1,10 @@
 import { Center, Stack, Title, Text, Button } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth"; 
 
 export default function Home() {
+  const navigate = useNavigate();
+  const isLoggedIn = useAuth();
   return (
     <>
       <Center>
@@ -33,7 +37,7 @@ export default function Home() {
           >
             Because even bad books can be great
           </Text>
-          <Button w="auto" size="md" mt="lg">Register and start rating!</Button>
+          {!isLoggedIn && <Button w="auto" size="md" mt="lg" onClick={() => navigate("/login")}>Register and start rating!</Button>}
         </Stack>
       </Center>
     </>
