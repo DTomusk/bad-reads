@@ -3,7 +3,7 @@ import {
   Group,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet, useNavigate } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Book from "./pages/Book";
@@ -40,6 +40,7 @@ const router = createBrowserRouter([
 
 function SiteShell() {
   const [opened, { toggle }] = useDisclosure();
+  const navigate = useNavigate();
 
   return (
     <AppShell
@@ -56,7 +57,7 @@ function SiteShell() {
           background: 'linear-gradient(to bottom, var(--mantine-color-dark-0), var(--mantine-color-dark-9))'
         }}>
           <Group justify="space-between" style={{ flex: 1 }}>
-            <Group>
+            <Group onClick={() => navigate("/")} style={{ cursor: 'pointer' }}>
               <BadReadLogo />
               <h1 style={{ color: "white" }}>Bad Reads</h1>
             </Group>
