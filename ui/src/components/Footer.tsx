@@ -3,10 +3,10 @@ import BadReadLogo from "./BadReadLogo";
 
 export default function Footer() {
   return (
-    <Group style={{ backgroundColor: "var(--mantine-color-orange-filled)" }}>
-      <BadReadLogo color="blue" />
+    <Group bg="dark.0">
+      <BadReadLogo color="orange" />
       <Group>
-        <Text>copyright @ A really really good startup idea</Text>
+        <Text c="white">copyright @ A really really good startup idea</Text>
       </Group>
     </Group>
   );

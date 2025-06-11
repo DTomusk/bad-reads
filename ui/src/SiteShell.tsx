@@ -51,8 +51,10 @@ function SiteShell() {
         collapsed: { desktop: true, mobile: !opened },
       }}
     >
-      <AppShell.Header style={{ backgroundColor: "black" }}>
-        <Group h="100%" px="md">
+      <AppShell.Header >
+        <Group px="md" style={{ 
+          background: 'linear-gradient(to bottom, var(--mantine-color-dark-0), var(--mantine-color-dark-9))'
+        }}>
           <Group justify="space-between" style={{ flex: 1 }}>
             <Group>
               <BadReadLogo />
