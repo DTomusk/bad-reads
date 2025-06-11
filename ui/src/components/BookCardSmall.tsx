@@ -49,8 +49,20 @@ export default function BookCardSmall({
                 </Title>}
 
                 <Stack gap="xs" align="center">
-                    <Text c="white" size="xl">💖💖</Text>
-                    <Text c="white" size="xl">💩💩💩💩💩</Text>
+                    <div style={{ display: 'flex', gap: '2px' }}>
+                        <Text c="white" size="xl">💖</Text>
+                        <Text c="white" size="xl">💖</Text>
+                        <Text c="white" size="xl" style={{ opacity: 0.3 }}>💖</Text>
+                        <Text c="white" size="xl" style={{ opacity: 0.3 }}>💖</Text>
+                        <Text c="white" size="xl" style={{ opacity: 0.3 }}>💖</Text>
+                    </div>
+                    <div style={{ display: 'flex', gap: '2px' }}>
+                        <Text c="white" size="xl">💩</Text>
+                        <Text c="white" size="xl">💩</Text>
+                        <Text c="white" size="xl">💩</Text>
+                        <Text c="white" size="xl">💩</Text>
+                        <Text c="white" size="xl">💩</Text>
+                    </div>
                     <Text c="white" size="sm" mb="sm">(9999)</Text>
                 </Stack>
             </Stack>
