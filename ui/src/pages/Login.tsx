@@ -2,10 +2,19 @@ import { Center } from "@mantine/core";
 import { useLogin } from "../hooks/useLogin";
 import { useNavigate } from "react-router-dom";
 import AuthForm from "../components/AuthForm";
+import { useAuth } from "../hooks/useAuth";
+import { useEffect } from "react";
 
 export default function Login() {
   const navigate = useNavigate();
   const { mutate: login, isPending } = useLogin();
+  const isAuthenticated = useAuth();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
 
   const fields = [
     {

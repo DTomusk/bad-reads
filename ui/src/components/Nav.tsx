@@ -30,11 +30,10 @@ export default function Nav() {
 
   const links = navigationData.map((item) => (
     <div key={item.label} style={{ display: "flex", flexDirection: "row", padding: "0.5rem" }}>
-      <NavLink
+      <NavLink onClick={() => navigate(item.link)}
         color="white"
         style={{ padding: "0.5rem" }}
         variant="subtle"
-        href={item.link}
         label={item.label}
         leftSection={item.icon}
         active={true}

@@ -41,7 +41,7 @@ export default function Home() {
             >
               Because even bad books can be great
             </Text>
-            {!isLoggedIn && <Button w="auto" size="md" mt="lg" onClick={() => navigate("/login")}>Register now and start rating!</Button>}
+            {!isLoggedIn && <Button w="auto" size="md" mt="lg" onClick={() => navigate("/register")}>Register now and start rating!</Button>}
             
           </Stack>
           <Center>
