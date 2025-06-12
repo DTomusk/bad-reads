@@ -3,7 +3,8 @@ import {
   Group,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { createBrowserRouter, RouterProvider, Outlet, useNavigate } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet, useNavigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 import Home from "./pages/Home";
 import Book from "./pages/Book";
@@ -41,6 +42,11 @@ const router = createBrowserRouter([
 function SiteShell() {
   const [opened, { toggle }] = useDisclosure();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   return (
     <AppShell
