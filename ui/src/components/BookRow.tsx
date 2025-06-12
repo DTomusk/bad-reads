@@ -21,8 +21,8 @@ export default function BookRow({ books }: { books: TBook[] }) {
     
     return (
         <Stack>
-            <Title c="white" order={2}>Worst Books of the Month</Title>
-            <Divider color="white" size="sm" />
+            <Title order={2}>Worst Books of the Month</Title>
+            <Divider/>
             <Center>
                 <Flex gap="md" wrap="nowrap" style={{ overflow: 'hidden', maxWidth: '100%' }}>
                     {books?.slice(0, getVisibleItems()).map((book) => (

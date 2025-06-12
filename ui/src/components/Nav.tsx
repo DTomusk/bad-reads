@@ -5,12 +5,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink, TextInput, Group } from "@mantine/core";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../auth/AuthProvider";
 
 export default function Nav() {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
-  const isAuthenticated = useAuth();
+  const { isAuthenticated } = useAuth();
 
   const navigationData = [
     { label: "Home", icon: <FontAwesomeIcon icon={faHome} />, link: "/" },

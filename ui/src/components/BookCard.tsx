@@ -1,19 +1,18 @@
 import {
-  Card,
-  Image,
   Text,
-  Badge,
   Button,
   Group,
   Stack,
   Modal,
-  Grid,
+  Image,
+  Flex,
+  Box,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useNavigate } from "react-router-dom";
 import RatingGroup from "./RatingGroup";
 import { TBook } from "../types/book";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../auth/AuthProvider";
 
 export default function BookCard({
   title,
@@ -26,7 +25,7 @@ export default function BookCard({
     ratingModalOpened,
     { open: openRatingModal, close: closeRatingModal },
   ] = useDisclosure(false);
-  const isLoggedIn = useAuth();
+  const { isAuthenticated } = useAuth();
 
   return (
     <>
@@ -45,55 +44,44 @@ export default function BookCard({
           </Group>
         </Stack>
       </Modal>
-      <Card
-        shadow="sm"
-        padding="lg"
-        radius="md"
-        withBorder
-        style={{ width: "100%", maxWidth: "800px", height: "10rem" }}
+      
+      <Flex
+        gap="md"
+        p="lg"
+        h="10rem"
       >
-        <Grid gutter="md" style={{ height: "100%" }}>
-          <Grid.Col span="content">
-            <Card.Section>
-              <Image 
-                src={picture_url} 
-                height="100%"
-                alt={`${title} image`} 
-                fit="contain"
-              />
-            </Card.Section>
-          </Grid.Col>
+        <Box>
+          <Image 
+            src={picture_url} 
+            height="100%"
+            alt={`${title} image`} 
+            fit="contain"
+          />
+        </Box>
 
-          <Grid.Col span="auto">
-            <Stack justify="space-between" h="100%">
-              <div>
-                <Group justify="space-between" mb="xs">
-                  <Text fw={500} size="lg">{title}</Text>
-                  <Badge color="orange">{authors.map((author) => author.name).join(", ")}</Badge>
-                </Group>
-              </div>
+        <Stack justify="space-between" h="100%" style={{ flex: 1 }}>
+          <Text fw={500} size="lg">{title}</Text>
+          <Text>{authors.map((author) => author.name).join(", ")}</Text>
 
-              <Group justify="center" mt="auto">
-                <Button
-                  color="blue"
-                  radius="md"
-                  onClick={() => navigate(`book/${id}`)}
-                >
-                  More
-                </Button>
-                <Button
-                  color="orange"
-                  radius="md"
-                  onClick={openRatingModal}
-                  disabled={!isLoggedIn}
-                >
-                  Rate
-                </Button>
-              </Group>
-            </Stack>
-          </Grid.Col>
-        </Grid>
-      </Card>
+          <Group justify="flex-start" mt="auto">
+            <Button
+              color="blue"
+              radius="md"
+              onClick={() => navigate(`/book/${id}`)}
+            >
+              More
+            </Button>
+            <Button
+              color="orange"
+              radius="md"
+              onClick={openRatingModal}
+              disabled={!isAuthenticated}
+            >
+              Rate
+            </Button>
+          </Group>
+        </Stack>
+      </Flex>
     </>
   );
 }

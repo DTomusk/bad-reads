@@ -1,5 +1,6 @@
 import {
   AppShell,
+  Container,
   Group,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -86,7 +87,10 @@ function SiteShell() {
       <AppShell.Main style={{ 
         background: 'linear-gradient(to right, var(--mantine-color-teal-5), var(--mantine-color-teal-2), var(--mantine-color-teal-0), var(--mantine-color-teal-2), var(--mantine-color-teal-5))'
       }}>
-        <Outlet />
+        {/* Note: Container is used to center the content and limit the width */}
+        <Container size="sm">
+          <Outlet />
+        </Container>
       </AppShell.Main>
 
       <Footer />

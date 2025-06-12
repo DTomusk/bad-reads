@@ -2,13 +2,13 @@ import { Center } from "@mantine/core";
 import { useLogin } from "../hooks/useLogin";
 import { useNavigate } from "react-router-dom";
 import AuthForm from "../components/AuthForm";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../auth/AuthProvider";
 import { useEffect } from "react";
 
 export default function Login() {
   const navigate = useNavigate();
   const { mutate: login, isPending } = useLogin();
-  const isAuthenticated = useAuth();
+  const { isAuthenticated, login: loginAuth } = useAuth();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -45,7 +45,7 @@ export default function Login() {
       {
         onSuccess: (data) => {
           // Store the token in localStorage
-          localStorage.setItem("token", data.access_token);
+          loginAuth(data.access_token);
           // Redirect to home page
           navigate("/");
         },
