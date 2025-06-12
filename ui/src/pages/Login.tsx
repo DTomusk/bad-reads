@@ -51,6 +51,7 @@ export default function Login() {
   return (
     <Center>
       <AuthForm
+        title="💅Welcome back💅"
         fields={fields}
         submitLabel="Login"
         alternateLabel="Don't have an account? Register"

@@ -59,6 +59,7 @@ export default function Register() {
   return (
     <Center>
       <AuthForm
+        title="✨Register✨"
         fields={fields}
         submitLabel="Register"
         alternateLabel="Already have an account? Login"

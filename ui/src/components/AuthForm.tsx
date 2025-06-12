@@ -5,6 +5,7 @@ import {
   Button,
   Group,
   Anchor,
+  Title,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useNavigate } from "react-router-dom";
@@ -18,6 +19,7 @@ interface FormField {
 }
 
 interface AuthFormProps {
+  title: string;
   fields: FormField[];
   submitLabel: string;
   alternateLabel: string;
@@ -27,6 +29,7 @@ interface AuthFormProps {
 }
 
 export default function AuthForm({
+  title,
   fields,
   submitLabel,
   alternateLabel,
@@ -53,6 +56,9 @@ export default function AuthForm({
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
+      <Title order={1} style={{ color: "var(--mantine-color-orange-filled)", textAlign: "center" }}>
+        {title}
+      </Title>
       <Stack>
         {fields.map((field) => {
           const InputComponent = field.type === "password" ? PasswordInput : TextInput;

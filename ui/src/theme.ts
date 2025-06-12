@@ -74,4 +74,21 @@ export const theme = createTheme({
   defaultRadius: 'md',
   black: '#000000',
   white: '#FFFFFF',
+  components: {
+    Text: {
+      defaultProps: {
+        c: '#FFFFFF',
+      },
+    },
+    Title: {
+      defaultProps: {
+        c: '#FFFFFF',
+      },
+    },
+    InputLabel: {
+      defaultProps: {
+        c: '#FFFFFF',
+      },
+    }
+  },
 });
