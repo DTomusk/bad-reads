@@ -12,6 +12,7 @@ app = FastAPI(
     description="API for rating books",
     version="1.0.0",
     debug=settings.DEBUG,
+    redirect_slashes=False,  # Disable automatic trailing slash redirects
 )
 
 # Configure CORS

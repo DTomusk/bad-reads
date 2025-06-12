@@ -5,7 +5,7 @@ import { TBook } from "../types/book";
 export const useBooks = () => {
     return useQuery({
         queryKey: ["books"],
-        queryFn: () => fetcher<TBook[]>("/books"),
+        queryFn: () => fetcher<TBook[]>("/books/"),
     });
 }
 
