@@ -89,6 +89,11 @@ export const theme = createTheme({
       defaultProps: {
         c: '#FFFFFF',
       },
-    }
+    },
+    Button: {
+      defaultProps: {
+        c: '#FFFFFF',
+      },
+    },
   },
 });

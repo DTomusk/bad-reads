@@ -56,10 +56,12 @@ export default function AuthForm({
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
-      <Title order={1} style={{ color: "var(--mantine-color-orange-filled)", textAlign: "center" }}>
-        {title}
-      </Title>
       <Stack>
+        <Group justify="center">
+          <Title order={1} mb="xl" mt="xl">
+            {title}
+          </Title>
+        </Group>
         {fields.map((field) => {
           const InputComponent = field.type === "password" ? PasswordInput : TextInput;
           return (
@@ -84,7 +86,6 @@ export default function AuthForm({
         <Anchor
           component="button"
           type="button"
-          c="dimmed"
           onClick={() => navigate(alternatePath)}
           size="md"
         >
@@ -94,7 +95,6 @@ export default function AuthForm({
           type="submit" 
           radius="xl" 
           size="lg" 
-          color="orange"
           loading={isPending}
         >
           {submitLabel}
