@@ -1,36 +1,33 @@
-import {
-  Stack,
-  TextInput,
-  PasswordInput,
-  Button,
-  Group,
-  Anchor,
-  Center,
-} from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { Center } from "@mantine/core";
 import { useLogin } from "../hooks/useLogin";
 import { useNavigate } from "react-router-dom";
+import AuthForm from "../components/AuthForm";
 
 export default function Login() {
   const navigate = useNavigate();
   const { mutate: login, isPending } = useLogin();
 
-  const form = useForm({
-    initialValues: {
-      email: "",
-      password: "",
+  const fields = [
+    {
+      name: "email",
+      label: "Email",
+      placeholder: "bad@bad-reads.com",
+      type: "text" as const,
+      validation: (val: string) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
     },
-
-    validate: {
-      email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
-      password: (val) =>
+    {
+      name: "password",
+      label: "Password",
+      placeholder: "Your password",
+      type: "password" as const,
+      validation: (val: string) =>
         val.length <= 6
           ? "Password should include at least 6 characters"
           : null,
     },
-  });
+  ];
 
-  const handleSubmit = (values: any) => {
+  const handleSubmit = (values: Record<string, string>) => {
     login(
       {
         username: values.email,
@@ -53,59 +50,14 @@ export default function Login() {
 
   return (
     <Center>
-      <form onSubmit={form.onSubmit(handleSubmit)} style={{ width: "50rem", marginTop: "2rem" }}>
-        <Stack>
-          <TextInput
-            required
-            label="Email"
-            placeholder="bad@bad-reads.com"
-            value={form.values.email}
-            onChange={(event) =>
-              form.setFieldValue("email", event.currentTarget.value)
-            }
-            error={form.errors.email && "Invalid email"}
-            radius="md"
-            size="lg"
-          />
-
-          <PasswordInput
-            required
-            label="Password"
-            placeholder="Your password"
-            value={form.values.password}
-            onChange={(event) =>
-              form.setFieldValue("password", event.currentTarget.value)
-            }
-            error={
-              form.errors.password &&
-              "Password should include at least 6 characters"
-            }
-            radius="md"
-            size="lg"
-          />
-        </Stack>
-
-        <Group justify="space-between" mt="xl">
-          <Anchor
-            component="button"
-            type="button"
-            c="dimmed"
-            onClick={() => navigate("/register")}
-            size="md"
-          >
-            Don't have an account? Register
-          </Anchor>
-          <Button 
-            type="submit" 
-            radius="xl" 
-            size="lg" 
-            color="orange"
-            loading={isPending}
-          >
-            Login
-          </Button>
-        </Group>
-      </form>
+      <AuthForm
+        fields={fields}
+        submitLabel="Login"
+        alternateLabel="Don't have an account? Register"
+        alternatePath="/register"
+        onSubmit={handleSubmit}
+        isPending={isPending}
+      />
     </Center>
   );
 }

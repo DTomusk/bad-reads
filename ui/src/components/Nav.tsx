@@ -5,15 +5,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink, TextInput, Group } from "@mantine/core";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-const navigationData = [
-  { label: "Home", icon: <FontAwesomeIcon icon={faHome} />, link: "/" },
-  { label: "Login", icon: <FontAwesomeIcon icon={faUser} />, link: "/login" },
-];
+import { useAuth } from "../hooks/useAuth";
 
 export default function Nav() {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+  const isAuthenticated = useAuth();
+
+  const navigationData = [
+    { label: "Home", icon: <FontAwesomeIcon icon={faHome} />, link: "/" },
+    { 
+      label: isAuthenticated ? "Account" : "Login", 
+      icon: <FontAwesomeIcon icon={faUser} />, 
+      link: isAuthenticated ? "/account" : "/login" 
+    },
+  ];
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && searchQuery.trim()) {
