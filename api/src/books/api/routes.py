@@ -33,8 +33,8 @@ async def get_book_details(book_id: UUID, get_book_details=Depends(get_book_deta
     """
     Get details of a book by its ID.
     """
-    book = get_book_details.execute(book_id=book_id)
-    return book
+    book_details = get_book_details.execute(book_id=book_id)
+    return book_details
 
 @router.post("/{book_id}/rate")
 async def rate_book(
@@ -57,7 +57,7 @@ async def review_book(
     """
     Review a book by its ID.
     """
-    review_book.execute(book_id=book_id, user_id=user_id, text=review_request.text, score=review_request.score)
+    review_book.execute(book_id=book_id, user_id=user_id, text=review_request.text, love_score=review_request.love_score, shit_score=review_request.shit_score)
     return {"message": "Book reviewed successfully"}
 
 
