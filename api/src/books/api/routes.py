@@ -1,7 +1,7 @@
 from uuid import UUID
 from fastapi import APIRouter, Depends
 
-from src.books.api.dependencies import get_book_details_use_case, get_books_use_case, rate_book_use_case, review_book_use_case
+from src.books.api.dependencies import get_book_details_use_case, get_books_use_case, rate_book_use_case, review_book_use_case, search_books_use_case
 from src.books.api.schemas.rate_request import RateRequest
 from src.books.api.schemas.review_request import ReviewRequest
 from src.users.api.auth import get_current_user
@@ -15,6 +15,17 @@ async def get_books(get_books=Depends(get_books_use_case), page: int = 1, page_s
     Get all books.
     """
     books = get_books.execute(page, page_size, sort_by, sort_order, author_id)
+    return books
+
+@router.get("/search")
+async def search_books(
+        query: str,
+        search_books=Depends(search_books_use_case),
+        page_size: int = 10):
+    """
+    Search for books by title.
+    """
+    books = search_books.execute(query, page_size)
     return books
 
 @router.get("/{book_id}")
@@ -48,4 +59,5 @@ async def review_book(
     """
     review_book.execute(book_id=book_id, user_id=user_id, text=review_request.text, score=review_request.score)
     return {"message": "Book reviewed successfully"}
+
 

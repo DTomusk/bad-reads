@@ -4,7 +4,7 @@ from uuid import uuid4
 import pytest
 
 from src.books.application.use_cases.review_book import ReviewBook
-from src.books.domain.models import Author, Book, Rating, RatingScore, Review
+from src.books.domain.models import ISBN13, Author, Book, Rating, RatingScore, Review
 
 @pytest.fixture
 def book_id():
@@ -16,7 +16,18 @@ def user_id():
 
 @pytest.fixture
 def mock_book(book_id):
-    return Book(id=book_id, title="Test Book", authors=[Author(id=uuid4(), name="Test Author")], average_love_rating=0.0, average_shit_rating=0.0, number_of_ratings=0, sum_of_love_ratings=0.0, sum_of_shit_ratings=0.0)
+    return Book(
+        id=book_id, 
+        title="Test Book", 
+        authors=[Author(id=uuid4(), name="Test Author")], 
+        average_love_rating=0.0, 
+        average_shit_rating=0.0, 
+        number_of_ratings=0, 
+        sum_of_love_ratings=0.0, 
+        sum_of_shit_ratings=0.0, 
+        isbn=ISBN13("978-3-16-148410-0"),
+        description="Test Description"
+    )
 
 @pytest.fixture
 def mock_book_repository(mock_book):
