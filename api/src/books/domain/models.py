@@ -97,6 +97,16 @@ class Book:
 
     def add_rating(self, rating: Rating) -> None:
         """ Add a rating to the book """
+        if self.sum_of_love_ratings is None:
+            self.sum_of_love_ratings = 0
+        if self.sum_of_shit_ratings is None:
+            self.sum_of_shit_ratings = 0
+        if self.number_of_ratings is None:
+            self.number_of_ratings = 0
+        if self.average_love_rating is None:
+            self.average_love_rating = 0
+        if self.average_shit_rating is None:
+            self.average_shit_rating = 0
         self.sum_of_love_ratings += rating.love_score.value
         self.sum_of_shit_ratings += rating.shit_score.value
         self.number_of_ratings += 1

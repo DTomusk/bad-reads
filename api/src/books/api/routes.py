@@ -45,7 +45,7 @@ async def rate_book(
     """
     Rate a book by its ID.
     """
-    rate_book.execute(book_id=book_id, user_id=user_id, score=rate_request.score)
+    rate_book.execute(book_id=book_id, user_id=user_id, love_score=rate_request.love_score, shit_score=rate_request.shit_score)
     return {"message": "Book rated successfully"}
 
 @router.post("/{book_id}/review")
