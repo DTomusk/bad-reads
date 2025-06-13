@@ -23,9 +23,11 @@ class BookRepo(AbstractBookRepo):
             id=result.id,
             title=result.title,
             authors=result.authors,
-            average_rating=result.average_rating,
+            average_love_rating=result.average_love_rating,
+            average_shit_rating=result.average_shit_rating,
             number_of_ratings=result.number_of_ratings,
-            sum_of_ratings=result.sum_of_ratings,
+            sum_of_love_ratings=result.sum_of_love_ratings,
+            sum_of_shit_ratings=result.sum_of_shit_ratings,
             isbn=result.isbn,
             description=result.description,
             picture_url=result.picture_url
@@ -48,9 +50,11 @@ class BookRepo(AbstractBookRepo):
         book_model = BookModel(
             id=book.id,
             title=book.title,
-            average_rating=book.average_rating,
+            average_love_rating=book.average_love_rating,
+            average_shit_rating=book.average_shit_rating,
             number_of_ratings=book.number_of_ratings,
-            sum_of_ratings=book.sum_of_ratings,
+            sum_of_love_ratings=book.sum_of_love_ratings,
+            sum_of_shit_ratings=book.sum_of_shit_ratings,
             isbn=str(book.isbn),
             description=book.description,
             picture_url=book.picture_url,
@@ -131,9 +135,11 @@ class BookRepo(AbstractBookRepo):
         :return: The updated book object.
         """
         self.session.query(BookModel).filter(BookModel.id == book.id).update({
-            BookModel.average_rating: book.average_rating,
+            BookModel.average_love_rating: book.average_love_rating,
+            BookModel.average_shit_rating: book.average_shit_rating,
             BookModel.number_of_ratings: book.number_of_ratings,
-            BookModel.sum_of_ratings: book.sum_of_ratings
+            BookModel.sum_of_love_ratings: book.sum_of_love_ratings,
+            BookModel.sum_of_shit_ratings: book.sum_of_shit_ratings
         })
         self.session.commit()
 

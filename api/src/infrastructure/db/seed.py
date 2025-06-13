@@ -78,9 +78,11 @@ def seed_books():
                 book_obj = BookModel(
                     id=uuid.uuid4(),
                     title=book["title"],
-                    average_rating=0.0,
+                    average_love_rating=0.0,
+                    average_shit_rating=0.0,
                     number_of_ratings=0,
-                    sum_of_ratings=0.0,
+                    sum_of_love_ratings=0.0,
+                    sum_of_shit_ratings=0.0,
                     authors=[authors_map[book["author"]]]
                 )
                 session.add(book_obj)
