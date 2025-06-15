@@ -1,23 +1,7 @@
-import { Stack, Image, Card, Title, Text } from "@mantine/core";
+import { Stack, Image, Card, Title } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { TBook } from "../types/book";
-
-const generateEmojis = (rating: number | undefined, emoji: string) => {
-    const safeRating = rating ?? 0;
-    const filledCount = Math.max(0, Math.min(5, Math.round(safeRating)));
-    const emptyCount = 5 - filledCount;
-    
-    return (
-        <>
-            {Array.from({ length: filledCount }, (_, i) => (
-                <Text key={`filled-${i}`} c="white" size="xl">{emoji}</Text>
-            ))}
-            {Array.from({ length: emptyCount }, (_, i) => (
-                <Text key={`empty-${i}`} c="white" size="xl" style={{ opacity: 0.3 }}>{emoji}</Text>
-            ))}
-        </>
-    );
-};
+import BookRatingDisplay from "./BookRatingDisplay";
 
 export default function BookCardSmall({
     title,
@@ -65,15 +49,11 @@ export default function BookCardSmall({
                     {title}
                 </Title>}
 
-                <Stack gap="xs" align="center">
-                    <div style={{ display: 'flex', gap: '2px' }}>
-                        {generateEmojis(average_love_rating, '💖')}
-                    </div>
-                    <div style={{ display: 'flex', gap: '2px' }}>
-                        {generateEmojis(average_shit_rating, '💩')}
-                    </div>
-                    <Text c="white" size="sm" mb="sm">({number_of_ratings})</Text>
-                </Stack>
+                <BookRatingDisplay 
+                    average_love_rating={average_love_rating}
+                    average_shit_rating={average_shit_rating}
+                    number_of_ratings={number_of_ratings}
+                />
             </Stack>
         </Card> 
     )
