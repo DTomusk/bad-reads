@@ -22,14 +22,6 @@ export default function BookCardSmall({
             onClick={() => navigate(`/book/${id}`)}
             style={{ cursor: 'pointer' }}
             bg="dark.0"
-            styles={{
-                root: {
-                    transition: 'background-color 0.2s ease',
-                    '&:hover': {
-                        backgroundColor: 'var(--mantine-color-dark-9)',
-                    }
-                }
-            }}
             p="0"
             m="0"
         >

@@ -93,7 +93,7 @@ export default function BookRow({ books }: { books: TBook[] }) {
                     <Flex gap="md" wrap="nowrap">
                         {books?.map((book) => (
                             <div key={book.id} style={{ width: CARD_WIDTH, flexShrink: 0 }}>
-                                <BookCardSmall title={book.title} picture_url={book.picture_url || ""} id={book.id} />
+                                <BookCardSmall title={book.title} picture_url={book.picture_url || ""} id={book.id} average_love_rating={book.average_love_rating} average_shit_rating={book.average_shit_rating} number_of_ratings={book.number_of_ratings} />
                             </div>
                         ))}
                     </Flex>
