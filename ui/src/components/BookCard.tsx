@@ -52,6 +52,7 @@ export default function BookCard({
           <BookActions
             bookId={id}
             onRateClick={openRatingModal}
+            showMore={true}
           />
         </Stack>
       </Flex>

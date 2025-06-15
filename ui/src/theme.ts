@@ -101,5 +101,11 @@ export const theme = createTheme({
         size: 'sm',
       },
     },
+    Paper: {
+      defaultProps: {
+        bg: 'rgba(0, 0, 0, 0)',
+        c: 'white',
+      },
+    },
   },
 });

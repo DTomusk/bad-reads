@@ -11,7 +11,6 @@ import {
   Text,
   Flex,
 } from "@mantine/core";
-import RatingGroup from "../components/RatingGroup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, useParams } from "react-router-dom";
@@ -19,6 +18,7 @@ import { useBook } from "../hooks/useBooks";
 import { useDisclosure } from "@mantine/hooks";
 import RatingModal from "../components/RatingModal";
 import BookActions from "../components/BookActions";
+import BookRatingDisplay from "../components/BookRatingDisplay";
 
 export default function Book() {
   const navigate = useNavigate();
@@ -49,27 +49,23 @@ export default function Book() {
 
   return (
     <Stack>
-      <ActionIcon
-        variant="subtle"
-        size="xl"
-        onClick={() => navigate("/")}
-        color="orange"
-      >
-        <FontAwesomeIcon icon={faArrowLeft} size="3x" />
-      </ActionIcon>
-      <Group justify="center"> 
+      <Group justify="center" mt="xl"> 
         <Flex justify="center" 
-          w={{base: "100%", md: "80%", lg: "50%"}}
           gap={{base: "0", md: "md"}}
           direction={{base: "column", md: "row"}}>
           <Stack>
             <Image
               src={book.picture_url}
-              h="100%"
+              h="auto"
               w="auto"
               fit="contain"
-              style={{ flexGrow: 1 }}
               alt={`${book.title} image`}
+              mt="xl"
+            />
+            <BookRatingDisplay
+              average_love_rating={book.average_love_rating}
+              average_shit_rating={book.average_shit_rating}
+              number_of_ratings={book.number_of_ratings}
             />
             <BookActions
               bookId={id || ""}

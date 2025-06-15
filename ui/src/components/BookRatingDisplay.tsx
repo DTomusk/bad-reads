@@ -30,12 +30,12 @@ export default function BookRatingDisplay({
 }: BookRatingDisplayProps) {
     return (
         <Stack gap="xs" align="center">
-            <div style={{ display: 'flex', gap: '2px' }}>
-                {generateEmojis(average_love_rating, '💖')}
-            </div>
-            <div style={{ display: 'flex', gap: '2px' }}>
-                {generateEmojis(average_shit_rating, '💩')}
-            </div>
+            <Text style={{ display: 'flex', gap: '2px' }}>
+                {generateEmojis(average_love_rating, '💖')} {average_love_rating}
+            </Text>
+            <Text style={{ display: 'flex', gap: '2px' }}>
+                {generateEmojis(average_shit_rating, '💩')} {average_shit_rating}
+            </Text>
             <Text c="white" size="sm" mb="sm">({number_of_ratings})</Text>
         </Stack>
     );
