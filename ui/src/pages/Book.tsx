@@ -88,7 +88,6 @@ export default function Book() {
             <Divider my="md" />
 
             <p>{book.description}</p>
-            <RatingGroup changeFunction={() => {}} />
           </Paper>
         </Flex>
       </Group>

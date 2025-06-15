@@ -2,7 +2,7 @@ import { TAuthor } from "./author";
 
 export type TBook = {
     title: string;
-    authors: string[];
+    authors: TAuthor[];
     average_love_rating: number;
     average_shit_rating: number;
     number_of_ratings: number;

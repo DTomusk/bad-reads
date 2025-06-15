@@ -47,7 +47,7 @@ export default function BookCard({
 
         <Stack justify="space-between" h="100%" style={{ flex: 1 }}>
           <Text fw={500} size="lg">{title}</Text>
-          <Text>{authors.join(", ")}</Text>
+          <Text>{authors.map((author) => author.name).join(", ")}</Text>
 
           <BookActions
             bookId={id}

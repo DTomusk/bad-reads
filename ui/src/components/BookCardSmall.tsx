@@ -1,15 +1,32 @@
 import { Stack, Image, Card, Title, Text } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
+import { TBook } from "../types/book";
+
+const generateEmojis = (rating: number | undefined, emoji: string) => {
+    const safeRating = rating ?? 0;
+    const filledCount = Math.max(0, Math.min(5, Math.round(safeRating)));
+    const emptyCount = 5 - filledCount;
+    
+    return (
+        <>
+            {Array.from({ length: filledCount }, (_, i) => (
+                <Text key={`filled-${i}`} c="white" size="xl">{emoji}</Text>
+            ))}
+            {Array.from({ length: emptyCount }, (_, i) => (
+                <Text key={`empty-${i}`} c="white" size="xl" style={{ opacity: 0.3 }}>{emoji}</Text>
+            ))}
+        </>
+    );
+};
 
 export default function BookCardSmall({
     title,
     picture_url,
     id,
-}: {
-    title: string;
-    picture_url: string;
-    id: string;
-}) {
+    average_love_rating = 0,
+    average_shit_rating = 0,
+    number_of_ratings = 0,
+}: Partial<TBook> & { id: string }) {
     const navigate = useNavigate();
     
     return (
@@ -50,20 +67,12 @@ export default function BookCardSmall({
 
                 <Stack gap="xs" align="center">
                     <div style={{ display: 'flex', gap: '2px' }}>
-                        <Text c="white" size="xl">💖</Text>
-                        <Text c="white" size="xl">💖</Text>
-                        <Text c="white" size="xl" style={{ opacity: 0.3 }}>💖</Text>
-                        <Text c="white" size="xl" style={{ opacity: 0.3 }}>💖</Text>
-                        <Text c="white" size="xl" style={{ opacity: 0.3 }}>💖</Text>
+                        {generateEmojis(average_love_rating, '💖')}
                     </div>
                     <div style={{ display: 'flex', gap: '2px' }}>
-                        <Text c="white" size="xl">💩</Text>
-                        <Text c="white" size="xl">💩</Text>
-                        <Text c="white" size="xl">💩</Text>
-                        <Text c="white" size="xl">💩</Text>
-                        <Text c="white" size="xl">💩</Text>
+                        {generateEmojis(average_shit_rating, '💩')}
                     </div>
-                    <Text c="white" size="sm" mb="sm">(9999)</Text>
+                    <Text c="white" size="sm" mb="sm">({number_of_ratings})</Text>
                 </Stack>
             </Stack>
         </Card> 
