@@ -97,9 +97,11 @@ def test_search_books_success(service, mock_google_books_response):
         assert first_book.description == "Test Description"
         assert isinstance(first_book.isbn, ISBN13)
         assert str(first_book.isbn) == "9780306406157"
-        assert first_book.average_rating == 0.0
+        assert first_book.average_love_rating == 0.0
+        assert first_book.average_shit_rating == 0.0
         assert first_book.number_of_ratings == 0
-        assert first_book.sum_of_ratings == 0.0
+        assert first_book.sum_of_love_ratings == 0.0
+        assert first_book.sum_of_shit_ratings == 0.0
 
         # Verify second book
         second_book = books[1]
@@ -110,6 +112,11 @@ def test_search_books_success(service, mock_google_books_response):
         assert second_book.description == "Another Description"
         assert isinstance(second_book.isbn, ISBN13)
         assert str(second_book.isbn) == "9780306406164"
+        assert second_book.average_love_rating == 0.0
+        assert second_book.average_shit_rating == 0.0
+        assert second_book.number_of_ratings == 0
+        assert second_book.sum_of_love_ratings == 0.0
+        assert second_book.sum_of_shit_ratings == 0.0
 
 def test_search_books_no_authors(service, mock_google_books_response_no_authors):
     with patch('httpx.get') as mock_get:
