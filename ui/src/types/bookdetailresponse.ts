@@ -1,6 +1,5 @@
-import { TAuthor } from "./author";
-
-export type TBook = {
+export type BookDetailResponse = {
+    id: string;
     title: string;
     authors: string[];
     average_love_rating: number;
@@ -10,5 +9,14 @@ export type TBook = {
     sum_of_shit_ratings: number;
     picture_url?: string;
     description: string;
+    reviews: ReviewResponse[];
+}
+
+export type ReviewResponse = {
     id: string;
+    book_id: string;
+    user_id: string;
+    text: string;
+    love_score: number;
+    shit_score: number;
 }

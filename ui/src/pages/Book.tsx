@@ -69,7 +69,7 @@ export default function Book() {
               <Divider my="md" />
 
             {book.authors && book.authors.length > 0 ? (
-              <Pill size="xl">{book.authors.map((author) => author.name).join(", ")}</Pill>
+              <Pill size="xl">{book.authors.join(", ")}</Pill>
             ) : (
               <Text c="dimmed">No authors listed</Text>
             )}
