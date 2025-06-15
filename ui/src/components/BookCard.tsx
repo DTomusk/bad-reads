@@ -1,18 +1,14 @@
 import {
   Text,
-  Button,
-  Group,
   Stack,
-  Modal,
   Image,
   Flex,
   Box,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { useNavigate } from "react-router-dom";
-import RatingGroup from "./RatingGroup";
 import { TBook } from "../types/book";
-import { useAuth } from "../auth/AuthProvider";
+import RatingModal from "./RatingModal";
+import BookActions from "./BookActions";
 
 export default function BookCard({
   title,
@@ -20,30 +16,20 @@ export default function BookCard({
   picture_url = "",
   id,
 }: TBook) {
-  const navigate = useNavigate();
-  const [
-    ratingModalOpened,
-    { open: openRatingModal, close: closeRatingModal },
-  ] = useDisclosure(false);
-  const { isAuthenticated } = useAuth();
+  const [ratingModalOpened, { open: openRatingModal, close: closeRatingModal }] = useDisclosure(false);
+
+  const handleRatingSubmit = (rating: { hearts: number; poos: number; review: string }) => {
+    console.log("Rating submitted:", rating);
+    // TODO: Implement rating submission
+  };
 
   return (
     <>
-      <Modal
+      <RatingModal
         opened={ratingModalOpened}
         onClose={closeRatingModal}
-        centered
-        withCloseButton={false}
-      >
-        <Stack justify="center">
-          <Group justify="center">
-            <h2>How bad is the book?</h2>
-          </Group>
-          <Group justify="center">
-            <RatingGroup changeFunction={closeRatingModal} />
-          </Group>
-        </Stack>
-      </Modal>
+        onSubmit={handleRatingSubmit}
+      />
       
       <Flex
         gap="md"
@@ -63,23 +49,10 @@ export default function BookCard({
           <Text fw={500} size="lg">{title}</Text>
           <Text>{authors.join(", ")}</Text>
 
-          <Group justify="flex-start" mt="auto">
-            <Button
-              color="blue"
-              radius="md"
-              onClick={() => navigate(`/book/${id}`)}
-            >
-              More
-            </Button>
-            <Button
-              color="orange"
-              radius="md"
-              onClick={openRatingModal}
-              disabled={!isAuthenticated}
-            >
-              Rate
-            </Button>
-          </Group>
+          <BookActions
+            bookId={id}
+            onRateClick={openRatingModal}
+          />
         </Stack>
       </Flex>
     </>

@@ -16,14 +16,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, useParams } from "react-router-dom";
 import { useBook } from "../hooks/useBooks";
+import { useDisclosure } from "@mantine/hooks";
+import RatingModal from "../components/RatingModal";
+import BookActions from "../components/BookActions";
 
 export default function Book() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { data: book, isLoading, error } = useBook(id || "");
+  const [ratingModalOpened, { open: openRatingModal, close: closeRatingModal }] = useDisclosure(false);
 
-  console.log("Book data:", book);
-  console.log("Book ID:", id);
+  const handleRatingSubmit = (rating: { hearts: number; poos: number; review: string }) => {
+    console.log("Rating submitted:", rating);
+    // TODO: Implement rating submission
+  };
 
   if (isLoading) {
     return (
@@ -43,19 +49,20 @@ export default function Book() {
 
   return (
     <Stack>
-        <ActionIcon
-          variant="subtle"
-          size="xl"
-          onClick={() => navigate("/")}
-          color="orange"
+      <ActionIcon
+        variant="subtle"
+        size="xl"
+        onClick={() => navigate("/")}
+        color="orange"
       >
         <FontAwesomeIcon icon={faArrowLeft} size="3x" />
       </ActionIcon>
       <Group justify="center"> 
         <Flex justify="center" 
-        w={{base: "100%", md: "80%", lg: "50%"}}
-        gap={{base: "0", md: "md"}}
-        direction={{base: "column", md: "row"}}>
+          w={{base: "100%", md: "80%", lg: "50%"}}
+          gap={{base: "0", md: "md"}}
+          direction={{base: "column", md: "row"}}>
+          <Stack>
             <Image
               src={book.picture_url}
               h="100%"
@@ -64,9 +71,14 @@ export default function Book() {
               style={{ flexGrow: 1 }}
               alt={`${book.title} image`}
             />
-            <Paper style={{ flexGrow: 2 }}>
-              <h1>{book.title}</h1>
-              <Divider my="md" />
+            <BookActions
+              bookId={id || ""}
+              onRateClick={openRatingModal}
+            />
+          </Stack>
+          <Paper style={{ flexGrow: 2 }}>
+            <h1>{book.title}</h1>
+            <Divider my="md" />
 
             {book.authors && book.authors.length > 0 ? (
               <Pill size="xl">{book.authors.join(", ")}</Pill>
@@ -76,10 +88,16 @@ export default function Book() {
             <Divider my="md" />
 
             <p>{book.description}</p>
-              <RatingGroup changeFunction={() => {}} />
-            </Paper>
+            <RatingGroup changeFunction={() => {}} />
+          </Paper>
         </Flex>
       </Group>
+
+      <RatingModal
+        opened={ratingModalOpened}
+        onClose={closeRatingModal}
+        onSubmit={handleRatingSubmit}
+      />
     </Stack>
   );
 }
