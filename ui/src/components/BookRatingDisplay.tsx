@@ -1,4 +1,4 @@
-import { Stack, Text } from "@mantine/core";
+import { Stack, Text, Group } from "@mantine/core";
 
 const generateEmojis = (rating: number | undefined, emoji: string) => {
     const safeRating = rating ?? 0;
@@ -30,12 +30,12 @@ export default function BookRatingDisplay({
 }: BookRatingDisplayProps) {
     return (
         <Stack gap="xs" align="center">
-            <Text style={{ display: 'flex', gap: '2px' }}>
-                {generateEmojis(average_love_rating, '💖')} {average_love_rating}
-            </Text>
-            <Text style={{ display: 'flex', gap: '2px' }}>
-                {generateEmojis(average_shit_rating, '💩')} {average_shit_rating}
-            </Text>
+            <Group gap="xs">
+                {generateEmojis(average_love_rating, '💖')} <Text>{average_love_rating}</Text>
+            </Group>
+            <Group gap="xs">
+                {generateEmojis(average_shit_rating, '💩')} <Text>{average_shit_rating}</Text>
+            </Group>
             <Text c="white" size="sm" mb="sm">({number_of_ratings})</Text>
         </Stack>
     );

@@ -9,7 +9,7 @@ export default function BookRow({ books }: { books: TBook[] }) {
     const isLg = useMediaQuery(`(min-width: ${theme.breakpoints.lg})`);
     const isMd = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
     
-    const CARD_WIDTH = 150; // pixels
+    const CARD_WIDTH = 200; // pixels
     
     // Calculate number of visible items based on screen width
     const getVisibleItems = () => {
