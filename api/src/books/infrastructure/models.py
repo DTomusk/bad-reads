@@ -17,13 +17,22 @@ class BookModel(Base):
 
     id = Column(UUID, primary_key=True, index=True)
     title = Column(String, index=True)
-    average_rating = Column(Float, index=False)
+    average_love_rating = Column(Float, index=False)
+    average_shit_rating = Column(Float, index=False)
     number_of_ratings = Column(Integer, index=False)
-    sum_of_ratings = Column(Float, index=False)
+    sum_of_love_ratings = Column(Float, index=False)
+    sum_of_shit_ratings = Column(Float, index=False)
+    isbn = Column(String, index=True)
+    description = Column(String, index=False)
+    picture_url = Column(String, index=False)
     
     ratings = relationship("RatingModel", back_populates="book")
     authors = relationship("AuthorModel", secondary=book_authors, back_populates="books")
     reviews = relationship("ReviewModel", back_populates="book")
+
+    __table_args__ = (
+        Index('ix_books_title_trgm', title, postgresql_using='gin'),
+    )
 
     def __repr__(self):
         return f"<BookModel(id={self.id}, title={self.title})>"
@@ -34,7 +43,8 @@ class RatingModel(Base):
     id = Column(UUID, primary_key=True, index=True)
     book_id = Column(UUID, ForeignKey("books.id"), index=True)
     user_id = Column(UUID, ForeignKey("users.id"), index=True)
-    rating = Column(Float, index=False)
+    love_score = Column(Float, index=False)
+    shit_score = Column(Float, index=False)
 
     book = relationship("BookModel", back_populates="ratings")
     user = relationship("UserModel", back_populates="ratings")
@@ -62,6 +72,7 @@ class AuthorModel(Base):
 
     id = Column(UUID, primary_key=True, index=True)
     name = Column(String, index=True)
+    normalized_name = Column(String, index=True)
 
     books = relationship("BookModel", secondary=book_authors, back_populates="authors")
 

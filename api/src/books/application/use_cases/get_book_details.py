@@ -1,24 +1,23 @@
 from uuid import UUID
-from src.books.application.repositories.book_repository import BookRepo
-from src.books.application.repositories.rating_repository import RatingRepo
+from src.books.application.repositories.book_repository import AbstractBookRepo
+from src.books.application.repositories.review_repository import AbstractReviewRepo
+from src.books.api.schemas.book_detail_response import BookDetailResponse
+from src.books.api.schemas.review_response import ReviewResponse
 
 
 class GetBookDetails:
-    def __init__(self, book_repository: BookRepo, rating_repository: RatingRepo):
+    def __init__(self, book_repository: AbstractBookRepo, review_repository: AbstractReviewRepo):
         self.book_repository = book_repository
-        self.rating_repository = rating_repository
+        self.review_repository = review_repository
 
-    def execute(self, book_id: UUID) -> dict:
+    def execute(self, book_id: UUID) -> BookDetailResponse:
         """ Get book details by its ID """
         # Get the book details
         book = self.book_repository.get_book_by_id(book_id)
         if not book:
             raise ValueError("Book not found")
         
-        # Get the ratings for the book
-        ratings = self.rating_repository.get_ratings_by_book_id(book_id)
+        # Get the reviews for the book
+        reviews = self.review_repository.get_reviews_by_book_id(book_id)
 
-        return {
-             "book": book,
-             "ratings": ratings,
-        }
+        return BookDetailResponse.from_domain(book, reviews)

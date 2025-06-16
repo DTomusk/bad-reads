@@ -1,10 +1,10 @@
 from uuid import uuid4
-from src.users.application.repositories.user_repository import UserRepository
+from src.users.application.repositories.user_repository import AbstractUserRepository
 from src.users.application.utilities.hasher import Hasher
 from src.users.domain.models import Email, User
 
 class RegisterUser:
-    def __init__(self, user_repository: UserRepository, hasher: Hasher):
+    def __init__(self, user_repository: AbstractUserRepository, hasher: Hasher):
         self.user_repository = user_repository
         self.hasher = hasher
 

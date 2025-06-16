@@ -1,11 +1,11 @@
 from sqlalchemy import UUID
-from src.books.application.repositories.rating_repository import RatingRepo
-from src.books.domain.models import Rating, RatingScore, Review
+from src.books.application.repositories.rating_repository import AbstractRatingRepo
+from src.books.domain.models import Rating, RatingScore
 from src.books.infrastructure.models import RatingModel
+from sqlalchemy.orm import Session
 
-
-class SqliteRatingRepo(RatingRepo):
-    def __init__(self, session):
+class RatingRepo(AbstractRatingRepo):
+    def __init__(self, session: Session):
         self.session = session
 
     def get_rating_by_user_and_book(self, user_id: UUID, book_id: UUID) -> Rating:
@@ -24,7 +24,8 @@ class SqliteRatingRepo(RatingRepo):
                 id=result.id,
                 book_id=result.book_id,
                 user_id=result.user_id,
-                score=RatingScore(result.rating)
+                love_score=RatingScore(result.love_score),
+                shit_score=RatingScore(result.shit_score)
             )
         return None
     
@@ -39,7 +40,8 @@ class SqliteRatingRepo(RatingRepo):
             id=result.id, 
             book_id=result.book_id, 
             user_id=result.user_id, 
-            score=RatingScore(result.rating)
+            love_score=RatingScore(result.love_score),
+            shit_score=RatingScore(result.shit_score)
             ) 
             for result in result]
 
@@ -53,7 +55,8 @@ class SqliteRatingRepo(RatingRepo):
             id=rating.id,
             book_id=rating.book_id,
             user_id=rating.user_id,
-            rating=rating.score.value,
+            love_score=rating.love_score.value,
+            shit_score=rating.shit_score.value,
         )
         self.session.add(rating_model)
         self.session.commit()
@@ -66,7 +69,8 @@ class SqliteRatingRepo(RatingRepo):
         """
         rating_model = self.session.query(RatingModel).filter(RatingModel.id == rating.id).first()
         if rating_model:
-            rating_model.rating = rating.score.value
+            rating_model.love_score = rating.love_score.value
+            rating_model.shit_score = rating.shit_score.value
             self.session.commit()
         else:
             raise ValueError("Rating not found")
