@@ -2,27 +2,48 @@ import {
   Modal,
   Stack,
   Group,
-  Text,
   Button,
-  Textarea,
   Title,
+  Card,
 } from "@mantine/core";
 import { useState } from "react";
 import RatingGroup from "./RatingGroup";
+import LimitedTextarea from "./LimitedTextarea";
+import { useRating } from "../hooks/useRating";
 
 interface RatingModalProps {
   opened: boolean;
   onClose: () => void;
-  onSubmit: (rating: { hearts: number; poos: number; review: string }) => void;
+  bookTitle: string;
+  bookId: string;
 }
 
-export default function RatingModal({ opened, onClose, onSubmit }: RatingModalProps) {
+const getBadRatingText = (value: number) => {
+  if (value === 0) return "Flawless";
+  if (value <= 1) return "Doesn't do much wrong";
+  if (value <= 2) return "Bad at times";
+  if (value <= 3) return "Quite bad";
+  if (value <= 4) return "Awful";
+  return "An absolute trainwreck";
+};
+
+const getGoodRatingText = (value: number) => {
+  if (value === 0) return "There is nothing positive about this book";
+  if (value <= 1) return "It's alright";
+  if (value <= 2) return "It has its moments";
+  if (value <= 3) return "I quite enjoyed it";
+  if (value <= 4) return "I loved it";
+  return "It was completely life changing";
+};
+
+export default function RatingModal({ opened, onClose, bookTitle, bookId }: RatingModalProps) {
   const [hearts, setHearts] = useState(0);
   const [poos, setPoos] = useState(0);
   const [review, setReview] = useState("");
+  const { mutate: submitRating, isPending: isLoading } = useRating(bookId);
 
   const handleSubmit = () => {
-    onSubmit({ hearts, poos, review });
+    submitRating({ hearts, poos, review });
     onClose();
   };
 
@@ -34,42 +55,54 @@ export default function RatingModal({ opened, onClose, onSubmit }: RatingModalPr
       withCloseButton={false}
       size="lg"
     >
-      <Stack gap="xl">
-        <Title order={2} ta="center">How bad is the book?</Title>
-        
-        <Stack gap="md">
-          <Text fw={500}>Hearts Rating:</Text>
-          <RatingGroup 
-            changeFunction={(value: number) => setHearts(value)} 
-            icon="heart"
-          />
-        </Stack>
+      <Card>
+        <Card.Section bg="teal.0">
+          <Title order={2} ta="center" p="md">Rate {bookTitle}</Title>
+        </Card.Section>
 
-        <Stack gap="md">
-          <Text fw={500}>Poos Rating:</Text>
-          <RatingGroup 
-            changeFunction={(value: number) => setPoos(value)} 
-            icon="poo"
-          />
-        </Stack>
+        <Card.Section bg="light" c="dark.9">
+          <Stack gap="xl" p="md" align="center">
+            <Stack gap="md" align="center">
+              <Title order={3} c="dark.9">How bad is the book?</Title>
+              <RatingGroup 
+                changeFunction={(value: number) => setPoos(value)} 
+                icon="poo"
+                value={poos}
+                getRatingText={getBadRatingText}
+                filledColor="#8B4513"
+              />
+            </Stack>
+            <Stack gap="md" align="center">
+              <Title order={3} c="dark.9">How much did you love it?</Title>
+              <RatingGroup 
+                changeFunction={(value: number) => setHearts(value)} 
+                icon="heart"
+                value={hearts}
+                getRatingText={getGoodRatingText}
+              />
+            </Stack>
 
-        <Textarea
-          label="Review (optional)"
-          placeholder="Share your thoughts about the book..."
-          value={review}
-          onChange={(event) => setReview(event.currentTarget.value)}
-          minRows={3}
-        />
+            <LimitedTextarea
+              title="Review (optional)"
+              maxLength={500}
+              placeholder="Share your thoughts about the book..."
+              value={review}
+              onChange={setReview}
+            />
+          </Stack>
+        </Card.Section>
 
-        <Group justify="flex-end" mt="md">
-          <Button variant="subtle" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button onClick={handleSubmit}>
-            Submit
-          </Button>
-        </Group>
-      </Stack>
+        <Card.Section bg="teal.0">
+          <Group justify="flex-end" w="100%" p="md">
+            <Button bg="secondary.0" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button onClick={handleSubmit} loading={isLoading}>
+              Submit
+            </Button>
+          </Group>
+        </Card.Section>
+      </Card>
     </Modal>
   );
 } 

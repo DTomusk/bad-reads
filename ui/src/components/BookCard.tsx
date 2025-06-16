@@ -18,17 +18,13 @@ export default function BookCard({
 }: TBook) {
   const [ratingModalOpened, { open: openRatingModal, close: closeRatingModal }] = useDisclosure(false);
 
-  const handleRatingSubmit = (rating: { hearts: number; poos: number; review: string }) => {
-    console.log("Rating submitted:", rating);
-    // TODO: Implement rating submission
-  };
-
   return (
     <>
       <RatingModal
         opened={ratingModalOpened}
         onClose={closeRatingModal}
-        onSubmit={handleRatingSubmit}
+        bookTitle={title}
+        bookId={id}
       />
       
       <Flex

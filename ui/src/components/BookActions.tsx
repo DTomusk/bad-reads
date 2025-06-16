@@ -23,7 +23,7 @@ export default function BookActions({ bookId, showMore = false, onRateClick }: B
         More
       </Button>}
       <Button
-        color="orange"
+        color="secondary.0"
         radius="md"
         onClick={onRateClick}
         disabled={!isAuthenticated}

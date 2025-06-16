@@ -4,7 +4,7 @@ import BadReadLogo from "./BadReadLogo";
 export default function Footer() {
   return (
     <Group bg="dark.0">
-      <BadReadLogo color="orange" />
+      <BadReadLogo color="secondary.0" />
       <Group>
         <Text c="white">copyright @ A really really good startup idea</Text>
       </Group>

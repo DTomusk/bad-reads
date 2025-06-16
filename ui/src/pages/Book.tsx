@@ -11,9 +11,7 @@ import {
   Text,
   Flex,
 } from "@mantine/core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useBook } from "../hooks/useBooks";
 import { useDisclosure } from "@mantine/hooks";
 import RatingModal from "../components/RatingModal";
@@ -21,15 +19,9 @@ import BookActions from "../components/BookActions";
 import BookRatingDisplay from "../components/BookRatingDisplay";
 
 export default function Book() {
-  const navigate = useNavigate();
   const { id } = useParams();
   const { data: book, isLoading, error } = useBook(id || "");
   const [ratingModalOpened, { open: openRatingModal, close: closeRatingModal }] = useDisclosure(false);
-
-  const handleRatingSubmit = (rating: { hearts: number; poos: number; review: string }) => {
-    console.log("Rating submitted:", rating);
-    // TODO: Implement rating submission
-  };
 
   if (isLoading) {
     return (
@@ -91,7 +83,8 @@ export default function Book() {
       <RatingModal
         opened={ratingModalOpened}
         onClose={closeRatingModal}
-        onSubmit={handleRatingSubmit}
+        bookTitle={book.title}
+        bookId={id || ""}
       />
     </Stack>
   );

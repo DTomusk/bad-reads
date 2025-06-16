@@ -93,6 +93,7 @@ export const theme = createTheme({
     Button: {
       defaultProps: {
         c: 'white',
+        shadow: 'xl',
       },
     },
     Divider: {
