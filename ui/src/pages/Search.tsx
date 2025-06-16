@@ -1,13 +1,12 @@
-import { Center, Stack, Loader, Text, Title, Divider } from "@mantine/core";
+import { Center, Stack, Title, Divider } from "@mantine/core";
 import BookCard from "../components/BookCard";
-import { useBooks, useBookSearch } from "../hooks/useBooks";
+import { useBookSearch } from "../hooks/useBooks";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
 export default function Search() {
   const [searchParams] = useSearchParams();
   const [activeSearch, setActiveSearch] = useState("");
-  const { data: books, isLoading, error } = useBooks();
   const { data: searchResults } = useBookSearch(activeSearch);
 
   useEffect(() => {
@@ -17,23 +16,9 @@ export default function Search() {
     }
   }, [searchParams]);
 
-  if (isLoading) {
-    return (
-      <Center>
-        <Loader size="xl" />
-      </Center>
-    );
-  }
 
-  if (error) {
-    return (
-      <Center>
-        <Text c="red">Error loading books: {(error as Error).message}</Text>
-      </Center>
-    );
-  }
 
-  const displayBooks = activeSearch ? searchResults || [] : books || [];
+  const displayBooks = searchResults || []
 
   return (
     <Center>
