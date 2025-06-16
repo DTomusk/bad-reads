@@ -34,9 +34,14 @@ class SearchBooks:
                 existing_author = self.author_repository.get_author_by_name(author.name)
                 if not existing_author:
                     self.background_task_queue.add_task(self.author_repository.add_author, author)  
-            if not self.book_repository.get_book_by_isbn(external_book.isbn):
+            existing_book = self.book_repository.get_book_by_isbn(external_book.isbn)
+            if not existing_book:
                 self.background_task_queue.add_task(self.book_repository.add_book, external_book)
+            else:
+                # replace the book in external_books with the book from the database
+                external_books[external_books.index(external_book)] = existing_book
 
         # TODO: this could give us more than page_size books and it could give us duplicates
+        # TODO: the similarity of external book titles might not be high enough
         return db_books + external_books
 
