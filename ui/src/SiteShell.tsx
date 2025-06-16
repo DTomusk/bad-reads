@@ -88,11 +88,10 @@ function SiteShell() {
         background: 'linear-gradient(to right, var(--mantine-color-teal-5), var(--mantine-color-teal-2), var(--mantine-color-teal-0), var(--mantine-color-teal-2), var(--mantine-color-teal-5))'
       }}>
         {/* Note: Container is used to center the content and limit the width */}
-        <Container size="sm">
+        <Container size="md">
           <Outlet />
         </Container>
       </AppShell.Main>
-
       <Footer />
     </AppShell>
   );
