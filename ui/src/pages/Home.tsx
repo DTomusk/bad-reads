@@ -1,69 +1,47 @@
-import { TextInput, Center, Group, Stack, Title, Loader, Text } from "@mantine/core";
-import BookCard from "../components/BookCard";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { useBooks, useBookSearch } from "../hooks/useBooks";
-import { useState } from "react";
+import { Stack, Title, Text, Button } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../auth/AuthProvider"; 
+import BookRow from "../components/BookRow";
+import { useBooks } from "../hooks/useBooks";
 
 export default function Home() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeSearch, setActiveSearch] = useState("");
-  const { data: books, isLoading, error } = useBooks();
-  const { data: searchResults } = useBookSearch(activeSearch);
-
-  if (isLoading) {
-    return (
-      <Center>
-        <Loader size="xl" />
-      </Center>
-    );
-  }
-
-  if (error) {
-    return (
-      <Center>
-        <Text c="red">Error loading books: {(error as Error).message}</Text>
-      </Center>
-    );
-  }
-
-  const displayBooks = activeSearch ? searchResults || [] : books || [];
-
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      setActiveSearch(searchQuery);
-    }
-  };
-
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const { data: books } = useBooks();
   return (
-    <>
-      <Center>
-        <Stack>
-          <Title
-            style={{
-              color: "var(--mantine-color-orange-filled)",
-              alignSelf: "center",
-            }}
-          >
-            Welcome to Bad Reads
-          </Title>
-          {/*TODO: This used to be an autocomplete, consider adding it back in*/}
-          <TextInput
-            placeholder="Search for bad books"
-            leftSection={<FontAwesomeIcon icon={faMagnifyingGlass} />}
-            value={searchQuery}
-            onChange={(event) => setSearchQuery(event.currentTarget.value)}
-            onKeyDown={handleKeyPress}
-            size="xl"
-            style={{ alignSelf: "center", width: "50rem" }}
-          />
-          <Group justify="center">
-            {displayBooks.map((book) => (
-              <BookCard key={book.id} {...book} />
-            ))}
-          </Group>
-        </Stack>
-      </Center>
-    </>
+    <Stack>
+      <Stack gap="lg" mt="5rem" align="center" mb="5rem"> 
+        <Text
+          style={{
+            alignSelf: "center",
+            fontSize: "var(--mantine-font-size-xl)",
+          }}
+          c="white"
+        >
+          Welcome to
+        </Text>
+        <Title
+          order={1}
+          style={{
+            alignSelf: "center",
+            fontSize: "54px"
+          }}
+          c="white"
+        >
+          💩Bad Reads💖
+        </Title>
+        <Text
+          style={{
+            alignSelf: "center",
+            fontSize: "var(--mantine-font-size-xl)",
+          }}
+          c="white"
+        >
+          Because even bad books can be great
+        </Text>
+        {!isAuthenticated && <Button w="auto" size="md" mt="lg" onClick={() => navigate("/register")}>Register now and start rating!</Button>}
+      </Stack>
+      <BookRow books={books || []} />
+    </Stack>
   );
 }

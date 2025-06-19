@@ -1,18 +1,14 @@
 import {
-  Card,
-  Image,
   Text,
-  Badge,
-  Button,
-  Group,
   Stack,
-  Modal,
+  Image,
+  Flex,
+  Box,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { useNavigate } from "react-router-dom";
-import RatingGroup from "./RatingGroup";
 import { TBook } from "../types/book";
-import { useAuth } from "../hooks/useAuth";
+import RatingModal from "./RatingModal";
+import BookActions from "./BookActions";
 
 export default function BookCard({
   title,
@@ -20,71 +16,42 @@ export default function BookCard({
   picture_url = "",
   id,
 }: TBook) {
-  const navigate = useNavigate();
-  const [
-    ratingModalOpened,
-    { open: openRatingModal, close: closeRatingModal },
-  ] = useDisclosure(false);
-  const isLoggedIn = useAuth();
+  const [ratingModalOpened, { open: openRatingModal, close: closeRatingModal }] = useDisclosure(false);
 
   return (
     <>
-      <Modal
+      <RatingModal
         opened={ratingModalOpened}
         onClose={closeRatingModal}
-        centered
-        withCloseButton={false}
+        bookTitle={title}
+        bookId={id}
+      />
+      
+      <Flex
+        gap="md"
+        p="lg"
+        h="10rem"
       >
-        <Stack justify="center">
-          <Group justify="center">
-            <h2>How bad is the book?</h2>
-          </Group>
-          <Group justify="center">
-            <RatingGroup changeFunction={closeRatingModal} />
-          </Group>
-        </Stack>
-      </Modal>
-      <Card
-        shadow="sm"
-        padding="lg"
-        radius="md"
-        withBorder
-        style={{ width: "20rem", height: "20rem" }}
-      >
-        <Card.Section>
+        <Box>
           <Image 
             src={picture_url} 
-            height={160} 
+            height="100%"
             alt={`${title} image`} 
             fit="contain"
           />
-        </Card.Section>
+        </Box>
 
-        <Group justify="space-between" mt="md" mb="xs">
-          <Text fw={500}>{title}</Text>
-          <Badge color="orange">{authors.map((author) => author.name).join(", ")}</Badge>
-        </Group>
+        <Stack justify="space-between" h="100%" style={{ flex: 1 }}>
+          <Text fw={500} size="lg">{title}</Text>
+          <Text>{authors.map((author) => author.name).join(", ")}</Text>
 
-        <Group justify="center">
-          <Button
-            color="blue"
-            mt="md"
-            radius="md"
-            onClick={() => navigate(`book/${id}`)}
-          >
-            More
-          </Button>
-          <Button
-            color="orange"
-            mt="md"
-            radius="md"
-            onClick={openRatingModal}
-            disabled={!isLoggedIn}
-          >
-            Rate
-          </Button>
-        </Group>
-      </Card>
+          <BookActions
+            bookId={id}
+            onRateClick={openRatingModal}
+            showMore={true}
+          />
+        </Stack>
+      </Flex>
     </>
   );
 }

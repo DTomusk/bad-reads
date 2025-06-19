@@ -19,6 +19,8 @@ def mock_book():
     mock.number_of_ratings = 10
     mock.sum_of_love_ratings = 45.0
     mock.sum_of_shit_ratings = 20.0
+    mock.picture_url = "https://example.com/picture.jpg"
+    mock.description = "Test Description"
     return mock
 
 @pytest.fixture

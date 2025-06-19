@@ -2,6 +2,7 @@ import jwt
 from datetime import datetime, timedelta, timezone
 from src.users.application.utilities.token_service import TokenService
 from src.config import get_settings
+from fastapi import HTTPException
 
 settings = get_settings()
 
@@ -18,6 +19,6 @@ class JWTTokenService(TokenService):
             payload = jwt.decode(token, key=settings.JWT_SECRET, algorithms=[settings.JWT_ALGORITHM])
             return payload.get("sub")
         except jwt.ExpiredSignatureError:
-            raise ValueError("Token has expired.")
+            raise HTTPException(status_code=401, detail="Token has expired.")
         except jwt.InvalidTokenError:
-            raise ValueError("Invalid token.")
+            raise HTTPException(status_code=401, detail="Invalid token.")
