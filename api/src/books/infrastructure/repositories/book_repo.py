@@ -143,7 +143,7 @@ class BookRepo(AbstractBookRepo):
         })
         self.session.commit()
 
-    def search_books(self, query: str, page_size: int, threshold: float = 0.7) -> list[Book]:
+    def search_books(self, query: str, page_size: int, threshold: float = 0.2) -> list[Book]:
         result = (self.session.query(BookModel)
             .filter(func.similarity(BookModel.title, query) > threshold)
             .order_by(func.similarity(BookModel.title, query).desc())
