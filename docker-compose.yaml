@@ -1,6 +1,8 @@
 services:
   frontend:
     build: ./ui
+    environment:
+      - VITE_API_URL=http://localhost:8000/api
     ports:
       - "3000:3000"
     networks:
@@ -9,6 +11,8 @@ services:
 
   backend:
     build: ./api
+    environment:
+      - DATABASE_URL=postgresql://baduser:badpassword@database:5432/bad_read_db
     ports:
       - "8000:8000"
     networks:
@@ -20,22 +24,32 @@ services:
       - POSTGRES_USER=baduser
       - POSTGRES_PASSWORD=badpassword
       - POSTGRES_DB=bad_read_db
+      - DATABASE_URL=postgresql://baduser:badpassword@database:5432/bad_read_db
     ports:
       - "5432:5432"
     networks:
       - back-tier
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "PGPASSWORD=badpassword pg_isready -U baduser -d bad_read_db",
+        ]
+      interval: 5s
+      retries: 5
 
   migrate:
     image: python:latest
     depends_on:
-      - database
+      database:
+        condition: service_healthy
     working_dir: /api
     volumes:
       - ./api:/api
     environment:
-      DATABASE_URL: postgresql://postgres:mypassword@localhost:5432/postgres
+      DATABASE_URL: postgresql://baduser:badpassword@database:5432/bad_read_db
     command: >
       sh -c "
         pip install -r requirements.txt &&
