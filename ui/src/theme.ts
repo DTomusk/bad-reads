@@ -85,11 +85,6 @@ export const theme = createTheme({
         c: '#FFFFFF',
       },
     },
-    InputLabel: {
-      defaultProps: {
-        c: '#FFFFFF',
-      },
-    },
     Button: {
       defaultProps: {
         c: 'white',

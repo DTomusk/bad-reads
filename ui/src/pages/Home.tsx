@@ -1,6 +1,6 @@
 import { Stack, Title, Text, Button } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../auth/AuthProvider"; 
+import { useAuth } from "../auth/AuthProvider";
 import BookRow from "../components/BookRow";
 import { useBooks } from "../hooks/useBooks";
 
@@ -10,7 +10,7 @@ export default function Home() {
   const { data: books } = useBooks();
   return (
     <Stack>
-      <Stack gap="lg" mt="5rem" align="center" mb="5rem"> 
+      <Stack gap="lg" mt="5rem" align="center" mb="5rem">
         <Text
           style={{
             alignSelf: "center",
@@ -24,7 +24,7 @@ export default function Home() {
           order={1}
           style={{
             alignSelf: "center",
-            fontSize: "54px"
+            fontSize: "54px",
           }}
           c="white"
         >
@@ -39,7 +39,16 @@ export default function Home() {
         >
           Because even bad books can be great
         </Text>
-        {!isAuthenticated && <Button w="auto" size="md" mt="lg" onClick={() => navigate("/register")}>Register now and start rating!</Button>}
+        {!isAuthenticated && (
+          <Button
+            w="auto"
+            size="md"
+            mt="lg"
+            onClick={() => navigate("/register")}
+          >
+            Register now and start rating!
+          </Button>
+        )}
       </Stack>
       <BookRow books={books || []} />
     </Stack>

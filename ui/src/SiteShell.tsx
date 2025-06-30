@@ -1,10 +1,12 @@
-import {
-  AppShell,
-  Container,
-  Group,
-} from "@mantine/core";
+import { AppShell, Container, Group } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { createBrowserRouter, RouterProvider, Outlet, useNavigate, useLocation } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Outlet,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import { useEffect } from "react";
 
 import Home from "./pages/Home";
@@ -15,6 +17,9 @@ import Search from "./pages/Search";
 import Nav from "./components/Nav";
 import Footer from "./components/Footer";
 import BadReadLogo from "./components/BadReadLogo";
+import Profile from "./pages/Profile";
+import BookClub from "./pages/BookClub";
+import BookClubHome from "./pages/BookClubHome";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +46,18 @@ const router = createBrowserRouter([
         path: "/search",
         element: <Search />,
       },
+      {
+        path: "/profile/:id",
+        element: <Profile />,
+      },
+      {
+        path: "/book-clubs",
+        element: <BookClubHome />,
+      },
+      {
+        path: "/book-club/1234",
+        element: <BookClub />,
+      },
     ],
   },
 ]);
@@ -64,12 +81,16 @@ function SiteShell() {
         collapsed: { desktop: true, mobile: !opened },
       }}
     >
-      <AppShell.Header >
-        <Group px="md" style={{ 
-          background: 'linear-gradient(to bottom, var(--mantine-color-dark-0), var(--mantine-color-dark-9))'
-        }}>
+      <AppShell.Header>
+        <Group
+          px="md"
+          style={{
+            background:
+              "linear-gradient(to bottom, var(--mantine-color-dark-0), var(--mantine-color-dark-9))",
+          }}
+        >
           <Group justify="space-between" style={{ flex: 1 }}>
-            <Group onClick={() => navigate("/")} style={{ cursor: 'pointer' }}>
+            <Group onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
               <BadReadLogo />
               <h1 style={{ color: "white" }}>Bad Reads</h1>
             </Group>
@@ -84,9 +105,12 @@ function SiteShell() {
         <Nav />
       </AppShell.Navbar>
 
-      <AppShell.Main style={{ 
-        background: 'linear-gradient(to right, var(--mantine-color-teal-5), var(--mantine-color-teal-2), var(--mantine-color-teal-0), var(--mantine-color-teal-2), var(--mantine-color-teal-5))'
-      }}>
+      <AppShell.Main
+        style={{
+          background:
+            "linear-gradient(to right, var(--mantine-color-teal-5), var(--mantine-color-teal-2), var(--mantine-color-teal-0), var(--mantine-color-teal-2), var(--mantine-color-teal-5))",
+        }}
+      >
         {/* Note: Container is used to center the content and limit the width */}
         <Container size="md">
           <Outlet />

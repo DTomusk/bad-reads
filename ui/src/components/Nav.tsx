@@ -1,4 +1,4 @@
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { faBook, faUser } from "@fortawesome/free-solid-svg-icons";
 import { faHome } from "@fortawesome/free-solid-svg-icons/faHome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,23 +14,32 @@ export default function Nav() {
 
   const navigationData = [
     { label: "Home", icon: <FontAwesomeIcon icon={faHome} />, link: "/" },
-    { 
-      label: isAuthenticated ? "Account" : "Login", 
-      icon: <FontAwesomeIcon icon={faUser} />, 
-      link: isAuthenticated ? "/account" : "/login" 
+    {
+      label: "Book Clubs",
+      icon: <FontAwesomeIcon icon={faBook} />,
+      link: "/book-clubs",
+    },
+    {
+      label: isAuthenticated ? "Account" : "Login",
+      icon: <FontAwesomeIcon icon={faUser} />,
+      link: isAuthenticated ? "/account" : "/login",
     },
   ];
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' && searchQuery.trim()) {
+    if (event.key === "Enter" && searchQuery.trim()) {
       navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
       setSearchQuery("");
     }
   };
 
   const links = navigationData.map((item) => (
-    <div key={item.label} style={{ display: "flex", flexDirection: "row", padding: "0.5rem" }}>
-      <NavLink onClick={() => navigate(item.link)}
+    <div
+      key={item.label}
+      style={{ display: "flex", flexDirection: "row", padding: "0.5rem" }}
+    >
+      <NavLink
+        onClick={() => navigate(item.link)}
         color="white"
         style={{ padding: "0.5rem" }}
         variant="subtle"
