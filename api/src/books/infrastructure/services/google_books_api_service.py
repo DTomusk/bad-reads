@@ -26,6 +26,11 @@ class GoogleBooksApiService(AbstractBooksService):
             if not volume_info.get("authors") or len(volume_info.get("authors")) == 0:
                 continue
 
+            # Don't add books that are not in English
+            # TODO: add support for other languages
+            if not volume_info.get("language") == "en":
+                continue
+
             # Create Author objects from author names
             # TODO: check repo if author exists, if not, create new author
             # otherwise we can get duplicates
