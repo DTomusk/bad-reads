@@ -1,5 +1,5 @@
 from uuid import UUID
-from fastapi import APIRouter, Depends, BackgroundTasks
+from fastapi import APIRouter, Depends
 
 from src.books.api.dependencies import get_book_details_use_case, get_books_use_case, rate_book_use_case, review_book_use_case, search_books_use_case
 from src.books.api.schemas.rate_request import RateRequest
@@ -20,7 +20,6 @@ async def get_books(get_books=Depends(get_books_use_case), page: int = 1, page_s
 @router.get("/search")
 async def search_books(
         query: str,
-        background_tasks: BackgroundTasks,
         search_books=Depends(search_books_use_case),
         page_size: int = 10):
     """
