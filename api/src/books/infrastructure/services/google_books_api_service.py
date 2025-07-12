@@ -2,7 +2,7 @@ import uuid
 import httpx
 from src.books.application.repositories.author_repository import AbstractAuthorRepo
 from src.books.application.services.external_books_service import AbstractBooksService
-from src.books.domain.models import Book, Author, ISBN13
+from src.books.domain.models import Book, Author
 
 
 class GoogleBooksApiService(AbstractBooksService):
@@ -21,19 +21,6 @@ class GoogleBooksApiService(AbstractBooksService):
 
         for book_data in books_data:
             volume_info = book_data.get("volumeInfo", {})
-            
-            # Get ISBN-13 from industry identifiers
-            isbn = None
-            for identifier in volume_info.get("industryIdentifiers", []):
-                if identifier.get("type") == "ISBN_13":
-                    try:
-                        isbn = ISBN13(identifier.get("identifier"))
-                        break
-                    except ValueError:
-                        continue
-
-            if isbn is None:
-                continue
 
             # Don't add books without authors to the database
             if not volume_info.get("authors") or len(volume_info.get("authors")) == 0:
@@ -59,7 +46,6 @@ class GoogleBooksApiService(AbstractBooksService):
                 number_of_ratings=0,
                 sum_of_love_ratings=0.0,
                 sum_of_shit_ratings=0.0,
-                isbn=isbn,
                 description=volume_info.get("description"),
                 picture_url=volume_info.get("imageLinks", {}).get("thumbnail")
             )

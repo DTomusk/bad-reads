@@ -23,7 +23,6 @@ class BookModel(Base):
     number_of_ratings = Column(Integer, index=False)
     sum_of_love_ratings = Column(Float, index=False)
     sum_of_shit_ratings = Column(Float, index=False)
-    isbn = Column(String, index=True)
     description = Column(String, index=False)
     picture_url = Column(String, index=False)
     
