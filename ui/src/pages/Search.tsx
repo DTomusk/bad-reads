@@ -1,4 +1,4 @@
-import { Center, Stack, Title, Divider, Loader } from "@mantine/core";
+import { Center, Stack, Title, Divider, Loader, Text } from "@mantine/core";
 import BookCard from "../components/BookCard";
 import { useBookSearch } from "../hooks/useBooks";
 import { useState, useEffect } from "react";
@@ -30,6 +30,12 @@ export default function Search() {
         {isLoading ? (
           <Center>
             <Loader size="xl" />
+          </Center>
+        ) : displayBooks.length === 0 && activeSearch ? (
+          <Center>
+            <Text size="lg" c="dimmed" ta="center">
+              No books found for "{activeSearch}"
+            </Text>
           </Center>
         ) : (
           <Stack>
