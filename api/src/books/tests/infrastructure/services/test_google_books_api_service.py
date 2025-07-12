@@ -13,14 +13,16 @@ def mock_google_books_response():
                 "volumeInfo": {
                     "title": "Test Book",
                     "authors": ["Test Author"],
-                    "description": "Test Description"
+                    "description": "Test Description",
+                    "language": "en"
                 }
             },
             {
                 "volumeInfo": {
                     "title": "Another Book",
                     "authors": ["Author 1", "Author 2"],
-                    "description": "Another Description"
+                    "description": "Another Description",
+                    "language": "en"
                 }
             }
         ]
@@ -34,7 +36,23 @@ def mock_google_books_response_no_authors():
                 "volumeInfo": {
                     "title": "Test Book",
                     "authors": [],
-                    "description": "Test Description"
+                    "description": "Test Description",
+                    "language": "en"
+                }
+            }
+        ]
+    }
+
+@pytest.fixture
+def mock_google_books_response_non_english():
+    return {
+        "items": [
+            {
+                "volumeInfo": {
+                    "title": "Test Book",
+                    "authors": ["Test Author"],
+                    "description": "Test Description",
+                    "language": "fr"
                 }
             }
         ]
@@ -129,3 +147,14 @@ def test_search_books_http_error(service):
         # Verify that the error is propagated
         with pytest.raises(httpx.HTTPError):
             service.search_books("test query")
+
+def test_search_books_non_english(service, mock_google_books_response_non_english):
+    with patch('httpx.get') as mock_get:
+        mock_response = Mock()
+        mock_response.json.return_value = mock_google_books_response_non_english
+        mock_response.raise_for_status = Mock()
+        mock_get.return_value = mock_response
+
+        books = service.search_books("test query")
+        assert len(books) == 0
+
