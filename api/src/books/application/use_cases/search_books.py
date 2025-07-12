@@ -20,8 +20,8 @@ class SearchBooks:
             for author in external_book.authors:
                 existing_author = self.author_repository.get_author_by_name(author.name)
                 if not existing_author:
-                    self.author_repository.add_author(author)  
-            existing_book = self.book_repository.get_book_by_isbn(external_book.isbn)
+                    existing_author = self.author_repository.add_author(author)  
+            existing_book = self.book_repository.get_book_by_title_and_author(external_book.title, existing_author.name)
             if not existing_book:
                 self.book_repository.add_book(external_book)
 

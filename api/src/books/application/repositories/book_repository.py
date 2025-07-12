@@ -2,8 +2,7 @@ from abc import ABC, abstractmethod
 
 from sqlalchemy import UUID
 
-from src.books.domain.models import ISBN13, Book
-
+from src.books.domain.models import Book
 
 class AbstractBookRepo(ABC):
     @abstractmethod
@@ -41,10 +40,11 @@ class AbstractBookRepo(ABC):
         pass
 
     @abstractmethod
-    def get_book_by_isbn(self, isbn: ISBN13) -> Book:
+    def get_book_by_title_and_author(self, title: str, author_name: str) -> Book:
         """
-        Get a book by its ISBN.
-        :param isbn: The ISBN of the book to retrieve.
+        Get a book by its title and author.
+        :param title: The title of the book to retrieve.
+        :param author_name: The name of the author of the book to retrieve.
         :return: The book object.
         """
         pass

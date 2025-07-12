@@ -38,36 +38,6 @@ class Author:
         self.id = id
         self.name = name
 
-@dataclass(frozen=True)
-class ISBN13:
-    value: str
-
-    def __post_init__(self):
-        # Remove hyphens or spaces for standardization
-        clean_value = re.sub(r'[-\s]', '', self.value)
-        if not re.match(r'^\d{13}$', clean_value):
-            raise ValueError(f"Invalid ISBN-13 format: {self.value}")
-
-        if not self._is_valid_isbn13(clean_value):
-            raise ValueError(f"Invalid ISBN-13 checksum: {self.value}")
-
-        # Set the clean, validated value
-        object.__setattr__(self, 'value', clean_value)
-
-    @staticmethod
-    def _is_valid_isbn13(isbn: str) -> bool:
-        """Validates the ISBN-13 checksum."""
-        total = 0
-        for i, char in enumerate(isbn[:12]):
-            factor = 1 if i % 2 == 0 else 3
-            total += int(char) * factor
-        check_digit = (10 - (total % 10)) % 10
-        return check_digit == int(isbn[12])
-
-    def __str__(self):
-        return self.value
-        
-
 class Book:
     def __init__(
             self, 
@@ -79,7 +49,6 @@ class Book:
             number_of_ratings: int,
             sum_of_love_ratings: float,
             sum_of_shit_ratings: float,
-            isbn: ISBN13,
             description: str | None = None,
             picture_url: str | None = None,
             ):
@@ -91,7 +60,6 @@ class Book:
         self.number_of_ratings = number_of_ratings
         self.sum_of_love_ratings = sum_of_love_ratings
         self.sum_of_shit_ratings = sum_of_shit_ratings
-        self.isbn = isbn
         self.description = description
         self.picture_url = picture_url
 

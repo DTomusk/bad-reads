@@ -2,8 +2,9 @@ from sqlalchemy import UUID, func
 from sqlalchemy.orm import Session
 
 from src.books.application.repositories.book_repository import AbstractBookRepo
-from src.books.domain.models import ISBN13, Book
+from src.books.domain.models import Book
 from src.books.infrastructure.models import BookModel, AuthorModel
+from src.infrastructure.utilities.text_normalizer import normalize_text
 
 
 class BookRepo(AbstractBookRepo):
@@ -28,7 +29,6 @@ class BookRepo(AbstractBookRepo):
             number_of_ratings=result.number_of_ratings if result.number_of_ratings else 0,
             sum_of_love_ratings=result.sum_of_love_ratings if result.sum_of_love_ratings else 0,
             sum_of_shit_ratings=result.sum_of_shit_ratings if result.sum_of_shit_ratings else 0,
-            isbn=result.isbn,
             description=result.description,
             picture_url=result.picture_url
         )
@@ -50,12 +50,12 @@ class BookRepo(AbstractBookRepo):
         book_model = BookModel(
             id=book.id,
             title=book.title,
+            normalized_title=normalize_text(book.title),
             average_love_rating=book.average_love_rating if book.average_love_rating else 0,
             average_shit_rating=book.average_shit_rating if book.average_shit_rating else 0,
             number_of_ratings=book.number_of_ratings if book.number_of_ratings else 0,
             sum_of_love_ratings=book.sum_of_love_ratings if book.sum_of_love_ratings else 0,
             sum_of_shit_ratings=book.sum_of_shit_ratings if book.sum_of_shit_ratings else 0,
-            isbn=str(book.isbn),
             description=book.description,
             picture_url=book.picture_url,
             authors=author_models  # Set up the many-to-many relationship
@@ -102,14 +102,18 @@ class BookRepo(AbstractBookRepo):
             .limit(page_size)
             .all())
         return [self._create_book_from_db_result(book) for book in result]
-    
-    def get_book_by_isbn(self, isbn: ISBN13) -> Book:
+        
+    def get_book_by_title_and_author(self, title: str, author_name: str) -> Book:
         """
-        Get a book by its ISBN.
-        :param isbn: The ISBN of the book to retrieve.
+        Get a book by its title and author.
+        :param title: The title of the book to retrieve.
+        :param author_name: The name of the author of the book to retrieve.
         :return: The book object.
         """
-        result = self.session.query(BookModel).filter(BookModel.isbn == str(isbn)).first()
+        # TODO: use fuzzy matching with a high threshold
+        normalized_title = normalize_text(title)
+        normalized_author_name = normalize_text(author_name)
+        result = self.session.query(BookModel).filter(BookModel.normalized_title == normalized_title, BookModel.authors.any(AuthorModel.normalized_name == normalized_author_name)).first()
         if result:
             return self._create_book_from_db_result(result)
         
@@ -119,9 +123,6 @@ class BookRepo(AbstractBookRepo):
         :param book: The book object to add.
         :return: The added book object.
         """
-        existing_book = self.get_book_by_isbn(book.isbn)
-        if existing_book:
-            return existing_book
         existing_book = self.get_book_by_id(book.id)
         if existing_book:
             return existing_book

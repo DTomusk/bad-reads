@@ -17,12 +17,12 @@ class BookModel(Base):
 
     id = Column(UUID, primary_key=True, index=True)
     title = Column(String, index=True)
+    normalized_title = Column(String, index=True)
     average_love_rating = Column(Float, index=False)
     average_shit_rating = Column(Float, index=False)
     number_of_ratings = Column(Integer, index=False)
     sum_of_love_ratings = Column(Float, index=False)
     sum_of_shit_ratings = Column(Float, index=False)
-    isbn = Column(String, index=True)
     description = Column(String, index=False)
     picture_url = Column(String, index=False)
     
