@@ -16,14 +16,6 @@ export default function Search() {
     }
   }, [searchParams]);
 
-  if (isLoading) {
-    return (
-      <Center>
-        <Loader size="xl" />
-      </Center>
-    );
-  }
-
   const displayBooks = searchResults || []
 
   return (
@@ -35,6 +27,11 @@ export default function Search() {
           </Title>
         )}
         <Divider/>
+        {isLoading ? (
+          <Center>
+            <Loader size="xl" />
+          </Center>
+        ) : (
           <Stack>
             {displayBooks.map((book) => (
               <>
@@ -43,6 +40,7 @@ export default function Search() {
               </>
             ))}
           </Stack>
+        )}
       </Stack>
     </Center>
   );
