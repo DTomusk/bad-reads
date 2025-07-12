@@ -49,6 +49,16 @@ class AbstractBookRepo(ABC):
         """
         pass
 
+    @abstractmethod
+    def get_book_by_title_and_author(self, title: str, author_name: str) -> Book:
+        """
+        Get a book by its title and author.
+        :param title: The title of the book to retrieve.
+        :param author_name: The name of the author of the book to retrieve.
+        :return: The book object.
+        """
+        pass
+
     @abstractmethod 
     def add_book(self, book: Book) -> Book:
         """

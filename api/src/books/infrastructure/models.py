@@ -17,6 +17,7 @@ class BookModel(Base):
 
     id = Column(UUID, primary_key=True, index=True)
     title = Column(String, index=True)
+    normalized_title = Column(String, index=True)
     average_love_rating = Column(Float, index=False)
     average_shit_rating = Column(Float, index=False)
     number_of_ratings = Column(Integer, index=False)
