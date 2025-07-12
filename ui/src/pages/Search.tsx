@@ -1,4 +1,4 @@
-import { Center, Stack, Title, Divider } from "@mantine/core";
+import { Center, Stack, Title, Divider, Loader, Text } from "@mantine/core";
 import BookCard from "../components/BookCard";
 import { useBookSearch } from "../hooks/useBooks";
 import { useState, useEffect } from "react";
@@ -7,7 +7,7 @@ import { useSearchParams } from "react-router-dom";
 export default function Search() {
   const [searchParams] = useSearchParams();
   const [activeSearch, setActiveSearch] = useState("");
-  const { data: searchResults } = useBookSearch(activeSearch);
+  const { data: searchResults, isLoading } = useBookSearch(activeSearch);
 
   useEffect(() => {
     const query = searchParams.get('q');
@@ -15,8 +15,6 @@ export default function Search() {
       setActiveSearch(query);
     }
   }, [searchParams]);
-
-
 
   const displayBooks = searchResults || []
 
@@ -29,6 +27,17 @@ export default function Search() {
           </Title>
         )}
         <Divider/>
+        {isLoading ? (
+          <Center>
+            <Loader size="xl" />
+          </Center>
+        ) : displayBooks.length === 0 && activeSearch ? (
+          <Center>
+            <Text size="lg" c="dimmed" ta="center">
+              No books found for "{activeSearch}"
+            </Text>
+          </Center>
+        ) : (
           <Stack>
             {displayBooks.map((book) => (
               <>
@@ -37,6 +46,7 @@ export default function Search() {
               </>
             ))}
           </Stack>
+        )}
       </Stack>
     </Center>
   );
