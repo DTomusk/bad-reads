@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetcher } from "../api/fetcher";
 import { TBook } from "../types/book";
 import { BookDetailResponse } from "../types/bookdetailresponse";
+import { BookSearchResponse } from "../types/bookSearchResponse";
 
 export const useBooks = () => {
     return useQuery({
@@ -20,9 +21,9 @@ export const useBook = (id: string) => {
     });
 }
 
-export const useBookSearch = (query: string) => {
+export const useBookSearch = (query: string, page: number) => {
     return useQuery({
-        queryKey: ["books", query],
-        queryFn: () => fetcher<TBook[]>(`/books/search?query=${query}`),
+        queryKey: ["books", query, page],
+        queryFn: () => fetcher<BookSearchResponse>(`/books/search?query=${query}&page=${page}`),
     });
 }

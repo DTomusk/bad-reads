@@ -2,6 +2,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends
 
 from src.books.api.dependencies import get_book_details_use_case, get_books_use_case, rate_book_use_case, review_book_use_case, search_books_use_case
+from src.books.api.schemas.book_search_response import BookSearchResponse
 from src.books.api.schemas.rate_request import RateRequest
 from src.books.api.schemas.review_request import ReviewRequest
 from src.users.api.auth import get_current_user
@@ -21,12 +22,13 @@ async def get_books(get_books=Depends(get_books_use_case), page: int = 1, page_s
 async def search_books(
         query: str,
         search_books=Depends(search_books_use_case),
-        page_size: int = 10):
+        page_size: int = 10,
+        page: int = 1) -> BookSearchResponse:
     """
     Search for books by title.
     """
-    books = search_books.execute(query, page_size)
-    return books
+    book_search_response = search_books.execute(query, page_size, page)
+    return book_search_response
 
 @router.get("/{book_id}")
 async def get_book_details(book_id: UUID, get_book_details=Depends(get_book_details_use_case)):
