@@ -21,4 +21,4 @@ class BookResponse(BaseModel):
             average_shit_rating=book.average_shit_rating if book.average_shit_rating else 0,
             number_of_ratings=book.number_of_ratings if book.number_of_ratings else 0,
             picture_url=book.picture_url,
-            description=book.description)
+            description=book.description if book.description else "")
