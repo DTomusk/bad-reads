@@ -55,9 +55,7 @@ class SearchBooks:
             # Multiply by 2 to account for duplicates
             self._process_external_books(query, external_books_needed * 2)
             db_books = self.book_repository.search_books(query, page_size)
-        for book in db_books:
-            print(book.title)
-            print(book.authors)
+
         has_more = len(db_books) == page_size + 1
 
         # Only return up to page_size books

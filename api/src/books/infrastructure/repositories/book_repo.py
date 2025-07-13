@@ -144,7 +144,7 @@ class BookRepo(AbstractBookRepo):
         })
         self.session.commit()
 
-    def search_books(self, query: str, page_size: int, page: int = 1, threshold: float = 0.2) -> list[Book]:
+    def search_books(self, query: str, page_size: int, page: int = 1) -> list[Book]:
         """
         Search for books by title. Note that we return one more book than the page size to check if there are more books.
         :param query: The query to search for.
@@ -153,9 +153,15 @@ class BookRepo(AbstractBookRepo):
         :param threshold: The threshold for the similarity search.
         :return: A list of book objects.
         """
+        # TODO: ts matches exactly on tokens, so it doesn't allow for spelling mistakes etc. 
+        # Consider using trigram as a fallback or move to a dedicated search service (e.g. typesense)
         result = (self.session.query(BookModel)
-            .filter(func.similarity(BookModel.title, query) > threshold)
-            .order_by(func.similarity(BookModel.title, query).desc())
+            .filter(func.to_tsvector('english', BookModel.title)
+                .op('@@')(func.plainto_tsquery('english', query)))
+            .order_by(func.ts_rank(
+                func.to_tsvector('english', BookModel.title),
+                func.plainto_tsquery('english', query)
+                ).desc())
             .offset((page - 1) * page_size)
             .limit(page_size + 1)
             .all())
