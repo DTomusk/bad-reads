@@ -154,8 +154,12 @@ class BookRepo(AbstractBookRepo):
         :return: A list of book objects.
         """
         result = (self.session.query(BookModel)
-            .filter(func.similarity(BookModel.title, query) > threshold)
-            .order_by(func.similarity(BookModel.title, query).desc())
+            .filter(func.to_tsvector('english', BookModel.title)
+                .op('@@')(func.plainto_tsquery('english', query)))
+            .order_by(func.ts_rank(
+                func.to_tsvector('english', BookModel.title),
+                func.plainto_tsquery('english', query)
+                ).desc())
             .offset((page - 1) * page_size)
             .limit(page_size + 1)
             .all())
