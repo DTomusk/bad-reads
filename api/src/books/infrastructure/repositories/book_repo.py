@@ -144,7 +144,7 @@ class BookRepo(AbstractBookRepo):
         })
         self.session.commit()
 
-    def search_books(self, query: str, page_size: int, page: int = 1, threshold: float = 0.2) -> list[Book]:
+    def search_books(self, query: str, page_size: int, page: int = 1) -> list[Book]:
         """
         Search for books by title. Note that we return one more book than the page size to check if there are more books.
         :param query: The query to search for.
