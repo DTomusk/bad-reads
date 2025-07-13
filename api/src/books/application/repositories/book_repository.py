@@ -68,11 +68,12 @@ class AbstractBookRepo(ABC):
         pass
 
     @abstractmethod
-    def search_books(self, query: str, page_size: int, threshold: float = 0.5) -> list[Book]:
+    def search_books(self, query: str, page_size: int, page: int = 1, threshold: float = 0.5) -> list[Book]:
         """
         Search for books.
         :param query: The query to search for.
         :param page_size: The number of books per page.
+        :param page: The page number to retrieve.
         :param threshold: The threshold for the similarity search.
         :return: A list of book objects.
         """

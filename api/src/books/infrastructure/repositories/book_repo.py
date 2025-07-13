@@ -144,10 +144,19 @@ class BookRepo(AbstractBookRepo):
         })
         self.session.commit()
 
-    def search_books(self, query: str, page_size: int, threshold: float = 0.2) -> list[Book]:
+    def search_books(self, query: str, page_size: int, page: int = 1, threshold: float = 0.2) -> list[Book]:
+        """
+        Search for books by title. Note that we return one more book than the page size to check if there are more books.
+        :param query: The query to search for.
+        :param page_size: The number of books per page.
+        :param page: The page number to retrieve.
+        :param threshold: The threshold for the similarity search.
+        :return: A list of book objects.
+        """
         result = (self.session.query(BookModel)
             .filter(func.similarity(BookModel.title, query) > threshold)
             .order_by(func.similarity(BookModel.title, query).desc())
-            .limit(page_size)
+            .offset((page - 1) * page_size)
+            .limit(page_size + 1)
             .all())
         return [self._create_book_from_db_result(book) for book in result]

@@ -2,6 +2,7 @@ from src.books.application.services.external_books_service import AbstractBooksS
 from src.books.domain.models import Book
 from src.books.application.repositories.book_repository import AbstractBookRepo
 from src.books.application.repositories.author_repository import AbstractAuthorRepo
+from src.books.api.schemas.book_search_response import BookSearchResponse
 
 class SearchBooks:
     def __init__(self, book_repository: AbstractBookRepo, external_books_service: AbstractBooksService, author_repository: AbstractAuthorRepo):
@@ -29,10 +30,21 @@ class SearchBooks:
             self, 
             query: str,
             page_size: int = 10,
-        ) -> list[Book]:
-        # TODO: figure out pagination 
+            page: int = 1
+        ) -> BookSearchResponse:
         if not query:
-            return []
+            return BookSearchResponse(books=[], has_more=False)
+        
+        if page < 1:
+            return BookSearchResponse(books=[], has_more=False)
+        
+        # For simplicity, just search db for the next page, don't bother with external api
+        if page > 1:
+            db_books = self.book_repository.search_books(query, page_size, page)
+            has_more = len(db_books) == page_size + 1
+            # Only return up to page_size books
+            books_to_return = db_books[:page_size]
+            return BookSearchResponse.from_domain(books_to_return, has_more)
             
         # We essentially do 2 searches to get the books 
         # If there are enough books the first time, then happy days 
@@ -43,6 +55,12 @@ class SearchBooks:
             # Multiply by 2 to account for duplicates
             self._process_external_books(query, external_books_needed * 2)
             db_books = self.book_repository.search_books(query, page_size)
-        
-        return db_books
+        for book in db_books:
+            print(book.title)
+            print(book.authors)
+        has_more = len(db_books) == page_size + 1
+
+        # Only return up to page_size books
+        books_to_return = db_books[:page_size]
+        return BookSearchResponse.from_domain(books_to_return, has_more)
 
