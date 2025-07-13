@@ -153,6 +153,8 @@ class BookRepo(AbstractBookRepo):
         :param threshold: The threshold for the similarity search.
         :return: A list of book objects.
         """
+        # TODO: ts matches exactly on tokens, so it doesn't allow for spelling mistakes etc. 
+        # Consider using trigram as a fallback or move to a dedicated search service (e.g. typesense)
         result = (self.session.query(BookModel)
             .filter(func.to_tsvector('english', BookModel.title)
                 .op('@@')(func.plainto_tsquery('english', query)))
