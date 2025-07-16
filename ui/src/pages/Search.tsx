@@ -47,11 +47,6 @@ export default function Search() {
           </Title>
         )}
         <Divider/>
-        {isLoading && (
-          <Center>
-            <Loader size="xl" />
-          </Center>
-        )}
         {accumulatedBooks.length === 0 && activeSearch && !isLoading && (
           <Center>
             <Text size="lg" c="dimmed" ta="center">
@@ -69,8 +64,19 @@ export default function Search() {
             ))}
           </Stack>
         )}
-        {searchResults?.has_more && (
+        {searchResults?.has_more ? (
           <Button onClick={handleLoadMore}>Load more</Button>
+        ) : (
+          <Center>
+            <Text size="lg" c="dimmed" ta="center">
+              No more books found for "{activeSearch}"
+            </Text>
+          </Center>
+        )}
+        {isLoading && (
+          <Center>
+            <Loader size="xl" />
+          </Center>
         )}
       </Stack>
     </Center>
