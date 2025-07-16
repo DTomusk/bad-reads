@@ -8,12 +8,16 @@ import {
 import { TBook } from "../types/book";
 import { useNavigate } from "react-router-dom";
 import "../styles.css";
+import BookRatingDisplay from "./BookRatingDisplay";
 
 export default function BookCard({
   title,
   authors,
   picture_url = "",
   id,
+  average_love_rating,
+  average_shit_rating,
+  number_of_ratings,
 }: TBook) {
   const navigate = useNavigate();
 
@@ -44,6 +48,12 @@ export default function BookCard({
             lineClamp={2}
             >{title}</Text>
           <Text>{authors.join(", ")}</Text>
+          <BookRatingDisplay
+            average_love_rating={average_love_rating}
+            average_shit_rating={average_shit_rating}
+            number_of_ratings={number_of_ratings}
+            align="left"
+          />
         </Stack>
       </Flex>
     </>
