@@ -1,7 +1,7 @@
 import { Center, Stack, Title, Divider, Loader, Text, Button } from "@mantine/core";
 import BookCard from "../components/BookCard";
 import { useBookSearch } from "../hooks/useBooks";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { useSearchParams } from "react-router-dom";
 import { TBook } from "../types/book";
 
@@ -57,10 +57,10 @@ export default function Search() {
         {accumulatedBooks.length > 0 && (
           <Stack>
             {accumulatedBooks.map((book) => (
-              <>
-                <BookCard key={book.id} {...book} />
+              <Fragment key={book.id}>
+                <BookCard {...book} />
                 <Divider size="xs"/>
-              </>
+              </Fragment>
             ))}
           </Stack>
         )}
