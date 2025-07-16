@@ -3,12 +3,14 @@ from src.books.domain.models import Book
 from src.books.application.repositories.book_repository import AbstractBookRepo
 from src.books.application.repositories.author_repository import AbstractAuthorRepo
 from src.books.api.schemas.book_search_response import BookSearchResponse
+from src.infrastructure.services.background_task_queue import BackgroundTaskQueue
 
 class SearchBooks:
-    def __init__(self, book_repository: AbstractBookRepo, external_books_service: AbstractBooksService, author_repository: AbstractAuthorRepo):
+    def __init__(self, book_repository: AbstractBookRepo, external_books_service: AbstractBooksService, author_repository: AbstractAuthorRepo, background_task_queue: BackgroundTaskQueue):
         self.book_repository = book_repository
         self.external_books_service = external_books_service
         self.author_repository = author_repository
+        self.background_task_queue = background_task_queue
 
     def _process_external_books(self, query: str, page_size: int, start_index: int):
         external_books = self.external_books_service.search_books(query, page_size=page_size, start_index=start_index)
@@ -49,7 +51,7 @@ class SearchBooks:
             db_books = self.book_repository.search_books(query, page_size, page)
         else:
             # Background a task to process the external books
-            pass
+            self.background_task_queue.add_task(self._process_external_books, query, page_size, page_size * (page - 1))
 
         has_more = len(db_books) == page_size + 1
 
