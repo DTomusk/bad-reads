@@ -5,10 +5,10 @@ import {
   Flex,
   Box,
 } from "@mantine/core";
-import { TBook } from "../types/book";
+import { TBook } from "../../types/book";
 import { useNavigate } from "react-router-dom";
-import "../styles.css";
-import BookRatingDisplay from "./RatingDisplay";
+import "../../styles.css";
+import BookRatingDisplay from "../Ratings/RatingDisplay";
 
 export default function BookCard({
   title,
