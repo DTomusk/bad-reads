@@ -39,8 +39,8 @@ export default function Search() {
   }
 
   return (
-    <Center>
-      <Stack>
+    <Center w="100%">
+      <Stack w="100%">
         {activeSearch && (
           <Title order={2} ta="center" mb="md" mt="xl">
             Search results for "{activeSearch}"

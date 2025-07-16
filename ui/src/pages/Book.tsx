@@ -9,18 +9,21 @@ import {
   Loader,
   Text,
   Flex,
+  Button,
 } from "@mantine/core";
 import { useParams } from "react-router-dom";
 import { useBook } from "../hooks/useBooks";
 import { useDisclosure } from "@mantine/hooks";
 import RatingModal from "../components/RatingModal";
-import BookActions from "../components/BookActions";
 import BookRatingDisplay from "../components/BookRatingDisplay";
+import { useAuth } from "../auth/AuthProvider";
+import { ExpandableText } from "../components/ExpandableText";
 
 export default function Book() {
   const { id } = useParams();
   const { data: book, isLoading, error } = useBook(id || "");
   const [ratingModalOpened, { open: openRatingModal, close: closeRatingModal }] = useDisclosure(false);
+  const { isAuthenticated } = useAuth();
 
   if (isLoading) {
     return (
@@ -58,10 +61,11 @@ export default function Book() {
               average_shit_rating={book.average_shit_rating}
               number_of_ratings={book.number_of_ratings}
             />
-            <BookActions
-              bookId={id || ""}
-              onRateClick={openRatingModal}
-            />
+            {isAuthenticated && <Button
+              onClick={openRatingModal}
+            >
+              Rate
+            </Button>}
           </Stack>
           <Paper style={{ flexGrow: 2 }}>
             <h1>{book.title}</h1>
@@ -74,7 +78,7 @@ export default function Book() {
             )}
             <Divider my="md" />
 
-            <p>{book.description}</p>
+            <ExpandableText text={book.description} />
           </Paper>
         </Flex>
       </Group>
