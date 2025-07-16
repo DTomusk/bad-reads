@@ -8,7 +8,7 @@ import {
 import { TBook } from "../types/book";
 import { useNavigate } from "react-router-dom";
 import "../styles.css";
-import BookRatingDisplay from "./BookRatingDisplay";
+import BookRatingDisplay from "./RatingDisplay";
 
 export default function BookCard({
   title,

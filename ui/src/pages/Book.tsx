@@ -15,9 +15,10 @@ import { useParams } from "react-router-dom";
 import { useBook } from "../hooks/useBooks";
 import { useDisclosure } from "@mantine/hooks";
 import RatingModal from "../components/RatingModal";
-import BookRatingDisplay from "../components/BookRatingDisplay";
+import BookRatingDisplay from "../components/RatingDisplay";
 import { useAuth } from "../auth/AuthProvider";
 import { ExpandableText } from "../components/ExpandableText";
+import ReviewContainer from "../components/ReviewContainer";
 
 export default function Book() {
   const { id } = useParams();
@@ -77,8 +78,10 @@ export default function Book() {
               <Text c="dimmed">No authors listed</Text>
             )}
             <Divider my="md" />
-
-            <ExpandableText text={book.description} />
+            <Group mb="xl">
+              <ExpandableText text={book.description}/>
+            </Group>
+            <ReviewContainer reviews={book.reviews} />
           </Paper>
         </Flex>
       </Group>
