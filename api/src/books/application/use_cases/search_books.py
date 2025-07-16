@@ -10,8 +10,8 @@ class SearchBooks:
         self.external_books_service = external_books_service
         self.author_repository = author_repository
 
-    def _process_external_books(self, query: str, page_size: int):
-        external_books = self.external_books_service.search_books(query, page_size=page_size)
+    def _process_external_books(self, query: str, page_size: int, start_index: int):
+        external_books = self.external_books_service.search_books(query, page_size=page_size, start_index=start_index)
         
         # Search for books that are not in the database and add them to the database
         for external_book in external_books:
@@ -38,23 +38,18 @@ class SearchBooks:
         if page < 1:
             return BookSearchResponse(books=[], has_more=False)
         
-        # For simplicity, just search db for the next page, don't bother with external api
-        if page > 1:
-            db_books = self.book_repository.search_books(query, page_size, page)
-            has_more = len(db_books) == page_size + 1
-            # Only return up to page_size books
-            books_to_return = db_books[:page_size]
-            return BookSearchResponse.from_domain(books_to_return, has_more)
-            
         # We essentially do 2 searches to get the books 
         # If there are enough books the first time, then happy days 
         # Otherwise, we copy data from the external api into the db and do a second search
-        db_books = self.book_repository.search_books(query, page_size)
+        db_books = self.book_repository.search_books(query, page_size, page)
         external_books_needed = page_size - len(db_books)
         if external_books_needed > 0:
             # Multiply by 2 to account for duplicates
-            self._process_external_books(query, external_books_needed * 2)
-            db_books = self.book_repository.search_books(query, page_size)
+            self._process_external_books(query, page_size * 2, page_size * (page - 1))
+            db_books = self.book_repository.search_books(query, page_size, page)
+        else:
+            # Background a task to process the external books
+            pass
 
         has_more = len(db_books) == page_size + 1
 

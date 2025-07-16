@@ -9,13 +9,13 @@ class GoogleBooksApiService(AbstractBooksService):
     def __init__(self, author_repo: AbstractAuthorRepo):
         self.author_repo = author_repo
 
-    def search_books(self, query: str, page_size: int = 10) -> list[Book]:
+    def search_books(self, query: str, page_size: int = 10, start_index: int = 0) -> list[Book]:
         books = []
 
         if page_size == 0:
             return books
         
-        books_data = self._get_books_data(query, page_size)
+        books_data = self._get_books_data(query, page_size, start_index)
 
         for book_data in books_data:
             volume_info = book_data.get("volumeInfo", {})
@@ -38,8 +38,8 @@ class GoogleBooksApiService(AbstractBooksService):
 
         return books
 
-    def _get_books_data(self, query: str, page_size: int) -> list[dict]:
-        url = f"https://www.googleapis.com/books/v1/volumes?q={query}&maxResults={page_size}"
+    def _get_books_data(self, query: str, page_size: int, start_index: int) -> list[dict]:
+        url = f"https://www.googleapis.com/books/v1/volumes?q={query}&maxResults={page_size}&startIndex={start_index}"
         response = httpx.get(url)
         response.raise_for_status()
         return response.json().get("items", [])
