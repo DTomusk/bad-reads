@@ -14,11 +14,11 @@ import {
 import { useParams } from "react-router-dom";
 import { useBook } from "../hooks/useBooks";
 import { useDisclosure } from "@mantine/hooks";
-import RatingModal from "../components/RatingModal";
-import BookRatingDisplay from "../components/RatingDisplay";
+import RatingModal from "../components/Ratings/RatingModal";
+import BookRatingDisplay from "../components/Ratings/RatingDisplay";
 import { useAuth } from "../auth/AuthProvider";
-import { ExpandableText } from "../components/ExpandableText";
-import ReviewContainer from "../components/ReviewContainer";
+import { ExpandableText } from "../components/Shared/ExpandableText";
+import ReviewContainer from "../components/Reviews/ReviewContainer";
 import { useReviews } from "../hooks/useReviews";
 
 export default function Book() {

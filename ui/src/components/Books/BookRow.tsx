@@ -1,7 +1,7 @@
 import { Center, Flex, Stack, Title, Divider, ActionIcon } from "@mantine/core";
 import { useRef, useState, useEffect } from "react";
 import BookCardSmall from "./BookCardSmall";
-import { TBook } from "../types/book";
+import { TBook } from "../../types/book";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 

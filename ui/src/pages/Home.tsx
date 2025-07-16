@@ -1,7 +1,7 @@
 import { Stack, Title, Text, Button } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider"; 
-import BookRow from "../components/BookRow";
+import BookRow from "../components/Books/BookRow";
 import { useBooks } from "../hooks/useBooks";
 
 export default function Home() {
