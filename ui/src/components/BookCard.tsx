@@ -5,10 +5,9 @@ import {
   Flex,
   Box,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import { TBook } from "../types/book";
-import RatingModal from "./RatingModal";
-import BookActions from "./BookActions";
+import { useNavigate } from "react-router-dom";
+import "../styles.css";
 
 export default function BookCard({
   title,
@@ -16,17 +15,10 @@ export default function BookCard({
   picture_url = "",
   id,
 }: TBook) {
-  const [ratingModalOpened, { open: openRatingModal, close: closeRatingModal }] = useDisclosure(false);
+  const navigate = useNavigate();
 
   return (
     <>
-      <RatingModal
-        opened={ratingModalOpened}
-        onClose={closeRatingModal}
-        bookTitle={title}
-        bookId={id}
-      />
-      
       <Flex
         gap="md"
         p="lg"
@@ -38,18 +30,20 @@ export default function BookCard({
             height="100%"
             alt={`${title} image`} 
             fit="contain"
+            onClick={() => navigate(`/book/${id}`)}
+            style={{ cursor: "pointer" }}
           />
         </Box>
 
-        <Stack justify="space-between" h="100%" style={{ flex: 1 }}>
-          <Text fw={500} size="lg">{title}</Text>
+        <Stack h="100%" style={{ flex: 1 }}>
+          <Text 
+            fw={500} 
+            size="lg" 
+            onClick={() => navigate(`/book/${id}`)} 
+            className="hover-underline"
+            lineClamp={2}
+            >{title}</Text>
           <Text>{authors.join(", ")}</Text>
-
-          <BookActions
-            bookId={id}
-            onRateClick={openRatingModal}
-            showMore={true}
-          />
         </Stack>
       </Flex>
     </>

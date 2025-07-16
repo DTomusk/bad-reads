@@ -27,6 +27,6 @@ class BookDetailResponse(BaseModel):
             number_of_ratings=book.number_of_ratings if book.number_of_ratings else 0,
             sum_of_love_ratings=book.sum_of_love_ratings if book.sum_of_love_ratings else 0,
             sum_of_shit_ratings=book.sum_of_shit_ratings if book.sum_of_shit_ratings else 0,
-            picture_url=book.picture_url,
-            description=book.description,
+            picture_url=book.picture_url if book.picture_url else "",
+            description=book.description if book.description else "No description available",
             reviews=reviews)
