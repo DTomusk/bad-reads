@@ -1,4 +1,5 @@
-import { Stack, Text, Group, Center } from "@mantine/core";
+import { Stack, Text } from "@mantine/core";
+import EmojiScore from "./EmojiScore";
 
 interface BookRatingDisplayProps {
     average_love_rating?: number;
@@ -15,11 +16,9 @@ export default function BookRatingDisplay({
 }: BookRatingDisplayProps) {
     return (
         <>
-        {number_of_ratings > 0 ? (<Stack gap="xs" align={align}>
-            <Group gap="xs">
-                <Text>💖 {average_love_rating}</Text>
-                <Text>💩 {average_shit_rating}</Text>
-            </Group>
+        {number_of_ratings > 0 ? (
+        <Stack gap="xs" align={align}>
+            <EmojiScore love_score={average_love_rating} shit_score={average_shit_rating} />
             <Text c="white" size="sm" mb="sm">{number_of_ratings > 1 ? `${number_of_ratings} ratings` : `${number_of_ratings} rating`}</Text>
         </Stack>) : (
             <Text c="white" size="sm" mb="sm" ta={align}>No ratings yet</Text>

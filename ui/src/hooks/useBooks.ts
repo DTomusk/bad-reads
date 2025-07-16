@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetcher } from "../api/fetcher";
 import { TBook } from "../types/book";
-import { BookDetailResponse } from "../types/bookDetailResponse";
+import { BookDetailResponse } from "../types/bookdetailresponse";
 import { BookSearchResponse } from "../types/bookSearchResponse";
 
 export const useBooks = () => {
