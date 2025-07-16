@@ -25,27 +25,31 @@ export default function BookCardSmall({
             p="0"
             m="0"
         >
-            <Stack h="100%" justify="space-between" gap="xs">
-                {picture_url ? <Image 
+            <Stack h="100%" gap="xs">
+                {picture_url && <Image 
                     src={picture_url} 
                     alt={title} 
                     width="100%" 
                     fit="contain" 
                     c="white"
-                /> : <Title 
+                />}
+
+                <Title 
                     order={5} 
                     size="sm" 
                     c="white"
                     m="sm"
+                    lineClamp={3}
                 >
                     {title}
-                </Title>}
+                </Title>
 
                 <BookRatingDisplay 
                     average_love_rating={average_love_rating}
                     average_shit_rating={average_shit_rating}
                     number_of_ratings={number_of_ratings}
-                />
+                    align="center"
+                    />
             </Stack>
         </Card> 
     )

@@ -7,6 +7,7 @@ import {
   Card,
 } from "@mantine/core";
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import RatingGroup from "./RatingGroup";
 import LimitedTextarea from "./LimitedTextarea";
 import { useRating } from "../hooks/useRating";
@@ -40,11 +41,23 @@ export default function RatingModal({ opened, onClose, bookTitle, bookId }: Rati
   const [hearts, setHearts] = useState(0);
   const [poos, setPoos] = useState(0);
   const [review, setReview] = useState("");
+  const queryClient = useQueryClient();
   const { mutate: submitRating, isPending: isLoading } = useRating(bookId);
 
   const handleSubmit = () => {
-    submitRating({ hearts, poos, review });
-    onClose();
+    submitRating(
+      { hearts, poos, review },
+      {
+        onSuccess: () => {
+          // Invalidate the book query to refresh the data
+          queryClient.invalidateQueries({ queryKey: ["book", bookId] });
+          onClose();
+        },
+        onError: () => {
+          // Keep modal open on error so user can try again
+        }
+      }
+    );
   };
 
   return (

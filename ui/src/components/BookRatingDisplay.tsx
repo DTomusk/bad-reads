@@ -1,42 +1,29 @@
-import { Stack, Text, Group } from "@mantine/core";
-
-const generateEmojis = (rating: number | undefined, emoji: string) => {
-    const safeRating = rating ?? 0;
-    const filledCount = Math.max(0, Math.min(5, Math.round(safeRating)));
-    const emptyCount = 5 - filledCount;
-    
-    return (
-        <>
-            {Array.from({ length: filledCount }, (_, i) => (
-                <Text key={`filled-${i}`} c="white" size="xl">{emoji}</Text>
-            ))}
-            {Array.from({ length: emptyCount }, (_, i) => (
-                <Text key={`empty-${i}`} c="white" size="xl" style={{ opacity: 0.3 }}>{emoji}</Text>
-            ))}
-        </>
-    );
-};
+import { Stack, Text, Group, Center } from "@mantine/core";
 
 interface BookRatingDisplayProps {
     average_love_rating?: number;
     average_shit_rating?: number;
     number_of_ratings?: number;
+    align?: "center" | "left";
 }
 
 export default function BookRatingDisplay({
     average_love_rating = 0,
     average_shit_rating = 0,
     number_of_ratings = 0,
+    align = "center",
 }: BookRatingDisplayProps) {
     return (
-        <Stack gap="xs" align="center">
+        <>
+        {number_of_ratings > 0 ? (<Stack gap="xs" align={align}>
             <Group gap="xs">
-                {generateEmojis(average_love_rating, '💖')} <Text>{average_love_rating}</Text>
+                <Text>💖 {average_love_rating}</Text>
+                <Text>💩 {average_shit_rating}</Text>
             </Group>
-            <Group gap="xs">
-                {generateEmojis(average_shit_rating, '💩')} <Text>{average_shit_rating}</Text>
-            </Group>
-            <Text c="white" size="sm" mb="sm">({number_of_ratings})</Text>
-        </Stack>
+            <Text c="white" size="sm" mb="sm">{number_of_ratings > 1 ? `${number_of_ratings} ratings` : `${number_of_ratings} rating`}</Text>
+        </Stack>) : (
+            <Text c="white" size="sm" mb="sm" ta={align}>No ratings yet</Text>
+        )}
+        </>
     );
 } 
