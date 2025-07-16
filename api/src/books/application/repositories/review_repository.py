@@ -16,10 +16,13 @@ class AbstractReviewRepo(ABC):
         pass
 
     @abstractmethod
-    def get_reviews_by_book_id(self, book_id: UUID) -> list[ReviewResponse]:
+    def get_reviews_by_book_id(self, book_id: UUID, limit: int = 10, sort_by: str = "date_created", sort_order: str = "desc") -> list[ReviewResponse]:
         """
         Get all reviews for a book.
         :param book_id: The ID of the book to get reviews for.
+        :param limit: The number of reviews to return.
+        :param sort_by: The field to sort the reviews by.
+        :param sort_order: The order to sort the reviews by.
         :return: A list of review response objects.
         """ 
         pass

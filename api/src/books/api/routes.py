@@ -1,7 +1,7 @@
 from uuid import UUID
 from fastapi import APIRouter, BackgroundTasks, Depends
 
-from src.books.api.dependencies import get_book_details_use_case, get_books_use_case, rate_book_use_case, review_book_use_case, search_books_use_case
+from src.books.api.dependencies import get_book_details_use_case, get_book_reviews_use_case, get_books_use_case, rate_book_use_case, review_book_use_case, search_books_use_case
 from src.books.api.schemas.book_search_response import BookSearchResponse
 from src.books.api.schemas.rate_request import RateRequest
 from src.books.api.schemas.review_request import ReviewRequest
@@ -68,5 +68,13 @@ async def review_book(
     """
     review_book.execute(book_id=book_id, user_id=user_id, text=review_request.text, love_score=review_request.love_score, shit_score=review_request.shit_score)
     return {"message": "Book reviewed successfully"}
+
+@router.get("/{book_id}/reviews")
+async def get_book_reviews(book_id: UUID, get_book_reviews=Depends(get_book_reviews_use_case)):
+    """
+    Get reviews of a book by its ID.
+    """
+    reviews = get_book_reviews.execute(book_id=book_id)
+    return reviews
 
 
