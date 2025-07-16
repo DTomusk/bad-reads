@@ -1,6 +1,6 @@
 import { Stack, Title, Text } from "@mantine/core";
-import { ReviewResponse } from "../types/reviewResponse";
-import EmojiScore from "./Ratings/EmojiScore";
+import { ReviewResponse } from "../../types/reviewResponse";
+import EmojiScore from "../Ratings/EmojiScore";
 
 interface ReviewDisplayProps {
     review: ReviewResponse; 

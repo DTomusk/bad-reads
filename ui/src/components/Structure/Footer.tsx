@@ -1,5 +1,5 @@
 import { Text, Group } from "@mantine/core";
-import BadReadLogo from "./BadReadLogo";
+import BadReadLogo from "../BadReadLogo";
 
 export default function Footer() {
   return (
