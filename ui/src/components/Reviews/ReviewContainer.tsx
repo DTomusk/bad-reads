@@ -1,5 +1,5 @@
 import { Stack, Title, Divider } from "@mantine/core";
-import { ReviewResponse } from "../types/reviewResponse";
+import { ReviewResponse } from "../../types/reviewResponse";
 import ReviewDisplay from "./ReviewDisplay";
 
 interface ReviewContainerProps {

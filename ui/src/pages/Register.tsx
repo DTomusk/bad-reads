@@ -1,7 +1,7 @@
 import { Center } from "@mantine/core";
 import { useRegister } from "../hooks/useRegister";
 import { useNavigate } from "react-router-dom";
-import AuthForm from "../components/AuthForm";
+import AuthForm from "./AuthForm";
 import { useAuth } from "../auth/AuthProvider";
 import { useEffect } from "react";
 

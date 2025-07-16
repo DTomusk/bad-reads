@@ -12,8 +12,8 @@ import Book from "./pages/Book";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Search from "./pages/Search";
-import Nav from "./components/Nav";
-import Footer from "./components/Footer";
+import Nav from "./components/Structure/Nav";
+import Footer from "./components/Structure/Footer";
 import BadReadLogo from "./components/BadReadLogo";
 
 const router = createBrowserRouter([

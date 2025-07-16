@@ -9,8 +9,8 @@ import {
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import RatingGroup from "./RatingGroup";
-import LimitedTextarea from "./LimitedTextarea";
-import { useRating } from "../hooks/useRating";
+import LimitedTextarea from "../Shared/LimitedTextarea";
+import { useRating } from "../../hooks/useRating";
 
 interface RatingModalProps {
   opened: boolean;

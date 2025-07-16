@@ -1,7 +1,7 @@
 import { Stack, Image, Card, Title } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
-import { TBook } from "../types/book";
-import BookRatingDisplay from "./RatingDisplay";
+import { TBook } from "../../types/book";
+import BookRatingDisplay from "../Ratings/RatingDisplay";
 
 export default function BookCardSmall({
     title,

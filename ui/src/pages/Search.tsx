@@ -1,5 +1,5 @@
 import { Center, Stack, Title, Divider, Loader, Text, Button } from "@mantine/core";
-import BookCard from "../components/BookCard";
+import BookCard from "../components/Books/BookCard";
 import { useBookSearch } from "../hooks/useBooks";
 import { useState, useEffect, Fragment } from "react";
 import { useSearchParams } from "react-router-dom";
