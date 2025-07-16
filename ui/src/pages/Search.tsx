@@ -1,7 +1,7 @@
 import { Center, Stack, Title, Divider, Loader, Text, Button } from "@mantine/core";
 import BookCard from "../components/BookCard";
 import { useBookSearch } from "../hooks/useBooks";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { useSearchParams } from "react-router-dom";
 import { TBook } from "../types/book";
 
@@ -47,11 +47,6 @@ export default function Search() {
           </Title>
         )}
         <Divider/>
-        {isLoading && (
-          <Center>
-            <Loader size="xl" />
-          </Center>
-        )}
         {accumulatedBooks.length === 0 && activeSearch && !isLoading && (
           <Center>
             <Text size="lg" c="dimmed" ta="center">
@@ -62,15 +57,26 @@ export default function Search() {
         {accumulatedBooks.length > 0 && (
           <Stack>
             {accumulatedBooks.map((book) => (
-              <>
-                <BookCard key={book.id} {...book} />
+              <Fragment key={book.id}>
+                <BookCard {...book} />
                 <Divider size="xs"/>
-              </>
+              </Fragment>
             ))}
           </Stack>
         )}
-        {searchResults?.has_more && (
+        {searchResults?.has_more ? (
           <Button onClick={handleLoadMore}>Load more</Button>
+        ) : accumulatedBooks.length > 0 && !isLoading && (
+          <Center>
+            <Text size="lg" c="dimmed" ta="center">
+              No more books found for "{activeSearch}"
+            </Text>
+          </Center>
+        )}
+        {isLoading && (
+          <Center>
+            <Loader size="xl" />
+          </Center>
         )}
       </Stack>
     </Center>
