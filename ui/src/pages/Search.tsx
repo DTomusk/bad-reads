@@ -66,7 +66,7 @@ export default function Search() {
         )}
         {searchResults?.has_more ? (
           <Button onClick={handleLoadMore}>Load more</Button>
-        ) : (
+        ) : accumulatedBooks.length > 0 && !isLoading && (
           <Center>
             <Text size="lg" c="dimmed" ta="center">
               No more books found for "{activeSearch}"
