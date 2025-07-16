@@ -46,8 +46,12 @@ class ReviewRepo(AbstractReviewRepo):
         )
         return ReviewResponse.from_domain(review, rating)
 
-    def get_reviews_by_book_id(self, book_id: UUID) -> list[ReviewResponse]:
-        result = self.session.query(ReviewModel).filter(ReviewModel.book_id == book_id).all()
+    def get_reviews_by_book_id(self, book_id: UUID, limit: int = 10, sort_by: str = "date_created", sort_order: str = "desc") -> list[ReviewResponse]:
+        result = (self.session.query(ReviewModel)
+            .filter(ReviewModel.book_id == book_id)
+            .order_by(getattr(ReviewModel, sort_by).asc() if sort_order == "asc" else getattr(ReviewModel, sort_by).desc())
+            .limit(limit)
+            .all())
         if not result:
             return []
         

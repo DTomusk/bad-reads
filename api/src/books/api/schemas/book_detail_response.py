@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from src.books.api.schemas.review_response import ReviewResponse
 from src.books.domain.models import Book
 
 class BookDetailResponse(BaseModel):
@@ -14,10 +13,8 @@ class BookDetailResponse(BaseModel):
     picture_url: str | None
     description: str
 
-    reviews: list[ReviewResponse]
-
     @classmethod
-    def from_domain(cls, book: Book, reviews: list[ReviewResponse]) -> "BookDetailResponse":
+    def from_domain(cls, book: Book) -> "BookDetailResponse":
         return cls(
             id=str(book.id),
             title=book.title,
@@ -29,4 +26,4 @@ class BookDetailResponse(BaseModel):
             sum_of_shit_ratings=book.sum_of_shit_ratings if book.sum_of_shit_ratings else 0,
             picture_url=book.picture_url if book.picture_url else "",
             description=book.description if book.description else "No description available",
-            reviews=reviews)
+        )
