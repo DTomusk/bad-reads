@@ -19,12 +19,10 @@ import BookRatingDisplay from "../components/Ratings/RatingDisplay";
 import { useAuth } from "../auth/AuthProvider";
 import { ExpandableText } from "../components/Shared/ExpandableText";
 import ReviewContainer from "../components/Reviews/ReviewContainer";
-import { useReviews } from "../hooks/useReviews";
 
 export default function Book() {
   const { id } = useParams();
   const { data: book, isLoading, error } = useBook(id || "");
-  const { data: reviews, isLoading: reviewsLoading, error: reviewsError } = useReviews(id || "");
   const [ratingModalOpened, { open: openRatingModal, close: closeRatingModal }] = useDisclosure(false);
   const { isAuthenticated } = useAuth();
 
@@ -83,9 +81,7 @@ export default function Book() {
             <Group mb="xl">
               <ExpandableText text={book.description}/>
             </Group>
-            {reviewsLoading && <Loader size="xl" />}
-            {reviewsError && <Text c="red">Error loading reviews: {(reviewsError as Error)?.message || "Error loading reviews"}</Text>}
-            {reviews && reviews.length > 0 && <ReviewContainer reviews={reviews} />}
+            <ReviewContainer bookId={id || ""} />
           </Paper>
         </Flex>
       </Group>
