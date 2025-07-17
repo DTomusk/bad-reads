@@ -6,7 +6,7 @@ export const useReviews = (bookId: string, sort: string) => {
     return useQuery<ReviewResponse[]>({
         queryKey: ["reviews", bookId, sort],
         queryFn: async () => {
-            const response = await fetcher<ReviewResponse[]>(`/books/${bookId}/reviews?sort=${sort}`);
+            const response = await fetcher<ReviewResponse[]>(`/books/${bookId}/reviews?sort=${sort.toLowerCase()}`);
             return response;
         },
     });

@@ -70,11 +70,14 @@ async def review_book(
     return {"message": "Book reviewed successfully"}
 
 @router.get("/{book_id}/reviews")
-async def get_book_reviews(book_id: UUID, get_book_reviews=Depends(get_book_reviews_use_case)):
+async def get_book_reviews(
+    book_id: UUID, 
+    sort: str = "newest", 
+    get_book_reviews=Depends(get_book_reviews_use_case)):
     """
     Get reviews of a book by its ID.
     """
-    reviews = get_book_reviews.execute(book_id=book_id)
+    reviews = get_book_reviews.execute(book_id=book_id, sort=sort)
     return reviews
 
 
