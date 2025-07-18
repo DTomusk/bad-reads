@@ -11,7 +11,7 @@ export default function ReviewDisplay({ review }: ReviewDisplayProps) {
         <Stack>
             <Title order={3}>{review.user_id} wrote:</Title>
             <Group gap="md">
-                <EmojiScoreExpanded love_score={review.love_score} shit_score={review.shit_score} />
+                <EmojiScoreExpanded love_score={review.love_score} shit_score={review.shit_score} size="medium" />
                 <Text>{review.text}</Text>
             </Group>
             <Divider my="xs" />

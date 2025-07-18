@@ -10,6 +10,7 @@ import {
   Text,
   Flex,
   Button,
+  Title,
 } from "@mantine/core";
 import { useParams } from "react-router-dom";
 import { useBook } from "../hooks/useBooks";
@@ -19,6 +20,7 @@ import BookRatingDisplay from "../components/Ratings/RatingDisplay";
 import { useAuth } from "../auth/AuthProvider";
 import { ExpandableText } from "../components/Shared/ExpandableText";
 import ReviewContainer from "../components/Reviews/ReviewContainer";
+import EmojiScoreExpanded from "../components/Ratings/EmojiScoreExpanded";
 
 export default function Book() {
   const { id } = useParams();
@@ -43,48 +45,45 @@ export default function Book() {
   }
 
   return (
-    <Stack>
-      <Group justify="center" mt="xl"> 
-        <Flex justify="center" 
-          gap={{base: "0", md: "md"}}
-          direction={{base: "column", md: "row"}}>
-          <Stack>
-            <Image
-              src={book.picture_url}
-              h="auto"
-              w="auto"
-              fit="contain"
-              alt={`${book.title} image`}
-              mt="xl"
-            />
-            <BookRatingDisplay
-              average_love_rating={book.average_love_rating}
-              average_shit_rating={book.average_shit_rating}
-              number_of_ratings={book.number_of_ratings}
-            />
-            {isAuthenticated && <Button
+    <Stack mt="xl">
+      <Flex direction="row" gap="md" align="center">
+        <Stack>
+        <Image
+          w="auto" 
+          fit="contain" 
+          src={book.picture_url}
+          alt={`${book.title} image`}
+        />
+        {isAuthenticated && <Button
               onClick={openRatingModal}
             >
               Rate
             </Button>}
-          </Stack>
-          <Paper style={{ flexGrow: 2 }}>
-            <h1>{book.title}</h1>
-            <Divider my="md" />
-
-            {book.authors && book.authors.length > 0 ? (
-              <Pill size="xl">{book.authors.join(", ")}</Pill>
-            ) : (
-              <Text c="dimmed">No authors listed</Text>
-            )}
-            <Divider my="md" />
-            <Group mb="xl">
-              <ExpandableText text={book.description}/>
-            </Group>
-            <ReviewContainer bookId={id || ""} />
-          </Paper>
+        </Stack>
+        <Flex direction="column" gap="md">
+            <Title order={1}>{book.title}</Title>
+                  {book.authors && book.authors.length > 0 ? (
+                    <Title order={3}>{book.authors.join(", ")}</Title>
+                  ) : (
+                    <Text c="dimmed">No authors listed</Text>
+                  )}
+            <EmojiScoreExpanded 
+                love_score={book.average_love_rating} 
+                shit_score={book.average_shit_rating} 
+                number_of_ratings={book.number_of_ratings} 
+                align="left"
+                size="large"
+                />
         </Flex>
-      </Group>
+      </Flex>
+
+      <Stack mb="xl">
+        <Title mt="lg" order={2}>Synopsis</Title>
+        <Divider />
+        <ExpandableText text={book.description}/>
+      </Stack>
+
+      <ReviewContainer bookId={id || ""} />
 
       <RatingModal
         opened={ratingModalOpened}
