@@ -24,7 +24,7 @@ export default function Home() {
           order={1}
           style={{
             alignSelf: "center",
-            fontSize: "54px"
+            fontSize: "64px"
           }}
           c="white"
         >
@@ -41,7 +41,7 @@ export default function Home() {
         </Text>
         {!isAuthenticated && <Button w="auto" size="md" mt="lg" onClick={() => navigate("/register")}>Register now and start rating!</Button>}
       </Stack>
-      <BookRow books={books || []} />
+      {isAuthenticated && <BookRow books={books || []} />}
     </Stack>
   );
 }

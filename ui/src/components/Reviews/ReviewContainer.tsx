@@ -15,16 +15,17 @@ export default function ReviewContainer({ bookId }: ReviewContainerProps) {
         <>
             {isLoading && <Loader size="xl" />}
             {error && <Text c="red">Error loading reviews: {(error as Error)?.message || "Error loading reviews"}</Text>}
-        {!isLoading && !error && <Stack>
-            <Group justify="space-between">
-                <Title order={2}>Reviews</Title>
-                <Dropdown data={["Newest", "Oldest"]} onValueChange={setSort} />
-            </Group>
-            <Divider />
-            {reviews && reviews.map((review) => (
-                <ReviewDisplay key={review.id} review={review} />
-            ))}
-        </Stack>}
+            {!isLoading && !error && <Stack>
+                <Group justify="space-between">
+                    <Title order={2}>Reviews</Title>
+                    <Dropdown data={["Newest", "Oldest"]} onValueChange={setSort} />
+                </Group>
+                <Divider />
+                {!reviews || reviews.length === 0 && <Text mb="xl">No reviews yet, be the first to leave a review!</Text>}
+                {reviews && reviews.map((review) => (
+                    <ReviewDisplay key={review.id} review={review} />
+                ))}
+            </Stack>}
         </>
     )
 }
