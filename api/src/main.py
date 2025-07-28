@@ -4,6 +4,7 @@ from src.config import get_settings
 
 from src.books.api.routes import router as books_router
 from src.users.api.routes import router as users_router
+from src.bookclubs.api.routes import router as book_club_router
 
 settings = get_settings()
 
@@ -34,4 +35,10 @@ app.include_router(
     users_router,
     prefix="/api/users",
     tags=["users"]
+)
+
+app.include_router(
+    book_club_router,
+    prefix="/api/book-clubs",
+    tags=["book-clubs"]
 )

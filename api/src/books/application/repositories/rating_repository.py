@@ -14,7 +14,6 @@ class AbstractRatingRepo(ABC):
         :param book_id: The ID of the book that was rated.
         :return: The rating object.
         """
-        pass
 
     @abstractmethod
     def get_ratings_by_book_id(self, book_id: UUID) -> list[Rating]:
@@ -23,7 +22,6 @@ class AbstractRatingRepo(ABC):
         :param book_id: The ID of the book to get ratings for.
         :return: A list of rating objects.
         """
-        pass
 
     @abstractmethod
     def create_rating(rating: Rating) -> None:
@@ -32,7 +30,6 @@ class AbstractRatingRepo(ABC):
         :param rating: The rating object to create.
         :return: None
         """
-        pass
 
     @abstractmethod
     def update_rating(rating: Rating) -> None:
@@ -41,4 +38,3 @@ class AbstractRatingRepo(ABC):
         :param rating: The rating object to update.
         :return: None
         """
-        pass

@@ -2,7 +2,7 @@ from uuid import UUID, uuid4
 
 from src.books.application.repositories.book_repository import AbstractBookRepo
 from src.books.application.repositories.rating_repository import AbstractRatingRepo
-from src.books.domain.models import Book, Rating, RatingScore, Review
+from src.books.domain.models import Book, Rating, RatingScore
 
 
 class RateBook:

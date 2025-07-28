@@ -1,8 +1,8 @@
 # Just to create some data to play around with
 # to be removed at a later stage
 
-import random
 from sqlalchemy.orm import Session
+from api.src.bookclubs.infrastructure.models import BookClubModel
 from src.infrastructure.db.database import Base, engine, SessionLocal
 from src.books.infrastructure.models import AuthorModel, BookModel
 import uuid
@@ -45,6 +45,14 @@ USERS = [
     {"email": "test4@test.com", "password": "test"},
     {"email": "test5@test.com", "password": "test"},
 ]
+
+BOOKCLUBS = [
+    {"name": "gritty book club"},
+    {"name": "work book club"},
+    {"name": "smutty book club"},
+    {"name": "greasy book club"},
+]
+
 
 Base.metadata.create_all(bind=engine)
 
@@ -119,6 +127,28 @@ def seed_users():
     finally:
         session.close()
 
+def seed_book_clubs():
+    session: Session = SessionLocal()
+    book_club_counter = 0
+    try:
+        for book_club in BOOKCLUBS:
+            book_club_obj = session.query(BookClubModel).filter(BookClubModel.name == book_club["name"]).first()
+            if not book_club_obj:
+                book_club_obj = BookClubModel(
+                    id=uuid.uuid4(),
+                    name=book_club["name"],
+                )
+                session.add(book_club_obj)
+                book_club_counter += 1
+        session.commit()
+        print(f"Seeded {book_club_counter} book clubs successfully.")
+    except Exception as e:
+        session.rollback()
+        print(f"Error seeding book clubs: {e}")
+    finally:
+        session.close()
+
 if __name__ == "__main__":
     seed_books()
     seed_users()
+    seed_book_clubs()

@@ -1,4 +1,4 @@
-from sqlalchemy import UUID, Column, String, Index
+from sqlalchemy import UUID, Column, String
 from sqlalchemy.orm import relationship
 from src.infrastructure.db.database import Base
 

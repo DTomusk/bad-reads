@@ -2,7 +2,6 @@ from uuid import UUID
 from src.books.application.repositories.book_repository import AbstractBookRepo
 from src.books.application.repositories.review_repository import AbstractReviewRepo
 from src.books.api.schemas.book_detail_response import BookDetailResponse
-from src.books.api.schemas.review_response import ReviewResponse
 
 
 class GetBookDetails:

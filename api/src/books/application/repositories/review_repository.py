@@ -13,7 +13,6 @@ class AbstractReviewRepo(ABC):
         :param review: The review object to create.
         :return: None
         """
-        pass
 
     @abstractmethod
     def get_reviews_by_book_id(self, book_id: UUID) -> list[ReviewResponse]:
@@ -22,7 +21,6 @@ class AbstractReviewRepo(ABC):
         :param book_id: The ID of the book to get reviews for.
         :return: A list of review response objects.
         """ 
-        pass
 
     @abstractmethod
     def get_reviews_by_user_id(self, user_id: UUID) -> list[ReviewResponse]:
@@ -31,7 +29,6 @@ class AbstractReviewRepo(ABC):
         :param user_id: The ID of the user to get reviews for.
         :return: A list of review response objects.
         """
-        pass
 
     @abstractmethod
     def get_review_by_id(self, review_id: UUID) -> ReviewResponse:
@@ -40,7 +37,6 @@ class AbstractReviewRepo(ABC):
         :param review_id: The ID of the review to get.
         :return: A review response object.
         """
-        pass
 
     @abstractmethod
     def get_review_by_user_and_book(self, user_id: UUID, book_id: UUID) -> ReviewResponse:
@@ -50,4 +46,3 @@ class AbstractReviewRepo(ABC):
         :param book_id: The ID of the book.
         :return: A review response object.
         """
-        pass
