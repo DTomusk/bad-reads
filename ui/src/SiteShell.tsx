@@ -15,6 +15,7 @@ import Search from "./pages/Search";
 import Nav from "./components/Structure/Nav";
 import Footer from "./components/Structure/Footer";
 import BadReadLogo from "./components/BadReadLogo";
+import PageNotFound from "./pages/PageNotFound";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
         path: "/search",
         element: <Search />,
       },
+      {
+        path: "*",
+        element: <PageNotFound />,
+      }
     ],
   },
 ]);
