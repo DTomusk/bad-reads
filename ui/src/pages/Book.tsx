@@ -24,11 +24,11 @@ import { useUserRating } from "../hooks/useRating";
 
 export default function Book() {
   const { id } = useParams();
-  const { data: book, isLoading, error } = useBook(id || "");
+  const { data: book, isLoading, error, refetch: refetchBook } = useBook(id || "");
   const [ratingModalOpened, { open: openRatingModal, close: closeRatingModal }] = useDisclosure(false);
   const { isAuthenticated } = useAuth();
 
-  const { data: userRating, isLoading: isLoadingUserRating } = useUserRating(id || "");
+  const { data: userRating, isLoading: isLoadingUserRating, refetch: refetchUserRating } = useUserRating(id || "");
 
   if (isLoading) {
     return (
@@ -90,7 +90,11 @@ export default function Book() {
 
       <RatingModal
         opened={ratingModalOpened}
-        onClose={closeRatingModal}
+        onClose={() => {
+          closeRatingModal();
+          refetchBook();
+          refetchUserRating();
+        }}
         bookTitle={book.title}
         bookId={id || ""}
       />
