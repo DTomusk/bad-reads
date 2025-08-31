@@ -1,18 +1,16 @@
-import { useState } from 'react';
 import { InputBase, Combobox, useCombobox } from '@mantine/core';
 
 
 interface DropdownProps {
     data: string[];
+    value: string;
     onValueChange?: (value: string) => void;
 }
 
-export default function Dropdown({ data, onValueChange }: DropdownProps) {
+export default function Dropdown({ data, value, onValueChange }: DropdownProps) {
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
-
-  const [value, setValue] = useState<string>(data[0]);
 
   const options = data.map((item) => (
     <Combobox.Option value={item} key={item}>
@@ -24,7 +22,6 @@ export default function Dropdown({ data, onValueChange }: DropdownProps) {
     <Combobox
       store={combobox}
       onOptionSubmit={(val) => {
-        setValue(val);
         onValueChange?.(val);
         combobox.closeDropdown();
       }}
