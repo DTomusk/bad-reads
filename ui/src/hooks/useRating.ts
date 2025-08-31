@@ -1,4 +1,4 @@
-import { useMutation, UseMutationResult } from "@tanstack/react-query";
+import { useMutation, UseMutationResult, useQuery, UseQueryResult } from "@tanstack/react-query";
 import { apiClient } from "../api/apiClient";
 
 interface RatingData {
@@ -35,6 +35,16 @@ export const useRating = (bookId: string): UseMutationResult<RatingResponse, Err
           text: data.review,
         }
       );
+      return response.data;
+    },
+  });
+};
+
+export const useUserRating = (bookId: string): UseQueryResult<RatingResponse, Error> => {
+  return useQuery({
+    queryKey: ["userRating", bookId],
+    queryFn: async () => {
+      const response = await apiClient.get<RatingResponse>(`/books/${bookId}/rating`);
       return response.data;
     },
   });

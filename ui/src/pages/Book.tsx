@@ -20,6 +20,7 @@ import { useAuth } from "../auth/AuthProvider";
 import { ExpandableText } from "../components/Shared/ExpandableText";
 import ReviewContainer from "../components/Reviews/ReviewContainer";
 import EmojiScoreExpanded from "../components/Ratings/EmojiScoreExpanded";
+import { useUserRating } from "../hooks/useRating";
 
 export default function Book() {
   const { id } = useParams();
@@ -27,7 +28,7 @@ export default function Book() {
   const [ratingModalOpened, { open: openRatingModal, close: closeRatingModal }] = useDisclosure(false);
   const { isAuthenticated } = useAuth();
 
-  const userRating = 5;
+  const { data: userRating, isLoading: isLoadingUserRating } = useUserRating(id || "");
 
   if (isLoading) {
     return (
@@ -57,7 +58,7 @@ export default function Book() {
         />
         {isAuthenticated && <Button
               onClick={openRatingModal}
-              disabled={userRating !== null}
+              disabled={isLoadingUserRating || userRating !== null}
             >
               Rate
             </Button>}
