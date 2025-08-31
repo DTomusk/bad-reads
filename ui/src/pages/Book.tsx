@@ -21,6 +21,8 @@ import { ExpandableText } from "../components/Shared/ExpandableText";
 import ReviewContainer from "../components/Reviews/ReviewContainer";
 import EmojiScoreExpanded from "../components/Ratings/EmojiScoreExpanded";
 import { useUserRating } from "../hooks/useRating";
+import { useReviews } from "../hooks/useReviews";
+import { useState } from "react";
 
 export default function Book() {
   const { id } = useParams();
@@ -29,6 +31,13 @@ export default function Book() {
   const { isAuthenticated } = useAuth();
 
   const { data: userRating, isLoading: isLoadingUserRating, refetch: refetchUserRating } = useUserRating(id || "");
+
+  const [sort, setSort] = useState<string>("Newest");
+    const { data: reviews, isLoading: isLoadingReviews, error: errorReviews, refetch: refetchReviews } = useReviews(id || "", sort);
+
+    const updateSort = (value: string) => {
+        setSort(value);
+    }
 
   if (isLoading) {
     return (
@@ -86,7 +95,13 @@ export default function Book() {
         <ExpandableText text={book.description}/>
       </Stack>
 
-      <ReviewContainer bookId={id || ""} />
+      <ReviewContainer 
+      sort={sort} 
+      updateSort={updateSort} 
+      reviews={reviews || []} 
+      isLoadingReviews={isLoadingReviews} 
+      errorReviews={errorReviews as Error} 
+      />
 
       <RatingModal
         opened={ratingModalOpened}
@@ -94,6 +109,7 @@ export default function Book() {
           closeRatingModal();
           refetchBook();
           refetchUserRating();
+          refetchReviews();
         }}
         bookTitle={book.title}
         bookId={id || ""}

@@ -1,26 +1,24 @@
 import { Stack, Title, Divider, Group, Loader, Text } from "@mantine/core";
 import ReviewDisplay from "./ReviewDisplay";
 import Dropdown from "../Shared/Dropdown";
-import { useState } from "react";
-import { useReviews } from "../../hooks/useReviews";
+import { ReviewResponse } from "../../types/reviewResponse";
 
 interface ReviewContainerProps {
-    bookId: string;
+    sort: string;
+    updateSort: (value: string) => void;
+    reviews: ReviewResponse[];
+    isLoadingReviews: boolean;
+    errorReviews: Error | null;
 }
 
-export default function ReviewContainer({ bookId }: ReviewContainerProps) {
-    const [sort, setSort] = useState<string>("Newest");
-    const { data: reviews, isLoading, error } = useReviews(bookId, sort);
-
-    const updateSort = (value: string) => {
-        setSort(value);
-    }
+export default function ReviewContainer({ sort, updateSort, reviews, isLoadingReviews, errorReviews }: ReviewContainerProps) {
+    
 
     return (
         <>
-            {isLoading && <Loader size="xl" />}
-            {error && <Text c="red">Error loading reviews: {(error as Error)?.message || "Error loading reviews"}</Text>}
-            {!isLoading && !error && <Stack>
+            {isLoadingReviews && <Loader size="xl" />}
+            {errorReviews && <Text c="red">Error loading reviews: {(errorReviews as Error)?.message || "Error loading reviews"}</Text>}
+            {!isLoadingReviews && !errorReviews && <Stack>
                 <Group justify="space-between">
                     <Title order={2}>Reviews</Title>
                     <Dropdown data={["Newest", "Oldest"]} value={sort} onValueChange={updateSort} />
