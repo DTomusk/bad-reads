@@ -3,7 +3,7 @@ import { Text, Stack, Group } from "@mantine/core";
 interface EmojiScoreExpandedProps {
     love_score: number;
     shit_score: number;
-    number_of_ratings?: number;
+    number_of_ratings: number;
     size?: "small" | "medium" | "large";
     align?: "left" | "center" | "right";
 }
@@ -33,7 +33,8 @@ export default function EmojiScoreExpanded({ love_score, shit_score, number_of_r
                 <Text size={size === "small" ? "16px" : size === "medium" ? "20px" : "24px"}>{createEmojiString(shit_score, "💩")}</Text>
                 <Text size="16px">{shit_score.toFixed(1)}</Text>
             </Group>
-            {number_of_ratings && <Text size="16px" fw="bold" mx="xs">{number_of_ratings > 1 ? `${number_of_ratings} ratings` : `${number_of_ratings} rating`}</Text>}
+            {number_of_ratings > 0 && <Text size="16px" fw="bold" mx="xs">{number_of_ratings > 1 ? `${number_of_ratings} ratings` : `${number_of_ratings} rating`}</Text>}
+            {number_of_ratings === 0 && <Text size="16px" fw="bold" mx="xs">No ratings yet</Text>}
         </Stack>
     )
 }

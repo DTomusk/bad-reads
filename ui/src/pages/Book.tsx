@@ -73,7 +73,7 @@ export default function Book() {
             <EmojiScoreExpanded 
                 love_score={book.average_love_rating} 
                 shit_score={book.average_shit_rating} 
-                number_of_ratings={book.number_of_ratings} 
+                number_of_ratings={book.number_of_ratings || 0} 
                 align="left"
                 size="large"
                 />
