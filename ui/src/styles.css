@@ -6,3 +6,12 @@
 .hover-underline:hover {
     text-decoration: underline;
 }
+
+.custom-button-root:disabled,
+.custom-button-root[data-disabled] {
+  background-color: var(--mantine-color-gray-4);
+  color: var(--mantine-color-dark-2);
+  border-color: var(--mantine-color-gray-5);
+  opacity: 1;
+  cursor: not-allowed;
+}

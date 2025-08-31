@@ -16,7 +16,6 @@ import { useParams } from "react-router-dom";
 import { useBook } from "../hooks/useBooks";
 import { useDisclosure } from "@mantine/hooks";
 import RatingModal from "../components/Ratings/RatingModal";
-import BookRatingDisplay from "../components/Ratings/RatingDisplay";
 import { useAuth } from "../auth/AuthProvider";
 import { ExpandableText } from "../components/Shared/ExpandableText";
 import ReviewContainer from "../components/Reviews/ReviewContainer";
@@ -27,6 +26,8 @@ export default function Book() {
   const { data: book, isLoading, error } = useBook(id || "");
   const [ratingModalOpened, { open: openRatingModal, close: closeRatingModal }] = useDisclosure(false);
   const { isAuthenticated } = useAuth();
+
+  const userRating = 5;
 
   if (isLoading) {
     return (
@@ -56,6 +57,7 @@ export default function Book() {
         />
         {isAuthenticated && <Button
               onClick={openRatingModal}
+              disabled={userRating !== null}
             >
               Rate
             </Button>}
