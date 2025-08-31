@@ -8,7 +8,7 @@ from alembic import context
 from src.infrastructure.db.database import Base
 # Import all models to ensure they are registered with Base.metadata
 from src.books.application.models import BookModel, RatingModel, ReviewModel, AuthorModel
-from src.users.infrastructure.models import UserModel
+from api.src.users.application.models import UserModel
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

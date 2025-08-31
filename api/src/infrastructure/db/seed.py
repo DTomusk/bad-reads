@@ -7,7 +7,7 @@ from src.infrastructure.db.database import Base, engine, SessionLocal
 from src.books.application.models import AuthorModel, BookModel
 import uuid
 
-from src.users.infrastructure.models import UserModel
+from api.src.users.application.models import UserModel
 
 BOOKS = [
     {"title": "To Kill a Mockingbird", "author": "Harper Lee"},
