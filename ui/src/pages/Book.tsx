@@ -1,9 +1,6 @@
 import {
-  Group,
   Stack,
   Image,
-  Paper,
-  Pill,
   Divider,
   Center,
   Loader,
@@ -26,20 +23,17 @@ import { useState } from "react";
 
 export default function Book() {
   const { id } = useParams();
-  const { data: book, isLoading, error, refetch: refetchBook } = useBook(id || "");
+  const { data: book, isLoading: isLoadingBook, error: errorBook, refetch: refetchBook } = useBook(id || "");
   const [ratingModalOpened, { open: openRatingModal, close: closeRatingModal }] = useDisclosure(false);
   const { isAuthenticated } = useAuth();
-
   const { data: userRating, isLoading: isLoadingUserRating, refetch: refetchUserRating } = useUserRating(id || "");
-
   const [sort, setSort] = useState<string>("Newest");
-    const { data: reviews, isLoading: isLoadingReviews, error: errorReviews, refetch: refetchReviews } = useReviews(id || "", sort);
+  const { data: reviews, isLoading: isLoadingReviews, error: errorReviews, refetch: refetchReviews } = useReviews(id || "", sort);
+  const updateSort = (value: string) => {
+    setSort(value);
+  }
 
-    const updateSort = (value: string) => {
-        setSort(value);
-    }
-
-  if (isLoading) {
+  if (isLoadingBook) {
     return (
       <Center>
         <Loader size="xl" />
@@ -47,10 +41,10 @@ export default function Book() {
     );
   }
 
-  if (error || !book) {
+  if (errorBook || !book) {
     return (
       <Center>
-        <Text c="red">Error loading book: {(error as Error)?.message || "Book not found"}</Text>
+        <Text c="red">Error loading book: {(errorBook as Error)?.message || "Book not found"}</Text>
       </Center>
     );
   }
@@ -100,7 +94,7 @@ export default function Book() {
       updateSort={updateSort} 
       reviews={reviews || []} 
       isLoadingReviews={isLoadingReviews} 
-      errorReviews={errorReviews as Error} 
+      errorReviews={errorReviews as Error | null} 
       />
 
       <RatingModal

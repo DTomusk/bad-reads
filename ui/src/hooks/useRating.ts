@@ -44,7 +44,7 @@ export const useUserRating = (bookId: string): UseQueryResult<RatingResponse, Er
   return useQuery({
     queryKey: ["userRating", bookId],
     queryFn: async () => {
-      const response = await apiClient.get<RatingResponse>(`/books/${bookId}/rating`);
+      const response = await apiClient.get<RatingData>(`/books/${bookId}/rating`);
       return response.data;
     },
   });
