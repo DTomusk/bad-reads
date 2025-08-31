@@ -95,6 +95,10 @@ export const theme = createTheme({
         c: 'white',
         shadow: 'xl',
       },
+      // 👇 use `classNames` or `vars` instead of `styles`
+      classNames: {
+        root: "custom-button-root",
+      },
     },
     Divider: {
       defaultProps: {

@@ -13,6 +13,7 @@ from src.books.application.use_cases.rate_book import RateBook
 from src.books.infrastructure.repositories.book_repo import BookRepo
 from src.books.infrastructure.repositories.rating_repo import RatingRepo
 from src.books.infrastructure.services.google_books_api_service import GoogleBooksApiService
+from src.books.application.use_cases.get_book_rating import GetBookRating
 
 def get_ratings_repo(session=Depends(get_session)):
     """
@@ -83,6 +84,12 @@ def search_books_use_case(
         author_repository=author_repo, 
         background_task_queue=FastAPIBackgroundTaskQueue(background_tasks=background_tasks)
     )
+
+def get_book_rating_use_case(rating_repo=Depends(get_ratings_repo)):
+    """
+    Dependency to provide the GetBookRating use case.
+    """
+    return GetBookRating(rating_repository=rating_repo)
 
 def get_book_reviews_use_case(review_repo=Depends(get_reviews_repo)):
     """
