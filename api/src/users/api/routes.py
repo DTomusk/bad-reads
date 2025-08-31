@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 
 from src.users.api.dependencies import get_login_use_case, get_register_user_use_case
@@ -15,7 +15,10 @@ async def register_user(registration_request: RegistrationRequest, register_user
 @router.post("/login")
 async def login_user(form_data: OAuth2PasswordRequestForm=Depends(), login_use_case=Depends(get_login_use_case)):
     """Login a user and return a JWT token."""
-    email = form_data.username
-    password = form_data.password
-    token = login_use_case.execute(email=email, password=password)
-    return {"access_token": token, "token_type": "Bearer"}
+    try:
+        email = form_data.username
+        password = form_data.password
+        token = login_use_case.execute(email=email, password=password)
+        return {"access_token": token, "token_type": "Bearer"}
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=str(e))
