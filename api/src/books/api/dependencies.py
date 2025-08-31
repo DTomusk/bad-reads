@@ -1,18 +1,18 @@
 from fastapi import BackgroundTasks, Depends
 
+from src.books.application.repositories.author_repository import AuthorRepo
 from src.books.application.use_cases.get_book_reviews import GetBookReviews
 from src.infrastructure.services.background_task_queue import FastAPIBackgroundTaskQueue
-from src.books.infrastructure.repositories.author_repo import AuthorRepo
 from src.books.application.use_cases.search_books import SearchBooks
 from src.books.application.use_cases.get_book_details import GetBookDetails
 from src.books.application.use_cases.review_book import ReviewBook
-from src.books.infrastructure.repositories.review_repo import ReviewRepo
+from src.books.application.repositories.review_repository import ReviewRepo
 from src.infrastructure.db.database import get_session
 from src.books.application.use_cases.get_books import GetBooks
 from src.books.application.use_cases.rate_book import RateBook
-from src.books.infrastructure.repositories.book_repo import BookRepo
-from src.books.infrastructure.repositories.rating_repo import RatingRepo
-from src.books.infrastructure.services.google_books_api_service import GoogleBooksApiService
+from src.books.application.repositories.book_repository import BookRepo
+from src.books.application.repositories.rating_repository import RatingRepo
+from src.books.application.services.external_books_service import GoogleBooksApiService
 from src.books.application.use_cases.get_book_rating import GetBookRating
 
 def get_ratings_repo(session=Depends(get_session)):
