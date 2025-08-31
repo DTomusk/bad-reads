@@ -14,4 +14,4 @@ class GetMeetingsByBookClub:
             page_size: int = 10, 
             sort_order: str = "asc",
         ) -> list[Meeting]:
-        return self.meeting_repository.get_meetings_by_book_club_id(book_club_id, page, page_size, sort_order)
+        return self.meeting_repository.get_meetings_by_book_club_id(book_club_id, page=page, page_size=page_size, sort_order=sort_order)

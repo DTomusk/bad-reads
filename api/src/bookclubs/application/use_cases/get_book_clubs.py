@@ -11,7 +11,7 @@ class GetBookClubs:
             self, 
             page: int = 1, 
             page_size: int = 10, 
-            sort_by: str = "title", 
+            sort_by: str = "name", 
             sort_order: str = "asc",
         ) -> list[BookClub]:
         return self.book_club_repository.get_book_clubs(page, page_size, sort_by, sort_order)

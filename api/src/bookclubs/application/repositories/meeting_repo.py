@@ -15,7 +15,7 @@ class AbstractMeetingRepo(ABC):
         """
 
     @abstractmethod
-    def get_meetings_by_book_club_id(self, book_club_id: UUID, page: int = 1, page_size: int = 10, sort_by: str = "title", sort_order: str = "asc") -> list[Meeting]:
+    def get_meetings_by_book_club_id(self, book_club_id: UUID, page: int = 1, page_size: int = 10, sort_by: str = "name", sort_order: str = "asc") -> list[Meeting]:
         """
         Get all meetings.
         :param book_club_id: The id of the book club the meeting belongs to 
@@ -27,7 +27,7 @@ class AbstractMeetingRepo(ABC):
         """
 
     @abstractmethod 
-    def add_meeting(self, meeting: Meeting) -> Meeting:
+    def create_meeting(self, meeting: Meeting) -> Meeting:
         """
         Add a meeting to the repository.
         :param meeting: The meeting object to add.

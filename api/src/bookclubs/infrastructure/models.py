@@ -16,6 +16,9 @@ class BookClubModel(Base):
     id = Column(UUID, primary_key=True, index=True)
     name = Column(String, index=True)
 
+    meetings = relationship("MeetingModel", back_populates="book_clubs")
+
+
     def __repr__(self):
         return f"<BookClubModel(id={self.id}, name={self.name})>"
     
@@ -24,9 +27,12 @@ class MeetingModel(Base):
 
     id = Column(UUID, primary_key=True, index=True)
     book_club_id = Column(UUID, ForeignKey("book_clubs.id"), index=True)
-    book_id = Column(UUID, ForeignKey("book.id"), index=True)
+    book_id = Column(String)
     date = Column(DateTime)
-    book_club = relationship("BookModel", back_populates="meetings")
+
+    book_clubs = relationship("BookClubModel", back_populates="meetings")
+    # book = relationship("BookModel")
+
 
     def __repr__(self):
         return f"<MeetingModel(id={self.id}, book_id={self.book_id}, book_club_id={self.book_club_id}, date={self.date})>"

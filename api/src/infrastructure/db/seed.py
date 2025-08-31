@@ -2,7 +2,7 @@
 # to be removed at a later stage
 
 from sqlalchemy.orm import Session
-from api.src.bookclubs.infrastructure.models import BookClubModel
+from src.bookclubs.infrastructure.models import BookClubModel
 from src.infrastructure.db.database import Base, engine, SessionLocal
 from src.books.infrastructure.models import AuthorModel, BookModel
 import uuid

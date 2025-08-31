@@ -31,7 +31,7 @@ def get_book_club_details_use_case(book_club_repo=Depends(get_book_clubs_repo), 
     """
     Dependency to provide the GetBookClubDetails use case.
     """
-    return GetBookClubDetails(book_repository=book_club_repo, meeting_repository=meeting_repo)
+    return GetBookClubDetails(book_club_repository=book_club_repo, meeting_repository=meeting_repo)
 
 def get_meetings_by_book_club_use_case(meeting_repo=Depends(get_meeting_repo)):
     """

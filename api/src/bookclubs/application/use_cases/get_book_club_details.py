@@ -6,7 +6,7 @@ from src.bookclubs.application.repositories.meeting_repo import AbstractMeetingR
 class GetBookClubDetails:
     def __init__(self, book_club_repository: AbstractBookClubRepo, meeting_repository: AbstractMeetingRepo):
         self.book_club_repository = book_club_repository
-        self.rating_repository = meeting_repository
+        self.meeting_repository = meeting_repository
 
     def execute(self, book_club_id: UUID) -> BookClubDetailResponse:
         """ Get book_club details by its ID """
@@ -16,6 +16,6 @@ class GetBookClubDetails:
             raise ValueError("BookClub Club not found")
         
         # Get the reviews for the book_club
-        meetings = self.meetings.get_meeting(book_club_id)
+        meetings = self.meeting_repository.get_meetings_by_book_club_id(book_club_id)
 
         return BookClubDetailResponse.from_domain(book_club, meetings)

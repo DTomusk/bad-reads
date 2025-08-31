@@ -31,7 +31,7 @@ class BookClubRepo(AbstractBookClubRepo):
         if result:
             return self._create_book_club(result)
     
-    def get_book_clubs(self, page: int = 1, page_size: int = 10, sort_by: str = "title", sort_order: str = "asc") -> list[BookClub]:
+    def get_book_clubs(self, page: int = 1, page_size: int = 10, sort_by: str = "name", sort_order: str = "asc") -> list[BookClub]:
         """
         Get all book_clubs.
         :return: A list of book_club objects.

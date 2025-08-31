@@ -26,7 +26,7 @@ class MeetingRepo(AbstractMeetingRepo):
         if result:
             return self._create_meeting(result)
     
-    def get_meetings_by_book_club_id(self, book_club_id: UUID) -> list[Meeting]:
+    def get_meetings_by_book_club_id(self, book_club_id: UUID, page: int = 1, page_size: int = 10, sort_by: str = "name", sort_order: str = "asc") -> list[Meeting]:
         """
         Get all meetings for a book_club.
         :param book_club_id: The ID of the book_club to get meetings for.
@@ -42,6 +42,12 @@ class MeetingRepo(AbstractMeetingRepo):
         :param meeting: The meeting object to create.
         :return: None
         """
-        meeting_model = self.create_meeting(meeting)
+        # meeting_model = self.create_meeting(meeting)
+        meeting_model = MeetingModel(
+            id=meeting.id,
+            book_id=meeting.book_id,
+            book_club_id=meeting.book_club_id,
+            date=meeting.date,
+        )
         self.session.add(meeting_model)
         self.session.commit()

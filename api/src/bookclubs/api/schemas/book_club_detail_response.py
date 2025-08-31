@@ -8,8 +8,9 @@ class BookClubDetailResponse(BaseModel):
     meetings: list[MeetingResponse]
 
     @classmethod
-    def from_domain(cls, book_club: BookClub) -> "BookClubDetailResponse":
+    def from_domain(cls, book_club: BookClub, meetings: list[MeetingResponse]) -> "BookClubDetailResponse":
         return cls(
             id=str(book_club.id),
             name=book_club.name,
+            meetings= meetings,
         )
