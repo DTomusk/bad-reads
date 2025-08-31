@@ -3,20 +3,26 @@ import {
   Group,
   Avatar,
   RingProgress,
-  Text,
   Button,
   Paper,
   Stack,
   Modal,
+  Center,
+  Text,
+  Loader,
 } from "@mantine/core";
 import MeetingCard from "../components/MeetingCard";
 import { TMeeting } from "../types/meeting";
-import { useState } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { AddMeetingForm } from "../components/AddMeetingForm";
 import { AddMemberForm } from "../components/AddMemberForm";
+import { useParams } from "react-router-dom";
+import { useBookClub } from "../hooks/useBookClubs";
 
 export default function BookClub() {
+  let params = useParams();
+  const { data: bookclub, isLoading, error } = useBookClub(params.id || "");
+
   const [
     newMeetingModalOpened,
     { open: openMeetingModal, close: closeMeetingModal },
@@ -33,6 +39,26 @@ export default function BookClub() {
     avgHeart: 3,
     avgPoo: 2,
   };
+
+  if (isLoading) {
+    return (
+      <Center>
+        <Loader size="xl" />
+      </Center>
+    );
+  }
+
+  if (error || !bookclub) {
+    return (
+      <Center>
+        <Text c="red">
+          Error loading book club:{" "}
+          {(error as Error)?.message || "Book club not found"}
+        </Text>
+      </Center>
+    );
+  }
+
   return (
     <>
       <Modal
@@ -75,7 +101,7 @@ export default function BookClub() {
             }}
           >
             <div>
-              <h1>Gritty Book Club</h1>
+              <h1>{bookclub?.name}</h1>
               <div style={{ display: "flex", flexDirection: "row" }}>
                 <Group justify="space-between" mt="md">
                   <Avatar.Group spacing="sm">
@@ -114,8 +140,11 @@ export default function BookClub() {
           </Card>
         </div>
       </Card>
-
-      <MeetingCard {...meetingCardExample} />
+      {bookclub ? (
+        bookclub.meetings?.map((meeting) => <MeetingCard {...meeting} />)
+      ) : (
+        <Text>No Meetings Found</Text>
+      )}
     </>
   );
 }

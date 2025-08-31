@@ -9,16 +9,16 @@ import {
 } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { TBookClub } from "../types/bookClub";
-import { TMeeting } from "../types/meeting";
+import { TMeeting, TMeetingReponse } from "../types/meeting";
 
 export default function MeetingCard({
-  book,
+  book_name,
   date,
-  avgPoo,
-  avgHeart,
-  resultsAvailable,
+  // avgPoo,
+  // avgHeart,
+  // resultsAvailable,
   id,
-}: TMeeting) {
+}: TMeetingReponse) {
   const currentDate = new Date().getDate();
   const meetingDate = currentDate + 10;
 
@@ -42,9 +42,9 @@ export default function MeetingCard({
         <div
           style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}
         >
-          <h2>{date.toLocaleDateString("en-GB")}</h2>
-          <h2>- {book}</h2>
-          {resultsAvailable && (
+          <h2>{new Date(date).toLocaleDateString("en-GB")}</h2>
+          <h2>- {book_name}</h2>
+          {false && (
             <div
               style={{
                 display: "flex",
@@ -78,7 +78,7 @@ export default function MeetingCard({
                 }}
               >
                 <Text c="var(--mantine-color-dark-0)" size="3rem">
-                  {avgHeart}
+                  {/* {avgHeart} */}
                 </Text>
                 <br />
                 <FontAwesomeIcon
@@ -92,7 +92,7 @@ export default function MeetingCard({
           )}
         </div>
 
-        {resultsAvailable ? (
+        {false ? (
           <div style={{ marginLeft: "1rem" }}>
             <Accordion transitionDuration={1000}>
               <AccordionItem value="1">
@@ -104,7 +104,7 @@ export default function MeetingCard({
               </AccordionItem>
             </Accordion>
           </div>
-        ) : date < new Date() ? (
+        ) : new Date(date) < new Date() ? (
           <Notification
             withCloseButton={false}
             color="green"

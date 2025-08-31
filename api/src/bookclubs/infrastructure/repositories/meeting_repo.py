@@ -42,7 +42,6 @@ class MeetingRepo(AbstractMeetingRepo):
         :param meeting: The meeting object to create.
         :return: None
         """
-        # meeting_model = self.create_meeting(meeting)
         meeting_model = MeetingModel(
             id=meeting.id,
             book_id=meeting.book_id,

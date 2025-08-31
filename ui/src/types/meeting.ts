@@ -8,3 +8,10 @@ export type TMeeting = {
     avgPoo?: number;
     avgHeart?: number;
 }
+
+export type TMeetingReponse =   {
+    id: string,
+    book_name: string,
+    book_club_id: string,
+    date: string
+  }

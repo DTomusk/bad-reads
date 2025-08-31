@@ -15,7 +15,6 @@ const stats = [
 ];
 export default function BookClubCard({
   name,
-  members,
   id,
 }: Partial<TBookClub> & { id: string }) {
   const currentDate = new Date().getDate();
@@ -38,7 +37,7 @@ export default function BookClubCard({
         }}
       >
         <div>
-          <h2>Gritty Book Club</h2>
+          <h2>{name}</h2>
           <div style={{ display: "flex", flexDirection: "row" }}>
             <Group justify="space-between" mt="md">
               <Avatar.Group spacing="sm">

@@ -55,7 +55,7 @@ const router = createBrowserRouter([
         element: <BookClubHome />,
       },
       {
-        path: "/book-club/1234",
+        path: "/book-club/:id",
         element: <BookClub />,
       },
     ],
