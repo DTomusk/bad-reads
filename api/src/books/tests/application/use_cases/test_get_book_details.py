@@ -29,14 +29,9 @@ def mock_book_repository(mock_book):
     repo.get_book_by_id = MagicMock(return_value=mock_book)
     return repo
 
-@pytest.fixture
-def mock_rating_repository():
-    repo = MagicMock()
-    return repo
-
-def test_get_book_details_returns_book(mock_book_repository, mock_rating_repository, book_id, mock_book):
+def test_get_book_details_returns_book(mock_book_repository, book_id, mock_book):
     # Arrange
-    use_case = GetBookDetails(mock_book_repository, mock_rating_repository)
+    use_case = GetBookDetails(mock_book_repository)
 
     # Act
     result = use_case.execute(book_id)
@@ -52,11 +47,11 @@ def test_get_book_details_returns_book(mock_book_repository, mock_rating_reposit
     assert result.sum_of_love_ratings == mock_book.sum_of_love_ratings
     assert result.sum_of_shit_ratings == mock_book.sum_of_shit_ratings
 
-def test_get_book_details_raises_if_book_not_found(mock_rating_repository, book_id):
+def test_get_book_details_raises_if_book_not_found(book_id):
     # Arrange
     mock_book_repository = MagicMock()
     mock_book_repository.get_book_by_id.return_value = None
-    use_case = GetBookDetails(mock_book_repository, mock_rating_repository)
+    use_case = GetBookDetails(mock_book_repository)
 
     # Act & Assert
     with pytest.raises(ValueError, match="Book not found"):

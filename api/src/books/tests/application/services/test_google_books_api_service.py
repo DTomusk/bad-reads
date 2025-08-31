@@ -1,7 +1,7 @@
 import pytest
 import httpx
 from unittest.mock import MagicMock, patch, Mock
-from src.books.infrastructure.services.google_books_api_service import GoogleBooksApiService
+from src.books.application.services.external_books_service import GoogleBooksApiService
 from src.books.domain.models import Book, Author
 
 

@@ -1,7 +1,7 @@
 from sqlalchemy import UUID, Column, DateTime, Float, ForeignKey, Integer, String, Table, Index
 from sqlalchemy.orm import relationship
 from src.infrastructure.db.database import Base
-from src.users.infrastructure.models import UserModel
+from src.users.application.models import UserModel
 
 
 # Association table for the many-to-many relationship between books and authors
