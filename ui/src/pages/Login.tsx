@@ -1,9 +1,10 @@
-import { Anchor, Button, Center, PasswordInput, Stack, TextInput, Text, Title, Group } from "@mantine/core"
+import { Anchor, Button, Center, PasswordInput, Stack, TextInput, Title, Group } from "@mantine/core"
 import { useForm } from "@mantine/form";
 import { useLogin } from "../hooks/useLogin";
 import { useAuth } from "../auth/AuthProvider";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import AlertBanner from "../components/Shared/AlertBanner";
 
 export default function Login() {
     const location = useLocation();
@@ -12,6 +13,7 @@ export default function Login() {
 
     const { mutate: login, isPending } = useLogin();
     const { isAuthenticated, login: loginAuth } = useAuth();
+    const [showAlert, setShowAlert] = useState(false);
     const form = useForm({
         initialValues: {
             email: "",
@@ -28,12 +30,13 @@ export default function Login() {
         if (isAuthenticated) {
             navigate(from, { replace: true });
         }
-    }, [isAuthenticated, navigate]);
+    }, [isAuthenticated, navigate, from]);
 
-    const handleSubmit = () => {
+    const handleSubmit = (values: typeof form.values) => {
+        
         login({
-            username: form.values.email,
-            password: form.values.password,
+            username: values.email,
+            password: values.password,
         },
         {
             onSuccess: (data) => {
@@ -41,7 +44,7 @@ export default function Login() {
                 navigate(from, { replace: true });
             },
             onError: () => {
-                console.error("Login failed");
+                setShowAlert(true);
             },
         });
     };
@@ -51,25 +54,24 @@ export default function Login() {
             <form onSubmit={form.onSubmit(handleSubmit)}>
                 <Stack>
                     <Title ta="center" order={1} mb="xl" mt="xl">💅Welcome back💅</Title>
+                    {showAlert && <AlertBanner title="Login failed" message="Invalid email or password" type="error" />}
                     <TextInput 
                         required 
                         label="Email" 
                         placeholder="Email"
-                        value={form.values.email}
-                        onChange={(event) => form.setFieldValue("email", event.currentTarget.value)}
-                        error={form.errors.email && 'Invalid email'}
+                        {...form.getInputProps('email')}
                         radius="md"
                         size="lg"
+                        onFocus={() => setShowAlert(false)}
                     />
                     <PasswordInput 
                         required 
                         label="Password" 
                         placeholder="Password" 
-                        value={form.values.password}
-                        onChange={(event) => form.setFieldValue("password", event.currentTarget.value)}
-                        error={form.errors.password && 'Password should include at least 6 characters'}
+                        {...form.getInputProps('password')}
                         radius="md"
                         size="lg"
+                        onFocus={() => setShowAlert(false)}
                     />
                 </Stack>
 

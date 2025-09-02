@@ -3,8 +3,7 @@ import {
   Container,
   Group,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { createBrowserRouter, RouterProvider, Outlet, useNavigate, useLocation } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
 import Home from "./pages/Home";
@@ -14,7 +13,6 @@ import Register from "./pages/Register";
 import Search from "./pages/Search";
 import Nav from "./components/Structure/Nav";
 import Footer from "./components/Structure/Footer";
-import BadReadLogo from "./components/BadReadLogo";
 import PageNotFound from "./pages/PageNotFound";
 
 const router = createBrowserRouter([
@@ -51,8 +49,6 @@ const router = createBrowserRouter([
 ]);
 
 function SiteShell() {
-  const [opened, { toggle }] = useDisclosure();
-  const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
