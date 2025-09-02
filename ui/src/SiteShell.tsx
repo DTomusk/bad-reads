@@ -84,11 +84,6 @@ function SiteShell() {
           </Group>
         </Group>
       </AppShell.Header>
-
-      <AppShell.Navbar py="md" px={4}>
-        <Nav />
-      </AppShell.Navbar>
-
       <AppShell.Main style={{ 
         background: 'linear-gradient(to right, var(--mantine-color-teal-5), var(--mantine-color-teal-2), var(--mantine-color-teal-0), var(--mantine-color-teal-2), var(--mantine-color-teal-5))'
       }}>
