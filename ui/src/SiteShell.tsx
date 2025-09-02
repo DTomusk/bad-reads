@@ -63,25 +63,12 @@ function SiteShell() {
     <AppShell
       header={{ height: 80 }}
       padding="md"
-      navbar={{
-        width: 300,
-        breakpoint: "sm",
-        collapsed: { desktop: true, mobile: !opened },
-      }}
     >
-      <AppShell.Header >
-        <Group px="md" style={{ 
+      <AppShell.Header style={{ width: "100%" }}>
+        <Group w="100%" px="md" style={{ 
           background: 'linear-gradient(to bottom, var(--mantine-color-dark-0), var(--mantine-color-dark-9))'
         }}>
-          <Group justify="space-between" style={{ flex: 1 }}>
-            <Group onClick={() => navigate("/")} style={{ cursor: 'pointer' }}>
-              <BadReadLogo />
-              <h1 style={{ color: "white" }}>Bad Reads</h1>
-            </Group>
-            <Group ml="xl" gap={0} visibleFrom="sm">
-              <Nav />
-            </Group>
-          </Group>
+          <Nav />
         </Group>
       </AppShell.Header>
       <AppShell.Main style={{ 

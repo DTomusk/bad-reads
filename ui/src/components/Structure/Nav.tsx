@@ -6,11 +6,12 @@ import { NavLink, TextInput, Group, Flex } from "@mantine/core";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthProvider";
+import BadReadLogo from "../BadReadLogo";
 
 export default function Nav() {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && searchQuery.trim()) {
@@ -20,16 +21,21 @@ export default function Nav() {
   };
 
   return (
-    <Group justify="space-between" align="center" style={{ width: "100%" }}>
-      <TextInput
-        placeholder="Search for bad books"
-        leftSection={<FontAwesomeIcon icon={faMagnifyingGlass} />}
-        value={searchQuery}
-        onChange={(event) => setSearchQuery(event.currentTarget.value)}
-        onKeyDown={handleKeyPress}
-        style={{ width: "300px" }}
-      />
-      <Flex>
+    <Flex justify="space-between" align="center" gap="lg" w="100%">
+      <Group onClick={() => navigate("/")} style={{ cursor: 'pointer' }}>
+        <BadReadLogo />
+        <h1 style={{ color: "white" }}>Bad Reads</h1>
+      </Group>
+      <Group>
+        <TextInput
+          placeholder="Search for bad books"
+          leftSection={<FontAwesomeIcon icon={faMagnifyingGlass} />}
+          value={searchQuery}
+          onChange={(event) => setSearchQuery(event.currentTarget.value)}
+          onKeyDown={handleKeyPress}
+          style={{ width: "300px" }}
+        />
+      
         <NavLink onClick={() => navigate("/")}
           color="white"
           style={{ padding: "0.5rem" }}
@@ -38,6 +44,7 @@ export default function Nav() {
           leftSection={<FontAwesomeIcon icon={faHome} />}
           active={true}
           autoContrast
+          w="auto"
         />
         {!isAuthenticated && <NavLink onClick={() => navigate("/login", { state: { from: location.pathname }})}
           color="white"
@@ -47,17 +54,19 @@ export default function Nav() {
           leftSection={<FontAwesomeIcon icon={faUser} />}
           active={true}
           autoContrast
+          w="auto"
         />}
-        {isAuthenticated && <NavLink onClick={() => navigate("/account")}
+        {isAuthenticated && <NavLink onClick={() => logout()}
           color="white"
           style={{ padding: "0.5rem" }}
           variant="subtle"
-          label="Account"
+          label="Log out"
           leftSection={<FontAwesomeIcon icon={faUser} />}
           active={true}
           autoContrast
+          w="auto"
         />}
-      </Flex>
-    </Group>
+      </Group>
+    </Flex>
   );
 }
