@@ -53,7 +53,7 @@ export default function Login() {
         <Center>
             <form onSubmit={form.onSubmit(handleSubmit)}>
                 <Stack>
-                    <Title ta="center" order={1} mb="xl" mt="xl">💅Welcome back💅</Title>
+                    <Title ta="center" order={1} mb="sm" mt="xl">💅Welcome back💅</Title>
                     {showAlert && <AlertBanner title="Login failed" message="Invalid email or password" type="error" />}
                     <TextInput 
                         required 

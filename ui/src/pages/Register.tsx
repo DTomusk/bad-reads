@@ -60,7 +60,7 @@ export default function Register() {
         <Center>
             <form onSubmit={form.onSubmit(handleSubmit)}>
                 <Stack>
-                    <Title ta="center" order={1} mb="xl" mt="xl">✨Register✨</Title>
+                    <Title ta="center" order={1} mb="sm" mt="xl">✨Register✨</Title>
                     {showSuccessAlert && <AlertBanner title="Registered successfully" type="success" message="Welcome to the coolest club in town"></AlertBanner>}
                     {showErrorAlert && <AlertBanner title="Registration failed" message={errorMessage} type="error" />}
                     <TextInput 
