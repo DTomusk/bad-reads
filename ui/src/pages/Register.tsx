@@ -13,9 +13,11 @@ export default function Register() {
 
     const { mutate: register, isPending } = useRegister();
     const { isAuthenticated } = useAuth();
-    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-    const [showErrorAlert, setShowErrorAlert] = useState(false);
 
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+
+    const [showErrorAlert, setShowErrorAlert] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const form = useForm({
         initialValues: {
@@ -47,7 +49,8 @@ export default function Register() {
             onSuccess: () => {
                 setShowSuccessAlert(true);
             },
-            onError: () => {
+            onError: (error) => {
+                setErrorMessage(error.response?.data?.detail || "Something went wrong signing you up")
                 setShowErrorAlert(true);
             }
         })
@@ -59,7 +62,7 @@ export default function Register() {
                 <Stack>
                     <Title ta="center" order={1} mb="xl" mt="xl">✨Register✨</Title>
                     {showSuccessAlert && <AlertBanner title="Registered successfully" type="success" message="Welcome to the coolest club in town"></AlertBanner>}
-                    {showErrorAlert && <AlertBanner title="Registration failed" message="Something went wrong signing you up" type="error" />}
+                    {showErrorAlert && <AlertBanner title="Registration failed" message={errorMessage} type="error" />}
                     <TextInput 
                         required 
                         label="Email" 
