@@ -7,6 +7,7 @@ class GetBookReviews():
         self.review_repository = review_repository
 
     def execute(self, book_id: UUID, sort: str) -> list[ReviewResponse]:
+        # TODO: use case shouldn't know about sort syntax
         if sort == "newest":
             sort_by = "date_created"
             sort_order = "desc"

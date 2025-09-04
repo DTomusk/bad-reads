@@ -19,6 +19,15 @@ class AbstractBookRepo(ABC):
         pass
 
     @abstractmethod
+    def get_books_by_ids(self, book_ids: list[UUID]) -> list[Book]:
+        """
+        Get books by their IDs.
+        :param book_ids: The IDs of the books to retrieve.
+        :return: A list of book objects.
+        """
+        pass
+
+    @abstractmethod
     def get_books(self, page: int = 1, page_size: int = 10, sort_by: str = "title", sort_order: str = "asc") -> list[Book]:
         """
         Get all books.
@@ -147,6 +156,15 @@ class BookRepo(AbstractBookRepo):
         result = self.session.query(BookModel).filter(BookModel.id == book_id).first()
         if result:
             return self._create_book_from_db_result(result)
+    
+    def get_books_by_ids(self, book_ids: list[UUID]) -> list[Book]:
+        """
+        Get books by their IDs.
+        :param book_ids: The IDs of the books to retrieve.
+        :return: A list of book objects.
+        """
+        result = self.session.query(BookModel).filter(BookModel.id.in_(book_ids)).all()
+        return [self._create_book_from_db_result(book) for book in result]
     
     def get_books(self, page: int = 1, page_size: int = 10, sort_by: str = "title", sort_order: str = "asc") -> list[Book]:
         """

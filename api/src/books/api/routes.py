@@ -1,7 +1,7 @@
 from uuid import UUID
 from fastapi import APIRouter, BackgroundTasks, Depends
 
-from src.books.api.dependencies import get_book_details_use_case, get_book_rating_use_case, get_book_reviews_use_case, get_books_use_case, rate_book_use_case, review_book_use_case, search_books_use_case
+from src.books.api.dependencies import get_book_details_use_case, get_book_rating_use_case, get_book_reviews_use_case, get_books_use_case, get_my_book_reviews_use_case, rate_book_use_case, review_book_use_case, search_books_use_case
 from src.books.api.schemas.book_search_response import BookSearchResponse
 from src.books.api.schemas.rate_request import RateRequest
 from src.books.api.schemas.review_request import ReviewRequest
@@ -36,6 +36,16 @@ async def search_books(
     """
     book_search_response = search_books.execute(query, page_size, page)
     return book_search_response
+
+@router.get("/my-reviews")
+async def get_my_book_reviews(
+    get_my_book_reviews=Depends(get_my_book_reviews_use_case),
+    user_id=Depends(get_current_user)):
+    """
+    Get reviews of books by the current user.
+    """
+    reviews = get_my_book_reviews.execute(user_id=user_id)
+    return reviews
 
 @router.get("/{book_id}")
 async def get_book_details(book_id: UUID, get_book_details=Depends(get_book_details_use_case)):
@@ -87,5 +97,3 @@ async def get_book_reviews(
     """
     reviews = get_book_reviews.execute(book_id=book_id, sort=sort)
     return reviews
-
-
