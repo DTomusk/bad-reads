@@ -2,7 +2,7 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { faHome } from "@fortawesome/free-solid-svg-icons/faHome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { NavLink, TextInput, Group, Flex } from "@mantine/core";
+import { NavLink, TextInput, Group, Flex, Title } from "@mantine/core";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthProvider";
@@ -21,10 +21,10 @@ export default function Nav() {
   };
 
   return (
-    <Flex justify="space-between" align="center" gap="lg" w="100%">
+    <Flex justify="space-between" align="center" gap="lg" w="100%" h="100%">
       <Group onClick={() => navigate("/")} style={{ cursor: 'pointer' }}>
         <BadReadLogo />
-        <h1 style={{ color: "white" }}>Bad Reads</h1>
+        <Title visibleFrom="xs" style={{ color: "white" }}>Bad Reads</Title>
       </Group>
       <Group>
         <TextInput
@@ -33,20 +33,9 @@ export default function Nav() {
           value={searchQuery}
           onChange={(event) => setSearchQuery(event.currentTarget.value)}
           onKeyDown={handleKeyPress}
-          style={{ width: "300px" }}
+          style={{ maxWidth: "300px" }}
         />
-      
-        <NavLink onClick={() => navigate("/")}
-          color="white"
-          style={{ padding: "0.5rem" }}
-          variant="subtle"
-          label="Home"
-          leftSection={<FontAwesomeIcon icon={faHome} />}
-          active={true}
-          autoContrast
-          w="auto"
-        />
-        {!isAuthenticated && <NavLink onClick={() => navigate("/login", { state: { from: location.pathname }})}
+        {!isAuthenticated && <NavLink visibleFrom="sm" onClick={() => navigate("/login", { state: { from: location.pathname }})}
           color="white"
           style={{ padding: "0.5rem" }}
           variant="subtle"
@@ -56,7 +45,7 @@ export default function Nav() {
           autoContrast
           w="auto"
         />}
-        {isAuthenticated && <NavLink onClick={() => logout()}
+        {isAuthenticated && <NavLink visibleFrom="sm" onClick={() => logout()}
           color="white"
           style={{ padding: "0.5rem" }}
           variant="subtle"
