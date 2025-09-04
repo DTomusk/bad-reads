@@ -29,7 +29,7 @@ export default function Register() {
         validate: {
             email: (value) => /^\S+@\S+$/.test(value) ? null : "Invalid email",
             password: (value) => value.length <= 6 ? "Password should include at least 6 characters" : null,
-            // confirmPassword: (value) => 
+            confirm_password: (value, values) => value !== values.password ? "Passwords do not match" : null
         },
     });
 
