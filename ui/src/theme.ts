@@ -79,6 +79,12 @@ export const theme = createTheme({
       defaultProps: {
         c: '#FFFFFF',
       },
+      styles: {
+        root: {
+          overflowWrap: 'break-word',
+          maxWidth: '100%',
+        }
+      }
     },
     Title: {
       defaultProps: {

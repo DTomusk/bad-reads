@@ -36,7 +36,7 @@ export default function EmojiScoreExpanded({ love_score, shit_score, number_of_r
                 <Text size={size === "small" ? "16px" : size === "medium" ? "20px" : "24px"}>{createEmojiString(shit_score, "💩")}</Text>
                 <Text size="16px">{shit_score.toFixed(1)}</Text>
             </Group>
-            {!hide_number_of_ratings && number_of_ratings &&
+            {!hide_number_of_ratings && typeof number_of_ratings === "number" &&
             number_of_ratings > 0 && <Text size="16px" fw="bold" mx="xs">{number_of_ratings > 1 ? `${number_of_ratings} ratings` : `${number_of_ratings} rating`}</Text>}
             {!hide_number_of_ratings && number_of_ratings === 0 && <Text size="16px" fw="bold" mx="xs">No ratings yet</Text>}
         </Stack>}
@@ -49,7 +49,7 @@ export default function EmojiScoreExpanded({ love_score, shit_score, number_of_r
                 <Text style={{whiteSpace: "nowrap"}} size={size === "small" ? "16px" : size === "medium" ? "20px" : "24px"}>{createEmojiString(shit_score, "💩")}</Text>
                 <Text size="16px">{shit_score.toFixed(1)}</Text>
             </Group>
-            {!hide_number_of_ratings && number_of_ratings &&
+            {!hide_number_of_ratings && typeof number_of_ratings === "number" &&
             number_of_ratings > 0 && <Text size="16px" fw="bold" mx="xs">{number_of_ratings > 1 ? `${number_of_ratings} ratings` : `${number_of_ratings} rating`}</Text>}
             {!hide_number_of_ratings &&number_of_ratings === 0 && <Text size="16px" fw="bold" mx="xs">No ratings yet</Text>}
         </Flex>}

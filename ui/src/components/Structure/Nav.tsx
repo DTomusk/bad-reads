@@ -1,5 +1,4 @@
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { faHome } from "@fortawesome/free-solid-svg-icons/faHome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink, TextInput, Group, Flex, Title } from "@mantine/core";
@@ -7,11 +6,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthProvider";
 import BadReadLogo from "../BadReadLogo";
+import AccountMenu from "./AccountMenu";
+import { useBreakpoints } from "../../hooks/useBreakpoints";
 
 export default function Nav() {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated } = useAuth();
+  const { isExtraLarge } = useBreakpoints();
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && searchQuery.trim()) {
@@ -21,7 +23,7 @@ export default function Nav() {
   };
 
   return (
-    <Flex justify="space-between" align="center" gap="lg" w="100%" h="100%">
+    <Flex justify="space-between" align="center" gap="lg" w={isExtraLarge ? "100%" : "70%"} h="100%" wrap="nowrap">
       <Group onClick={() => navigate("/")} style={{ cursor: 'pointer' }}>
         <BadReadLogo />
         <Title visibleFrom="xs" style={{ color: "white" }}>Bad Reads</Title>
@@ -45,16 +47,7 @@ export default function Nav() {
           autoContrast
           w="auto"
         />}
-        {isAuthenticated && <NavLink visibleFrom="sm" onClick={() => logout()}
-          color="white"
-          style={{ padding: "0.5rem" }}
-          variant="subtle"
-          label="Log out"
-          leftSection={<FontAwesomeIcon icon={faUser} />}
-          active={true}
-          autoContrast
-          w="auto"
-        />}
+        {isAuthenticated && <AccountMenu />}
       </Group>
     </Flex>
   );
