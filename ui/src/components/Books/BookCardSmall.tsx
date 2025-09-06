@@ -1,4 +1,4 @@
-import { Stack, Image, Card, Title } from "@mantine/core";
+import { Stack, Image, Card, Title, Container, Box } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { TBook } from "../../types/book";
 import BookRatingDisplay from "../Ratings/RatingDisplay";
@@ -26,13 +26,14 @@ export default function BookCardSmall({
             m="0"
         >
             <Stack h="100%" gap="xs">
-                {picture_url && <Image 
+                {picture_url && <Box h="50%"><Image 
                     src={picture_url} 
                     alt={title} 
-                    width="100%" 
+                    height="100%" 
                     fit="contain" 
                     c="white"
-                />}
+                    flex={1}
+                /></Box>}
 
                 <Title 
                     order={5} 
@@ -40,16 +41,19 @@ export default function BookCardSmall({
                     c="white"
                     m="sm"
                     lineClamp={3}
+                    flex={1}
                 >
                     {title}
                 </Title>
-
-                <BookRatingDisplay 
-                    average_love_rating={average_love_rating}
-                    average_shit_rating={average_shit_rating}
-                    number_of_ratings={number_of_ratings}
-                    align="center"
-                    />
+                
+                <Container flex={1}>
+                    <BookRatingDisplay 
+                        average_love_rating={average_love_rating}
+                        average_shit_rating={average_shit_rating}
+                        number_of_ratings={number_of_ratings}
+                        align="center"
+                        />
+                </Container>
             </Stack>
         </Card> 
     )
