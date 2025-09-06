@@ -67,7 +67,7 @@ function SiteShell() {
       padding="md"
     >
       <AppShell.Header style={{ width: "100%" }}>
-        <Group w="100%" px="md" style={{ 
+        <Group w="100%" h="100%" px="md" style={{ 
           background: 'linear-gradient(to bottom, var(--mantine-color-dark-0), var(--mantine-color-dark-9))'
         }}>
           <Nav />
