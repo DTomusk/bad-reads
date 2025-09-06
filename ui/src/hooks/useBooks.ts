@@ -3,6 +3,7 @@ import { fetcher } from "../api/fetcher";
 import { TBook } from "../types/book";
 import { BookDetailResponse } from "../types/bookdetailresponse";
 import { BookSearchResponse } from "../types/bookSearchResponse";
+import { BookWithReviewResponse } from "../types/bookwithreviewresponse";
 
 export const useBooks = () => {
     return useQuery({
@@ -26,4 +27,14 @@ export const useBookSearch = (query: string, page: number) => {
         queryKey: ["books", query, page],
         queryFn: () => fetcher<BookSearchResponse>(`/books/search?query=${query}&page=${page}`),
     });
+}
+
+export const useMyBookReviews = () => {
+    return useQuery<BookWithReviewResponse[]>({
+        queryKey: ['my-book-reviews'],
+        queryFn: async () => {
+            const response = await fetcher<BookWithReviewResponse[]>('/books/my-reviews');
+            return response;
+        }
+    })
 }

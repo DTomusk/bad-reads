@@ -14,6 +14,8 @@ import Search from "./pages/Search";
 import Nav from "./components/Structure/Nav";
 import Footer from "./components/Structure/Footer";
 import PageNotFound from "./pages/PageNotFound";
+import UserProfile from "./pages/UserProfile";
+import PrivateRoute from "./components/Structure/PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: "/search",
         element: <Search />,
+      },
+      {
+        path: "/me",
+        element: <PrivateRoute><UserProfile /></PrivateRoute>,
       },
       {
         path: "*",

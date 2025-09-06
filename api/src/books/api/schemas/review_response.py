@@ -5,6 +5,7 @@ import datetime
 
 class ReviewResponse(BaseModel):
     id: UUID
+    book_id: UUID
     user_id: UUID
     text: str
     date_created: datetime.datetime
@@ -17,6 +18,7 @@ class ReviewResponse(BaseModel):
     def from_domain(cls, review: Review, rating: Rating) -> "ReviewResponse":
         return cls(
             id=review.id,
+            book_id=review.book_id,
             user_id=review.user_id,
             text=review.text,
             date_created=review.date_created,
