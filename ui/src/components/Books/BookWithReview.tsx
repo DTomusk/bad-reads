@@ -32,7 +32,7 @@ export default function BookWithReview({ book, review }: BookWithReviewResponse
                     hide_number_of_ratings={true}
                     stacked={false}
                     />
-                <Text style={{ overflowWrap: "break-word"}}>
+                <Text>
                     {review.text}
                 </Text>
             </Stack>
