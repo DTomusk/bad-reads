@@ -16,6 +16,7 @@ import Nav from "./components/Structure/Nav";
 import Footer from "./components/Structure/Footer";
 import BadReadLogo from "./components/BadReadLogo";
 import PageNotFound from "./pages/PageNotFound";
+import UserProfile from "./pages/UserProfile";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
       {
         path: "/search",
         element: <Search />,
+      },
+      {
+        path: "/me",
+        element: <UserProfile />,
       },
       {
         path: "*",

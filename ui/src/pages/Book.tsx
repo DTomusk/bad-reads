@@ -68,11 +68,11 @@ export default function Book() {
         </Stack>
         <Flex direction="column" gap="md">
             <Title order={1}>{book.title}</Title>
-                  {book.authors && book.authors.length > 0 ? (
-                    <Title order={3}>{book.authors.join(", ")}</Title>
-                  ) : (
-                    <Text c="dimmed">No authors listed</Text>
-                  )}
+            {book.authors && book.authors.length > 0 ? (
+              <Title order={3}>{book.authors.join(", ")}</Title>
+            ) : (
+              <Text c="dimmed">No authors listed</Text>
+            )}
             <EmojiScoreExpanded 
                 love_score={book.average_love_rating} 
                 shit_score={book.average_shit_rating} 
