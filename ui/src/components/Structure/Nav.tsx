@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthProvider";
 import BadReadLogo from "../BadReadLogo";
+import AccountMenu from "./AccountMenu";
 
 export default function Nav() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -44,16 +45,7 @@ export default function Nav() {
           autoContrast
           w="auto"
         />}
-        {isAuthenticated && <NavLink visibleFrom="sm" onClick={() => logout()}
-          color="white"
-          style={{ padding: "0.5rem" }}
-          variant="subtle"
-          label="Log out"
-          leftSection={<FontAwesomeIcon icon={faUser} />}
-          active={true}
-          autoContrast
-          w="auto"
-        />}
+        {isAuthenticated && <AccountMenu />}
       </Group>
     </Flex>
   );
