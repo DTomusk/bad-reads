@@ -1,81 +1,115 @@
-import { Center } from "@mantine/core";
-import { useRegister } from "../hooks/useRegister";
-import { useNavigate } from "react-router-dom";
-import AuthForm from "./AuthForm";
+import { useForm } from "@mantine/form";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider";
-import { useEffect } from "react";
+import { Anchor, Button, Center, Group, PasswordInput, Stack, TextInput, Title } from "@mantine/core";
+import AlertBanner from "../components/Shared/AlertBanner";
+import { useRegister } from "../hooks/useRegister";
 
 export default function Register() {
-  const navigate = useNavigate();
-  const { mutate: register, isPending } = useRegister();
-  const { isAuthenticated } = useAuth();
+    const location = useLocation();
+    const navigate = useNavigate();
+    const from = location.state?.from || "/";
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/");
+    const { mutate: register, isPending } = useRegister();
+    const { isAuthenticated } = useAuth();
+
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+
+    const [showErrorAlert, setShowErrorAlert] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+
+    const form = useForm({
+        initialValues: {
+            email: "",
+            password: "",
+            confirm_password: ""
+        },
+
+        validate: {
+            email: (value) => /^\S+@\S+$/.test(value) ? null : "Invalid email",
+            password: (value) => value.length <= 6 ? "Password should include at least 6 characters" : null,
+            confirm_password: (value, values) => value !== values.password ? "Passwords do not match" : null
+        },
+    });
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate(from, { replace: true });
+        }
+    }, [isAuthenticated, navigate, from]);
+
+    const handleSubmit = (values: typeof form.values) => {
+        register({
+            email: values.email,
+            password: values.password,
+            confirm_password: values.confirm_password
+        },
+        {
+            onSuccess: () => {
+                setShowSuccessAlert(true);
+            },
+            onError: (error) => {
+                setErrorMessage(error.response?.data?.detail || "Something went wrong signing you up")
+                setShowErrorAlert(true);
+            }
+        })
     }
-  }, [isAuthenticated, navigate]);
 
-  const fields = [
-    {
-      name: "email",
-      label: "Email",
-      placeholder: "bad@bad-reads.com",
-      type: "text" as const,
-      validation: (val: string) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
-    },
-    {
-      name: "password",
-      label: "Password",
-      placeholder: "Your password",
-      type: "password" as const,
-      validation: (val: string) =>
-        val.length <= 6
-          ? "Password should include at least 6 characters"
-          : null,
-    },
-    {
-      name: "confirm_password",
-      label: "Confirm Password",
-      placeholder: "Confirm your password",
-      type: "password" as const,
-      validation: (val: string, values?: Record<string, string>) =>
-        val !== values?.password ? "Passwords did not match" : null,
-    },
-  ];
-
-  const handleSubmit = (values: Record<string, string>) => {
-    register(
-      {
-        email: values.email,
-        password: values.password,
-        confirm_password: values.confirm_password,
-      },
-      {
-        onSuccess: (data) => {
-          // TODO: Show success message to user, maybe a banner
-          console.log("Registration successful:", data);
-          navigate("/login");
-        },
-        onError: (error) => {
-          // TODO: Show error message to user
-          console.error("Registration failed:", error);
-        },
-      }
-    );
-  };
-
-  return (
-    <Center>
-      <AuthForm
-        title="✨Register✨"
-        fields={fields}
-        submitLabel="Register"
-        alternateLabel="Already have an account? Login"
-        alternatePath="/login"
-        onSubmit={handleSubmit}
-        isPending={isPending}
-      />
-    </Center>
-  );
-} 
+    return (
+        <Center>
+            <form onSubmit={form.onSubmit(handleSubmit)}>
+                <Stack>
+                    <Title ta="center" order={1} mb="sm" mt="xl">✨Register✨</Title>
+                    {showSuccessAlert && <AlertBanner title="Registered successfully" type="success" message="Welcome to the coolest club in town"></AlertBanner>}
+                    {showErrorAlert && <AlertBanner title="Registration failed" message={errorMessage} type="error" />}
+                    <TextInput 
+                        required 
+                        label="Email" 
+                        placeholder="Email"
+                        {...form.getInputProps('email')}
+                        radius="md"
+                        size="lg"
+                        onFocus={() => setShowErrorAlert(false)}
+                    />
+                    <PasswordInput 
+                        required 
+                        label="Password" 
+                        placeholder="Password" 
+                        {...form.getInputProps('password')}
+                        radius="md"
+                        size="lg"
+                        onFocus={() => setShowErrorAlert(false)}
+                    />
+                    <PasswordInput 
+                        required 
+                        label="Confirm Password" 
+                        placeholder="Confirm Password" 
+                        {...form.getInputProps('confirm_password')}
+                        radius="md"
+                        size="lg"
+                        onFocus={() => setShowErrorAlert(false)}
+                    />  
+                </Stack>
+                <Group justify="space-between" mt="xl">
+                    <Anchor
+                        component="button"
+                        type="button"
+                        onClick={() => navigate("/login")}
+                        size="md"
+                    >
+                    Already signed up? Login here
+                    </Anchor>
+                    <Button 
+                        type="submit" 
+                        radius="xl" 
+                        size="lg" 
+                        loading={isPending}
+                    >
+                    Register
+                    </Button>
+                </Group>
+            </form>
+        </Center>
+    )
+}
