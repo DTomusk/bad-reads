@@ -15,6 +15,7 @@ import Nav from "./components/Structure/Nav";
 import Footer from "./components/Structure/Footer";
 import PageNotFound from "./pages/PageNotFound";
 import UserProfile from "./pages/UserProfile";
+import PrivateRoute from "./components/Structure/PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -43,7 +44,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/me",
-        element: <UserProfile />,
+        element: <PrivateRoute><UserProfile /></PrivateRoute>,
       },
       {
         path: "*",
