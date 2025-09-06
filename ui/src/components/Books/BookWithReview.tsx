@@ -2,13 +2,15 @@ import { Box, Flex, Image, Stack, Title, Text } from "@mantine/core";
 import { BookWithReviewResponse } from "../../types/bookwithreviewresponse";
 import { useNavigate } from "react-router-dom";
 import EmojiScoreExpanded from "../Ratings/EmojiScoreExpanded";
+import { useBreakpoints } from "../../hooks/useBreakpoints";
 
 export default function BookWithReview({ book, review }: BookWithReviewResponse
 ) {
     const navigate = useNavigate();
+    const {isExtraSmall} = useBreakpoints(); // 48em = Mantine sm breakpoint
     return (
-        <Flex gap="md" p="lg">
-            <Box>
+        <Flex gap="md" p="lg" direction={isExtraSmall ? "column" : "row"} align={isExtraSmall ? "center" : "flex-start"}>
+            <Box w={isExtraSmall ? "60%" : "20%"}>
                 <Image 
                 src={book.picture_url} 
                 height="100%"
@@ -19,7 +21,7 @@ export default function BookWithReview({ book, review }: BookWithReviewResponse
                 />
             </Box>
 
-            <Stack w="100%" style={{ flex: 1 }}>
+            <Stack w="80%" style={{ flex: 1 }}>
                 <Title order={2} onClick={() => navigate(`/book/${book.id}`)} 
           className="hover-underline">{book.title}</Title>
                 <EmojiScoreExpanded 
