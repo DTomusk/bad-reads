@@ -3,8 +3,7 @@ import {
   Container,
   Group,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { createBrowserRouter, RouterProvider, Outlet, useNavigate, useLocation } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
 import Home from "./pages/Home";
@@ -14,7 +13,6 @@ import Register from "./pages/Register";
 import Search from "./pages/Search";
 import Nav from "./components/Structure/Nav";
 import Footer from "./components/Structure/Footer";
-import BadReadLogo from "./components/BadReadLogo";
 import PageNotFound from "./pages/PageNotFound";
 import UserProfile from "./pages/UserProfile";
 
@@ -56,8 +54,6 @@ const router = createBrowserRouter([
 ]);
 
 function SiteShell() {
-  const [opened, { toggle }] = useDisclosure();
-  const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
@@ -68,32 +64,14 @@ function SiteShell() {
     <AppShell
       header={{ height: 80 }}
       padding="md"
-      navbar={{
-        width: 300,
-        breakpoint: "sm",
-        collapsed: { desktop: true, mobile: !opened },
-      }}
     >
-      <AppShell.Header >
-        <Group px="md" style={{ 
+      <AppShell.Header style={{ width: "100%" }}>
+        <Group w="100%" px="md" style={{ 
           background: 'linear-gradient(to bottom, var(--mantine-color-dark-0), var(--mantine-color-dark-9))'
         }}>
-          <Group justify="space-between" style={{ flex: 1 }}>
-            <Group onClick={() => navigate("/")} style={{ cursor: 'pointer' }}>
-              <BadReadLogo />
-              <h1 style={{ color: "white" }}>Bad Reads</h1>
-            </Group>
-            <Group ml="xl" gap={0} visibleFrom="sm">
-              <Nav />
-            </Group>
-          </Group>
+          <Nav />
         </Group>
       </AppShell.Header>
-
-      <AppShell.Navbar py="md" px={4}>
-        <Nav />
-      </AppShell.Navbar>
-
       <AppShell.Main style={{ 
         background: 'linear-gradient(to right, var(--mantine-color-teal-5), var(--mantine-color-teal-2), var(--mantine-color-teal-0), var(--mantine-color-teal-2), var(--mantine-color-teal-5))'
       }}>

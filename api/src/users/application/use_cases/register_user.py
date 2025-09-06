@@ -13,7 +13,7 @@ class RegisterUser:
         user_email = Email(email=email)
         existing_user = self.user_repository.get_by_email(email)
         if existing_user:
-            raise ValueError("User already exists with this email.")
+            raise ValueError("Email already in use.")
         id = uuid4()
         hashed_password = self.hasher.hash(password)
         user = User(id=id, email=user_email, hashed_password=hashed_password)
