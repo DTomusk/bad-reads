@@ -13,6 +13,11 @@ class AbstractUserRepository(ABC):
         pass
 
     @abstractmethod
+    def get_by_username(self, username: str) -> Optional[User]:
+        """Get a user by username."""
+        pass
+
+    @abstractmethod
     def save(self, user: User) -> None:
         """Save a user."""
         pass
@@ -28,6 +33,18 @@ class UserRepository(AbstractUserRepository):
                 id=result.id,
                 email=result.email,
                 hashed_password=result.hashed_password,
+                username=result.username,
+            )
+        return None
+    
+    def get_by_username(self, username: str):
+        result = self.session.query(UserModel).filter_by(username=username).first()
+        if result: 
+            return User(
+                id=result.id,
+                email=result.email,
+                hashed_password=result.hashed_password,
+                username=result.username,
             )
         return None
     
@@ -36,6 +53,7 @@ class UserRepository(AbstractUserRepository):
             id=user.id,
             email=user.email.email,
             hashed_password=user.hashed_password,
+            username=user.username.username,
         )
         self.session.add(db_user)
         self.session.commit()

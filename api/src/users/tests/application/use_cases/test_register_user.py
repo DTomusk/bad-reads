@@ -28,9 +28,10 @@ def test_register_user_success(register_user, mock_user_repository, mock_hasher)
     # Arrange
     email = "test@example.com"
     password = "securepassword"
+    username = "validUser"
 
     # Act
-    user = register_user.execute(email=email, password=password)
+    user = register_user.execute(email=email, password=password, username=username)
 
     # Assert
     assert user.id is not None, "User ID should be generated"
@@ -43,14 +44,15 @@ def test_register_user_success(register_user, mock_user_repository, mock_hasher)
 def test_register_user_existing_email(register_user, mock_user_repository, mock_hasher):
     # Arrange
     mock_user_repository.get_by_email.return_value = User(
-        id=uuid4(), email=Email(email="test@example.com"), hashed_password="hashed_password"
+        id=uuid4(), email=Email(email="test@example.com"), hashed_password="hashed_password", username="validUser"
     )
     email = "test@example.com"
     password = "securepassword"
+    username = "validUser"
 
     # Act & Assert
-    with pytest.raises(ValueError, match="User already exists with this email."):
-        register_user.execute(email=email, password=password)
+    with pytest.raises(ValueError, match="Email already in use."):
+        register_user.execute(email=email, password=password, username=username)
 
     mock_user_repository.get_by_email.assert_called_once_with(email)
     mock_user_repository.save.assert_not_called()
@@ -63,7 +65,7 @@ def test_register_user_invalid_email(register_user, mock_user_repository, mock_h
 
     # Act & Assert
     with pytest.raises(ValueError, match="Invalid email format"):
-        register_user.execute(email=email, password=password)
+        register_user.execute(email=email, password=password, username="validUser")
 
     mock_user_repository.get_by_email.assert_not_called()
     mock_user_repository.save.assert_not_called()

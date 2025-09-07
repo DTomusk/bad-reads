@@ -10,7 +10,11 @@ router = APIRouter()
 async def register_user(registration_request: RegistrationRequest, register_user_use_case=Depends(get_register_user_use_case)):
     """Register a new user."""
     try:
-        user = register_user_use_case.execute(email=registration_request.email, password=registration_request.password)
+        user = register_user_use_case.execute(
+            email=registration_request.email, 
+            password=registration_request.password,
+            username=registration_request.username
+        )
         return {"id": str(user.id), "email": user.email.email}
     except Exception as e: 
         raise HTTPException(status_code=401, detail=str(e))
