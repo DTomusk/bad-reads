@@ -1,4 +1,4 @@
-"""empty message
+"""Add love and poo score
 
 Revision ID: ac44af84f8a2
 Revises: 1eb4581ecd2e

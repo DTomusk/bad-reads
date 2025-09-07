@@ -1,4 +1,4 @@
-"""empty message
+"""Add ISBN to books
 
 Revision ID: 457b9205d425
 Revises: 1eb4581ecd2e
