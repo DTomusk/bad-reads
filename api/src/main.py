@@ -1,5 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from src.config import get_settings
 
 from src.books.api.routes import router as books_router
@@ -12,8 +14,20 @@ app = FastAPI(
     description="API for rating books",
     version="1.0.0",
     debug=settings.DEBUG,
-    redirect_slashes=False,  # Disable automatic trailing slash redirects
+    redirect_slashes=False,
 )
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    errors = {}
+    for err in exc.errors():
+        field = ".".join(str(loc) for loc in err["loc"] if isinstance(loc, str))
+        errors[field] = err["msg"]
+
+    return JSONResponse(
+        status_code=422,
+        content={"errors": errors}
+    )
 
 # Configure CORS
 app.add_middleware(
