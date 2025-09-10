@@ -21,12 +21,18 @@ export default function Register() {
 
     const form = useForm({
         initialValues: {
+            username: "",
             email: "",
             password: "",
             confirm_password: ""
         },
 
         validate: {
+            username: (value) => {
+                if (value.length < 3) return "Username must be at least 3 characters long"
+                if (value.length > 20) return "Username must be at most 20 characters long"
+                if (!/^[a-zA-Z0-9_.-]+$/.test(value)) return "Username can only contain letters, numbers, underscores, hyphens, and periods"
+                return null},
             email: (value) => /^\S+@\S+$/.test(value) ? null : "Invalid email",
             password: (value) => value.length <= 6 ? "Password should include at least 6 characters" : null,
             confirm_password: (value, values) => value !== values.password ? "Passwords do not match" : null
@@ -41,6 +47,7 @@ export default function Register() {
 
     const handleSubmit = (values: typeof form.values) => {
         register({
+            username: values.username,
             email: values.email,
             password: values.password,
             confirm_password: values.confirm_password
@@ -63,6 +70,15 @@ export default function Register() {
                     <Title ta="center" order={1} mb="sm" mt="xl">✨Register✨</Title>
                     {showSuccessAlert && <AlertBanner title="Registered successfully" type="success" message="Welcome to the coolest club in town"></AlertBanner>}
                     {showErrorAlert && <AlertBanner title="Registration failed" message={errorMessage} type="error" />}
+                    <TextInput
+                        required 
+                        label="Username" 
+                        placeholder="Username"
+                        {...form.getInputProps('username')}
+                        radius="md"
+                        size="lg"
+                        onFocus={() => setShowErrorAlert(false)}
+                    />
                     <TextInput 
                         required 
                         label="Email" 

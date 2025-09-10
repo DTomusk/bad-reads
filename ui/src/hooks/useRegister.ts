@@ -3,6 +3,7 @@ import { apiClient } from "../api/apiClient";
 import { AxiosError } from "axios";
 
 interface RegisterCredentials {
+    username: string;
     password: string;
     confirm_password: string;
     email: string;

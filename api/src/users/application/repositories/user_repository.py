@@ -3,7 +3,7 @@ from typing import Optional
 
 from sqlalchemy.orm import Session
 
-from src.users.domain.models import User
+from src.users.domain.models import Email, User, Username
 from src.users.application.models import UserModel
 
 class AbstractUserRepository(ABC):
@@ -26,25 +26,25 @@ class UserRepository(AbstractUserRepository):
     def __init__(self, session: Session):
         self.session = session
     
-    def get_by_email(self, email: str):
+    def get_by_email(self, email: str) -> Optional[User]:
         result = self.session.query(UserModel).filter_by(email=email).first()
         if result: 
             return User(
                 id=result.id,
-                email=result.email,
+                email=Email(result.email),
                 hashed_password=result.hashed_password,
-                username=result.username,
+                username=Username(result.username),
             )
         return None
     
-    def get_by_username(self, username: str):
+    def get_by_username(self, username: str) -> Optional[User]:
         result = self.session.query(UserModel).filter_by(username=username).first()
         if result: 
             return User(
                 id=result.id,
-                email=result.email,
+                email=Email(result.email),
                 hashed_password=result.hashed_password,
-                username=result.username,
+                username=Username(result.username),
             )
         return None
     
