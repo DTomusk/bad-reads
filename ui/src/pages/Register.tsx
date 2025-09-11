@@ -19,6 +19,8 @@ export default function Register() {
     const [showErrorAlert, setShowErrorAlert] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
+    const [submitDisabled, setSubmitDisabled] = useState(true);
+
     const form = useForm({
         initialValues: {
             username: "",
@@ -45,6 +47,13 @@ export default function Register() {
         }
     }, [isAuthenticated, navigate, from]);
 
+    useEffect(() => {
+        const hasEmptyFields = Object.values(form.values).some((val) => !val.trim());
+        const hasErrors = Object.values(form.errors).some((err) => err !== null);
+
+        setSubmitDisabled(hasEmptyFields || hasErrors);
+    }, [form.values, form.errors]);
+
     const handleSubmit = (values: typeof form.values) => {
         register({
             username: values.username,
@@ -54,6 +63,8 @@ export default function Register() {
         },
         {
             onSuccess: () => {
+                form.reset();
+                setSubmitDisabled(true);
                 setShowSuccessAlert(true);
             },
             onError: (error) => {
@@ -62,6 +73,12 @@ export default function Register() {
                 setShowErrorAlert(true);
             }
         })
+    }
+
+    const clearAlerts = () => {
+        setShowErrorAlert(false);
+        setShowSuccessAlert(false);
+        setErrorMessage("");
     }
 
     return (
@@ -78,7 +95,7 @@ export default function Register() {
                         {...form.getInputProps('username')}
                         radius="md"
                         size="lg"
-                        onFocus={() => setShowErrorAlert(false)}
+                        onFocus={() => clearAlerts()}
                     />
                     <TextInput 
                         required 
@@ -87,7 +104,7 @@ export default function Register() {
                         {...form.getInputProps('email')}
                         radius="md"
                         size="lg"
-                        onFocus={() => setShowErrorAlert(false)}
+                        onFocus={() => clearAlerts()}
                     />
                     <PasswordInput 
                         required 
@@ -96,7 +113,7 @@ export default function Register() {
                         {...form.getInputProps('password')}
                         radius="md"
                         size="lg"
-                        onFocus={() => setShowErrorAlert(false)}
+                        onFocus={() => clearAlerts()}
                     />
                     <PasswordInput 
                         required 
@@ -105,7 +122,7 @@ export default function Register() {
                         {...form.getInputProps('confirm_password')}
                         radius="md"
                         size="lg"
-                        onFocus={() => setShowErrorAlert(false)}
+                        onFocus={() => clearAlerts()}
                     />  
                 </Stack>
                 <Group justify="space-between" mt="xl">
@@ -122,6 +139,7 @@ export default function Register() {
                         radius="xl" 
                         size="lg" 
                         loading={isPending}
+                        disabled={submitDisabled}
                     >
                     Register
                     </Button>
