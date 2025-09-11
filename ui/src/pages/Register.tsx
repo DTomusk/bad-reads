@@ -17,7 +17,7 @@ export default function Register() {
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
     const [showErrorAlert, setShowErrorAlert] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState<string | string[]>("");
 
     const [submitDisabled, setSubmitDisabled] = useState(true);
 
@@ -68,8 +68,15 @@ export default function Register() {
                 setShowSuccessAlert(true);
             },
             onError: (error) => {
-                console.log(error.response?.data.errors)
-                setErrorMessage(error.response?.data?.detail || "Something went wrong signing you up")
+                const apiError = error?.response?.data;
+                console.log("API Error:", apiError);
+                if (apiError?.errors && typeof apiError?.errors === "object") {
+                    setErrorMessage(Object.values(apiError.errors));
+                } else if (apiError?.detail) {
+                    setErrorMessage(apiError.detail);
+                } else {
+                    setErrorMessage("Something went wrong signing you up");
+                }
                 setShowErrorAlert(true);
             }
         })
