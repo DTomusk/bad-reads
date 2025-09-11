@@ -13,5 +13,5 @@ class Failure:
 @dataclass
 class Outcome(Generic[T]):
     isSuccess: bool
-    data: T
-    failure: Failure
+    data: T = None
+    failure: Failure = None
