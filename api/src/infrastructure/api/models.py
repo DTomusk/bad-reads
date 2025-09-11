@@ -7,7 +7,6 @@ T = TypeVar("T")
 @dataclass
 class Failure:
     error: str
-    success: bool = False
     code: int = 400
 
 @dataclass
