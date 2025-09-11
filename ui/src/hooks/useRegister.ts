@@ -16,11 +16,12 @@ interface RegisterResponse {
 }
 
 // TODO: centralise error responses
-interface RegisterError {
-    detail: string;
+interface ValidationErrorResponse {
+  detail: string;
+  errors?: Record<string, string>;
 }
 
-export const useRegister = (): UseMutationResult<RegisterResponse, AxiosError<RegisterError>, RegisterCredentials> => {
+export const useRegister = (): UseMutationResult<RegisterResponse, AxiosError<ValidationErrorResponse>, RegisterCredentials> => {
     return useMutation({
         mutationFn: async (credentials: RegisterCredentials) => {
             const response = await apiClient.post("/users/register", credentials);

@@ -26,7 +26,10 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
     return JSONResponse(
         status_code=422,
-        content={"errors": errors}
+        content={
+            "detail": "Validation error",
+            "errors": errors
+        }
     )
 
 # Configure CORS

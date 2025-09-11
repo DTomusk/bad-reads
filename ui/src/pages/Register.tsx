@@ -57,6 +57,7 @@ export default function Register() {
                 setShowSuccessAlert(true);
             },
             onError: (error) => {
+                console.log(error.response?.data.errors)
                 setErrorMessage(error.response?.data?.detail || "Something went wrong signing you up")
                 setShowErrorAlert(true);
             }
