@@ -5,6 +5,7 @@ import { useAuth } from "../auth/AuthProvider";
 import { Anchor, Button, Center, Group, PasswordInput, Stack, TextInput, Title } from "@mantine/core";
 import AlertBanner from "../components/Shared/AlertBanner";
 import { useRegister } from "../hooks/useRegister";
+import { useApiErrorHandler } from "../hooks/useApiError";
 
 export default function Register() {
     const location = useLocation();
@@ -15,11 +16,14 @@ export default function Register() {
     const { isAuthenticated } = useAuth();
 
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-
-    const [showErrorAlert, setShowErrorAlert] = useState(false);
-    const [errorMessage, setErrorMessage] = useState<string | string[]>("");
-
     const [submitDisabled, setSubmitDisabled] = useState(true);
+
+    const {
+        showErrorAlert,
+        errorMessage,
+        handleError,
+        clearError
+    } = useApiErrorHandler();
 
     const form = useForm({
         initialValues: {
@@ -67,25 +71,13 @@ export default function Register() {
                 setSubmitDisabled(true);
                 setShowSuccessAlert(true);
             },
-            onError: (error) => {
-                const apiError = error?.response?.data;
-                console.log("API Error:", apiError);
-                if (apiError?.errors && typeof apiError?.errors === "object") {
-                    setErrorMessage(Object.values(apiError.errors));
-                } else if (apiError?.detail) {
-                    setErrorMessage(apiError.detail);
-                } else {
-                    setErrorMessage("Something went wrong signing you up");
-                }
-                setShowErrorAlert(true);
-            }
+            onError: handleError
         })
     }
 
     const clearAlerts = () => {
-        setShowErrorAlert(false);
         setShowSuccessAlert(false);
-        setErrorMessage("");
+        clearError();
     }
 
     return (
