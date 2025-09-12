@@ -1,6 +1,7 @@
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import { apiClient } from "../api/apiClient";
 import { AxiosError } from "axios";
+import { ErrorResponse } from "../types/ErrorResponse";
 
 interface RegisterCredentials {
     username: string;
@@ -15,13 +16,7 @@ interface RegisterResponse {
     email: string;
 }
 
-// TODO: centralise error responses
-interface ValidationErrorResponse {
-  detail: string;
-  errors?: Record<string, string>;
-}
-
-export const useRegister = (): UseMutationResult<RegisterResponse, AxiosError<ValidationErrorResponse>, RegisterCredentials> => {
+export const useRegister = (): UseMutationResult<RegisterResponse, AxiosError<ErrorResponse>, RegisterCredentials> => {
     return useMutation({
         mutationFn: async (credentials: RegisterCredentials) => {
             const response = await apiClient.post("/users/register", credentials);
