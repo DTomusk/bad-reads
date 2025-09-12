@@ -16,7 +16,7 @@ async def register_user(registration_request: RegistrationRequest, register_user
         username=registration_request.username
     )
 
-    if outcome.isSuccess is False:
+    if not outcome.isSuccess:
         raise HTTPException(status_code=outcome.failure.code, detail=outcome.failure.error)
     
     user = outcome.data
@@ -26,10 +26,13 @@ async def register_user(registration_request: RegistrationRequest, register_user
 @router.post("/login")
 async def login_user(form_data: OAuth2PasswordRequestForm=Depends(), login_use_case=Depends(get_login_use_case)):
     """Login a user and return a JWT token."""
-    try:
-        email = form_data.username
-        password = form_data.password
-        token = login_use_case.execute(email=email, password=password)
-        return {"access_token": token, "token_type": "Bearer"}
-    except Exception as e:
-        raise HTTPException(status_code=401, detail=str(e))
+    email = form_data.username
+    password = form_data.password
+    outcome: Outcome = login_use_case.execute(email=email, password=password)
+
+    if not outcome.isSuccess:
+        raise HTTPException(status_code=outcome.failure.code, detail=outcome.failure.error)
+    
+    token = outcome.data
+
+    return {"access_token": token, "token_type": "Bearer"}
