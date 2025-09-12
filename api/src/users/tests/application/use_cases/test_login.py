@@ -39,7 +39,7 @@ def login(mock_user_repository, mock_hasher, mock_token_service) -> Login:
 def test_login_success(login, mock_user_repository, mock_hasher, mock_token_service):
     # Arrange
     mock_user_repository.get_by_email.return_value = User(
-        id=uuid4(), email=Email(email="test@example.com"), hashed_password="hashed_password"
+        id=uuid4(), email=Email(email="test@example.com"), hashed_password="hashed_password", username="validUser"
     )
     email = "test@example.com"
     password = "securepassword"
@@ -65,7 +65,7 @@ def test_login_invalid_email(login):
 def test_login_invalid_password(login, mock_user_repository, mock_hasher):
     # Arrange
     mock_user_repository.get_by_email.return_value = User(
-        id=uuid4(), email=Email(email="test@example.com"), hashed_password="hashed_password"
+        id=uuid4(), email=Email(email="test@example.com"), hashed_password="hashed_password", username="validUser"
     )
     mock_hasher.verify.return_value = False
     email = "test@example.com"

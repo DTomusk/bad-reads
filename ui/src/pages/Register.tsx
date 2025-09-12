@@ -5,6 +5,7 @@ import { useAuth } from "../auth/AuthProvider";
 import { Anchor, Button, Center, Group, PasswordInput, Stack, TextInput, Title } from "@mantine/core";
 import AlertBanner from "../components/Shared/AlertBanner";
 import { useRegister } from "../hooks/useRegister";
+import { useApiErrorHandler } from "../hooks/useApiError";
 
 export default function Register() {
     const location = useLocation();
@@ -15,18 +16,29 @@ export default function Register() {
     const { isAuthenticated } = useAuth();
 
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+    const [submitDisabled, setSubmitDisabled] = useState(true);
 
-    const [showErrorAlert, setShowErrorAlert] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
+    const {
+        showErrorAlert,
+        errorMessage,
+        handleError,
+        clearError
+    } = useApiErrorHandler();
 
     const form = useForm({
         initialValues: {
+            username: "",
             email: "",
             password: "",
             confirm_password: ""
         },
 
         validate: {
+            username: (value) => {
+                if (value.length < 3) return "Username must be at least 3 characters long"
+                if (value.length > 20) return "Username must be at most 20 characters long"
+                if (!/^[a-zA-Z0-9_.-]+$/.test(value)) return "Username can only contain letters, numbers, underscores, hyphens, and periods"
+                return null},
             email: (value) => /^\S+@\S+$/.test(value) ? null : "Invalid email",
             password: (value) => value.length <= 6 ? "Password should include at least 6 characters" : null,
             confirm_password: (value, values) => value !== values.password ? "Passwords do not match" : null
@@ -39,21 +51,33 @@ export default function Register() {
         }
     }, [isAuthenticated, navigate, from]);
 
+    useEffect(() => {
+        const hasEmptyFields = Object.values(form.values).some((val) => !val.trim());
+        const hasErrors = Object.values(form.errors).some((err) => err !== null);
+
+        setSubmitDisabled(hasEmptyFields || hasErrors);
+    }, [form.values, form.errors]);
+
     const handleSubmit = (values: typeof form.values) => {
         register({
+            username: values.username,
             email: values.email,
             password: values.password,
             confirm_password: values.confirm_password
         },
         {
             onSuccess: () => {
+                form.reset();
+                setSubmitDisabled(true);
                 setShowSuccessAlert(true);
             },
-            onError: (error) => {
-                setErrorMessage(error.response?.data?.detail || "Something went wrong signing you up")
-                setShowErrorAlert(true);
-            }
+            onError: handleError
         })
+    }
+
+    const clearAlerts = () => {
+        setShowSuccessAlert(false);
+        clearError();
     }
 
     return (
@@ -63,6 +87,15 @@ export default function Register() {
                     <Title ta="center" order={1} mb="sm" mt="xl">✨Register✨</Title>
                     {showSuccessAlert && <AlertBanner title="Registered successfully" type="success" message="Welcome to the coolest club in town"></AlertBanner>}
                     {showErrorAlert && <AlertBanner title="Registration failed" message={errorMessage} type="error" />}
+                    <TextInput
+                        required 
+                        label="Username" 
+                        placeholder="Username"
+                        {...form.getInputProps('username')}
+                        radius="md"
+                        size="lg"
+                        onFocus={() => clearAlerts()}
+                    />
                     <TextInput 
                         required 
                         label="Email" 
@@ -70,7 +103,7 @@ export default function Register() {
                         {...form.getInputProps('email')}
                         radius="md"
                         size="lg"
-                        onFocus={() => setShowErrorAlert(false)}
+                        onFocus={() => clearAlerts()}
                     />
                     <PasswordInput 
                         required 
@@ -79,7 +112,7 @@ export default function Register() {
                         {...form.getInputProps('password')}
                         radius="md"
                         size="lg"
-                        onFocus={() => setShowErrorAlert(false)}
+                        onFocus={() => clearAlerts()}
                     />
                     <PasswordInput 
                         required 
@@ -88,7 +121,7 @@ export default function Register() {
                         {...form.getInputProps('confirm_password')}
                         radius="md"
                         size="lg"
-                        onFocus={() => setShowErrorAlert(false)}
+                        onFocus={() => clearAlerts()}
                     />  
                 </Stack>
                 <Group justify="space-between" mt="xl">
@@ -105,6 +138,7 @@ export default function Register() {
                         radius="xl" 
                         size="lg" 
                         loading={isPending}
+                        disabled={submitDisabled}
                     >
                     Register
                     </Button>

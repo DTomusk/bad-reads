@@ -1,3 +1,4 @@
+from src.infrastructure.api.models import Failure, Outcome
 from src.users.application.repositories.user_repository import AbstractUserRepository
 from src.users.application.utilities.hasher import Hasher
 from src.users.application.utilities.token_service import TokenService
@@ -9,11 +10,15 @@ class Login:
         self.hasher = hasher
         self.token_service = token_service
 
-    def execute(self, email: str, password: str) -> str:
+    def execute(self, email: str, password: str) -> Outcome[str]:
         user = self.user_repository.get_by_email(email)
         if not user or not self.hasher.verify(password, user.hashed_password):
-            raise ValueError("Invalid credentials.")
+            return Outcome(isSuccess=False, failure=Failure(error="Invalid credentials."))
         
-        token = self.token_service.create_token(data={"sub": str(user.id)}, expires_minutes=30)
-        return token
+        token = self.token_service.create_token(
+            data={
+                "sub": str(user.id),
+                "username": user.username.username
+            }, expires_minutes=30)
+        return Outcome[str](isSuccess=True, data=token)
         
