@@ -3,8 +3,9 @@ import { useForm } from "@mantine/form";
 import { useLogin } from "../hooks/useLogin";
 import { useAuth } from "../auth/AuthProvider";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import AlertBanner from "../components/Shared/AlertBanner";
+import { useApiErrorHandler } from "../hooks/useApiError";
 
 export default function Login() {
     const location = useLocation();
@@ -13,7 +14,14 @@ export default function Login() {
 
     const { mutate: login, isPending } = useLogin();
     const { isAuthenticated, login: loginAuth } = useAuth();
-    const [showAlert, setShowAlert] = useState(false);
+
+    const {
+        showErrorAlert,
+        errorMessage,
+        handleError,
+        clearError
+    } = useApiErrorHandler();
+
     const form = useForm({
         initialValues: {
             email: "",
@@ -43,9 +51,7 @@ export default function Login() {
                 loginAuth(data.access_token);
                 navigate(from, { replace: true });
             },
-            onError: () => {
-                setShowAlert(true);
-            },
+            onError: handleError
         });
     };
 
@@ -54,7 +60,7 @@ export default function Login() {
             <form onSubmit={form.onSubmit(handleSubmit)}>
                 <Stack>
                     <Title ta="center" order={1} mb="sm" mt="xl">💅Welcome back💅</Title>
-                    {showAlert && <AlertBanner title="Login failed" message="Invalid email or password" type="error" />}
+                    {showErrorAlert && <AlertBanner title="Login failed" message={errorMessage} type="error" />}
                     <TextInput 
                         required 
                         label="Email" 
@@ -62,7 +68,7 @@ export default function Login() {
                         {...form.getInputProps('email')}
                         radius="md"
                         size="lg"
-                        onFocus={() => setShowAlert(false)}
+                        onFocus={() => clearError()}
                     />
                     <PasswordInput 
                         required 
@@ -71,7 +77,7 @@ export default function Login() {
                         {...form.getInputProps('password')}
                         radius="md"
                         size="lg"
-                        onFocus={() => setShowAlert(false)}
+                        onFocus={() => clearError()}
                     />
                 </Stack>
 
