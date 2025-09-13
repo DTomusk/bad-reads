@@ -2,8 +2,6 @@ from uuid import UUID
 from src.books.domain.models import Book
 from src.infrastructure.api.models import Failure, Outcome
 from src.books.application.repositories.book_repository import AbstractBookRepo
-from src.books.api.schemas.book_detail_response import BookDetailResponse
-
 
 class GetBookDetails:
     def __init__(self, book_repository: AbstractBookRepo):

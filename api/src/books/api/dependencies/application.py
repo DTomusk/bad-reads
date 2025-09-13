@@ -1,45 +1,18 @@
 from fastapi import BackgroundTasks, Depends
 
-from src.books.application.use_cases.get_book_reviews_for_user import GetBookReviewsForUser
-from src.books.application.repositories.author_repository import AuthorRepo
-from src.books.application.use_cases.get_book_reviews import GetBookReviews
+from src.books.api.dependencies.repos import get_authors_repo, get_books_repo, get_ratings_repo, get_reviews_repo
+from src.books.application.use_cases.reviews.get_reviews_for_user import GetBookReviewsForUser
+from src.books.application.use_cases.reviews.get_reviews_for_book import GetBookReviews
 from src.infrastructure.services.background_task_queue import FastAPIBackgroundTaskQueue
-from src.books.application.use_cases.search_books import SearchBooks
-from src.books.application.use_cases.get_book_details import GetBookDetails
-from src.books.application.use_cases.review_book import ReviewBook
-from src.books.application.repositories.review_repository import ReviewRepo
-from src.infrastructure.db.database import get_session
-from src.books.application.use_cases.get_books import GetBooks
-from src.books.application.use_cases.rate_book import RateBook
-from src.books.application.repositories.book_repository import BookRepo
-from src.books.application.repositories.rating_repository import RatingRepo
+from src.books.application.use_cases.books.search_books import SearchBooks
+from src.books.application.use_cases.books.get_book_details import GetBookDetails
+from src.books.application.use_cases.reviews.review_book import ReviewBook
+from src.books.application.use_cases.books.get_books import GetBooks
+from src.books.application.use_cases.ratings.rate_book import RateBook
 from src.books.application.services.external_books_service import GoogleBooksApiService
-from src.books.application.use_cases.get_book_rating import GetBookRating
+from src.books.application.use_cases.ratings.get_rating_for_book_for_user import GetRatingForBookForUser
 
-def get_ratings_repo(session=Depends(get_session)):
-    """
-    Dependency to provide the Ratings repository.
-    """
-    return RatingRepo(session=session)
-
-def get_reviews_repo(session=Depends(get_session)):
-    """
-    Dependency to provide the Reviews repository.
-    """
-    return ReviewRepo(session=session)
-
-def get_books_repo(session=Depends(get_session)):
-    """
-    Dependency to provide the Books repository.
-    """
-    return BookRepo(session=session)
-
-def get_authors_repo(session=Depends(get_session)):
-    """
-    Dependency to provide the Authors repository.
-    """
-    return AuthorRepo(session=session)
-
+# TODO: split out use cases once there are too many of them
 def get_external_books_service(author_repo=Depends(get_authors_repo)):
     """
     Dependency to provide the ExternalBooksService.
@@ -90,7 +63,7 @@ def get_book_rating_use_case(rating_repo=Depends(get_ratings_repo)):
     """
     Dependency to provide the GetBookRating use case.
     """
-    return GetBookRating(rating_repository=rating_repo)
+    return GetRatingForBookForUser(rating_repository=rating_repo)
 
 def get_book_reviews_use_case(review_repo=Depends(get_reviews_repo)):
     """

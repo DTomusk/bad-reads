@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import MagicMock
 from uuid import uuid4
-from src.books.application.use_cases.get_book_details import GetBookDetails
+from src.books.application.use_cases.books.get_book_details import GetBookDetails
 from src.books.domain.models import Author
 
 @pytest.fixture

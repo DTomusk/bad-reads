@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 from uuid import uuid4
 import pytest
 
-from src.books.application.use_cases.review_book import ReviewBook
+from src.books.application.use_cases.reviews.review_book import ReviewBook
 from src.books.domain.models import Author, Book, Rating, RatingScore, Review
 
 @pytest.fixture

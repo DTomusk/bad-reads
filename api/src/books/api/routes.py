@@ -4,7 +4,7 @@ from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 from src.books.api.schemas.book_detail_response import BookDetailResponse
 from src.books.domain.models import Book
 from src.infrastructure.api.models import Outcome
-from src.books.api.dependencies import get_book_details_use_case, get_book_rating_use_case, get_book_reviews_use_case, get_books_use_case, get_my_book_reviews_use_case, rate_book_use_case, review_book_use_case, search_books_use_case
+from src.books.api.dependencies.application import get_book_details_use_case, get_book_rating_use_case, get_book_reviews_use_case, get_books_use_case, get_my_book_reviews_use_case, rate_book_use_case, review_book_use_case, search_books_use_case
 from src.books.api.schemas.book_search_response import BookSearchResponse
 from src.books.api.schemas.rate_request import RateRequest
 from src.books.api.schemas.review_request import ReviewRequest
