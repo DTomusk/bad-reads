@@ -1,6 +1,6 @@
 from fastapi import BackgroundTasks, Depends
 
-from src.books.application.use_cases.get_my_book_reviews import GetMyBookReviews
+from src.books.application.use_cases.get_book_reviews_for_user import GetBookReviewsForUser
 from src.books.application.repositories.author_repository import AuthorRepo
 from src.books.application.use_cases.get_book_reviews import GetBookReviews
 from src.infrastructure.services.background_task_queue import FastAPIBackgroundTaskQueue
@@ -100,6 +100,6 @@ def get_book_reviews_use_case(review_repo=Depends(get_reviews_repo)):
 
 def get_my_book_reviews_use_case(review_repo=Depends(get_reviews_repo), book_repo=Depends(get_books_repo)):
     """
-    Dependency to provide the GetMyBookReviews use case.
+    Dependency to provide the GetBooReviewsForUser use case.
     """
-    return GetMyBookReviews(review_repository=review_repo, book_repository=book_repo)
+    return GetBookReviewsForUser(review_repository=review_repo, book_repository=book_repo)

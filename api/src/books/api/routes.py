@@ -1,6 +1,8 @@
 from uuid import UUID
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 
+from src.books.api.schemas.book_detail_response import BookDetailResponse
+from src.books.domain.models import Book
 from src.infrastructure.api.models import Outcome
 from src.books.api.dependencies import get_book_details_use_case, get_book_rating_use_case, get_book_reviews_use_case, get_books_use_case, get_my_book_reviews_use_case, rate_book_use_case, review_book_use_case, search_books_use_case
 from src.books.api.schemas.book_search_response import BookSearchResponse
@@ -53,8 +55,14 @@ async def get_book_details(book_id: UUID, get_book_details=Depends(get_book_deta
     """
     Get details of a book by its ID.
     """
-    book_details = get_book_details.execute(book_id=book_id)
-    return book_details
+    book_details: Outcome[Book] = get_book_details.execute(book_id=book_id)
+
+    if not book_details.isSuccess:
+        raise HTTPException(status_code=book_details.failure.code, detail=book_details.failure.error)
+    
+    response: BookDetailResponse = BookDetailResponse.from_domain(book_details.data)
+
+    return response
 
 @router.get("/{book_id}/rating")
 async def get_book_rating(book_id: UUID, get_book_rating=Depends(get_book_rating_use_case), user_id=Depends(get_current_user)):
