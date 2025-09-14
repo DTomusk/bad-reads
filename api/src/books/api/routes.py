@@ -74,6 +74,7 @@ async def get_book_rating(book_id: UUID, get_book_rating=Depends(get_book_rating
 
 @router.post("/{book_id}/rate")
 async def rate_book(
+        background_tasks: BackgroundTasks,
         book_id: UUID, 
         rate_request: RateRequest,
         rate_book=Depends(rate_book_use_case), 
@@ -88,6 +89,7 @@ async def rate_book(
 
 @router.post("/{book_id}/review")
 async def review_book(
+        background_tasks: BackgroundTasks,
         book_id: UUID, 
         review_request: ReviewRequest,
         review_book=Depends(review_book_use_case), 

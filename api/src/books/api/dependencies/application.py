@@ -20,13 +20,18 @@ def get_external_books_service(author_repo=Depends(get_authors_repo)):
     """
     return GoogleBooksApiService(author_repo=author_repo)
 
-def get_rating_service(rating_repository=Depends(get_ratings_repo), book_repository=Depends(get_books_repo)):
+def get_rating_service(
+        rating_repository=Depends(get_ratings_repo), 
+        book_repository=Depends(get_books_repo),
+        background_tasks: BackgroundTasks = None
+    ):
     """
     Dependency to provide the RatingService.
     """
     return RatingsService(
         rating_repository=rating_repository,
-        book_repository=book_repository)
+        book_repository=book_repository,
+        background_task_queue=FastAPIBackgroundTaskQueue(background_tasks=background_tasks))
 
 def rate_book_use_case(rating_service=Depends(get_rating_service)):
     """

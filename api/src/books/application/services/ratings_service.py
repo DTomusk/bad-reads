@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
 from uuid import UUID, uuid4
 
-from src.books.domain.models import Rating, RatingScore
+from src.infrastructure.services.background_task_queue import BackgroundTaskQueue
+from src.books.domain.models import Book, Rating, RatingScore
 from src.books.application.repositories.book_repository import AbstractBookRepo
 from src.books.application.repositories.rating_repository import AbstractRatingRepo
 from src.infrastructure.api.models import Failure, Outcome
@@ -18,11 +19,14 @@ class AbstractRatingsService(ABC):
 
 class RatingsService(AbstractRatingsService):
     def __init__(
-        self, 
-        rating_repository: AbstractRatingRepo, 
-        book_repository: AbstractBookRepo):
+            self, 
+            rating_repository: AbstractRatingRepo, 
+            book_repository: AbstractBookRepo,
+            background_task_queue: BackgroundTaskQueue
+        ):
         self.rating_repository = rating_repository
         self.book_repository = book_repository
+        self.background_task_queue = background_task_queue
 
     def create_rating(self, book_id, user_id, love_score, shit_score):
         # Check if the book exists
@@ -37,7 +41,14 @@ class RatingsService(AbstractRatingsService):
         
         new_rating = Rating(uuid4(), book.id, user_id, RatingScore(love_score), RatingScore(shit_score))
         self.rating_repository.create_rating(new_rating)
-        book.add_rating(new_rating)
-        self.book_repository.update_book(book)
 
+        # Updating values on the book itself and the global data shouldn't be blocking
+        self.background_task_queue.add_task(self._update_ratings, book, new_rating)
+
+        print("Created rating")
         return Outcome(isSuccess=True, data=new_rating.id)
+    
+    def _update_ratings(self, book: Book, rating: Rating):
+        print("Running rating side effects")
+        book.add_rating(rating)
+        self.book_repository.update_book(book)

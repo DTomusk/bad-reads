@@ -9,7 +9,8 @@ class SearchBooks:
             self, 
             book_repository: AbstractBookRepo, 
             external_books_service: AbstractBooksService, 
-            author_repository: AbstractAuthorRepo, background_task_queue: BackgroundTaskQueue
+            author_repository: AbstractAuthorRepo, 
+            background_task_queue: BackgroundTaskQueue
         ):
         self.book_repository = book_repository
         self.external_books_service = external_books_service
