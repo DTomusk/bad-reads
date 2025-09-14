@@ -95,7 +95,11 @@ async def review_book(
     """
     Review a book by its ID.
     """
-    review_book.execute(book_id=book_id, user_id=user_id, text=review_request.text, love_score=review_request.love_score, shit_score=review_request.shit_score)
+    outcome: Outcome = review_book.execute(book_id=book_id, user_id=user_id, text=review_request.text, love_score=review_request.love_score, shit_score=review_request.shit_score)
+
+    if not outcome.isSuccess:
+        raise HTTPException(status_code=outcome.failure.code, detail=outcome.failure.error)
+
     return {"message": "Book reviewed successfully"}
 
 @router.get("/{book_id}/reviews")
