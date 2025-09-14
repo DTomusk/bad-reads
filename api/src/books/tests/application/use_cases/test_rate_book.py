@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import MagicMock
 from uuid import uuid4
-from src.books.application.use_cases.rate_book import RateBook
+from src.books.application.use_cases.ratings.rate_book import RateBook
 from src.books.domain.models import Rating, Book, Author, RatingScore
 
 @pytest.fixture

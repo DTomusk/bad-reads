@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from datetime import datetime, timedelta, timezone
 from fastapi import HTTPException
 import jwt
+from src.infrastructure.api.models import Outcome
 from src.config import get_settings
 
 
@@ -26,8 +27,7 @@ class JWTTokenService(TokenService):
         to_encode.update({"exp": expire})
         return jwt.encode(payload=to_encode, key=settings.JWT_SECRET, algorithm=settings.JWT_ALGORITHM)
     
-    def verify_token(self, token):
-        print(token)
+    def verify_token(self, token) -> Outcome[str]:
         try:
             payload = jwt.decode(token, key=settings.JWT_SECRET, algorithms=[settings.JWT_ALGORITHM])
             return payload.get("sub")

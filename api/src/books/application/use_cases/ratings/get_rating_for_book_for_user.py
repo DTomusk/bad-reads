@@ -3,7 +3,7 @@ from src.books.api.schemas.rating_response import RatingResponse
 from src.books.application.repositories.rating_repository import AbstractRatingRepo
 
 
-class GetBookRating:
+class GetRatingForBookForUser:
     def __init__(self, rating_repository: AbstractRatingRepo):
         self.rating_repository = rating_repository
 

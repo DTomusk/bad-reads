@@ -5,7 +5,7 @@ from src.books.application.repositories.review_repository import AbstractReviewR
 from src.books.application.repositories.book_repository import AbstractBookRepo
 
 
-class GetMyBookReviews():
+class GetBookReviewsForUser():
     def __init__(self, 
                  review_repository: AbstractReviewRepo,
                  book_repository: AbstractBookRepo):
