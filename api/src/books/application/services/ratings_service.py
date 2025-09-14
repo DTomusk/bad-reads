@@ -52,3 +52,4 @@ class RatingsService(AbstractRatingsService):
         print("Running rating side effects")
         book.add_rating(rating)
         self.book_repository.update_book(book)
+        self.rating_repository.add_rating_to_global_stats(rating)
