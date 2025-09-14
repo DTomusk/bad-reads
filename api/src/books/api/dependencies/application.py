@@ -1,5 +1,6 @@
 from fastapi import BackgroundTasks, Depends
 
+from src.books.application.services.ratings_service import RatingsService
 from src.books.api.dependencies.repos import get_authors_repo, get_books_repo, get_ratings_repo, get_reviews_repo
 from src.books.application.use_cases.reviews.get_reviews_for_user import GetBookReviewsForUser
 from src.books.application.use_cases.reviews.get_reviews_for_book import GetBookReviews
@@ -19,17 +20,25 @@ def get_external_books_service(author_repo=Depends(get_authors_repo)):
     """
     return GoogleBooksApiService(author_repo=author_repo)
 
-def rate_book_use_case(book_repo=Depends(get_books_repo), rating_repo=Depends(get_ratings_repo)):
+def get_rating_service(rating_repository=Depends(get_ratings_repo), book_repository=Depends(get_books_repo)):
+    """
+    Dependency to provide the RatingService.
+    """
+    return RatingsService(
+        rating_repository=rating_repository,
+        book_repository=book_repository)
+
+def rate_book_use_case(rating_service=Depends(get_rating_service)):
     """
     Dependency to provide the RateBook use case.
     """
-    return RateBook(book_repository=book_repo, rating_repository=rating_repo)
+    return RateBook(rating_service=rating_service)
 
-def review_book_use_case(book_repo=Depends(get_books_repo), rating_repo=Depends(get_ratings_repo), review_repo=Depends(get_reviews_repo)):
+def review_book_use_case(rating_service=Depends(get_rating_service), review_repo=Depends(get_reviews_repo)):
     """
     Dependency to provide the ReviewBook use case.
     """
-    return ReviewBook(book_repository=book_repo, rating_repository=rating_repo, review_repository=review_repo)
+    return ReviewBook(rating_service=rating_service, review_repository=review_repo)
 
 def get_books_use_case(book_repo=Depends(get_books_repo)):
     """

@@ -1,43 +1,31 @@
 from datetime import datetime, timezone
 from uuid import UUID, uuid4
-from src.infrastructure.api.models import Failure, Outcome
-from src.books.application.repositories.book_repository import AbstractBookRepo
-from src.books.application.repositories.rating_repository import AbstractRatingRepo
+from src.books.application.services.ratings_service import AbstractRatingsService
+from src.infrastructure.api.models import Outcome
 from src.books.application.repositories.review_repository import AbstractReviewRepo
-from src.books.domain.models import Rating, RatingScore, Review
+from src.books.domain.models import Review
 
 # TODO: add a case for updating a review and a case for adding a review to a book that has already been rated
 class ReviewBook:
-    def __init__(self, book_repository: AbstractBookRepo, rating_repository: AbstractRatingRepo, review_repository: AbstractReviewRepo):
-        self.book_repository = book_repository
-        self.rating_repository = rating_repository
+    def __init__(self, rating_service: AbstractRatingsService, review_repository: AbstractReviewRepo):
+        self.rating_service = rating_service
         self.review_repository = review_repository
 
     def execute(self, book_id: UUID, user_id: UUID, text: str, love_score: float, shit_score: float) -> Outcome[None]:
         """ User reviews a book """
-        # Check if the book exists
-        book = self.book_repository.get_book_by_id(book_id)
-        if not book:
-            return Outcome(isSuccess=False, failure=Failure(error="Book not found"))
-        
-        # Check if the user has already rated the book
-        existing_rating = self.rating_repository.get_rating_by_user_and_book(user_id, book_id)
-        if existing_rating:
-            return Outcome(isSuccess=False, failure="Book already rated by user")
-        
-        # Check if the user has already reviewed the book
         existing_review = self.review_repository.get_review_by_user_and_book(user_id, book_id)
         if existing_review:
             return Outcome(isSuccess=False, failure="Book already rated by user")
 
-        # Create a new rating
-        new_rating = Rating(uuid4(), book_id, user_id, RatingScore(love_score), RatingScore(shit_score))
-        self.rating_repository.create_rating(new_rating)
-        book.add_rating(new_rating)
-        self.book_repository.update_book(book)
+        rating_outcome: Outcome[UUID] = self.rating_service.create_rating(book_id=book_id, user_id=user_id, love_score=love_score, shit_score=shit_score)
+
+        if not rating_outcome.isSuccess:
+            return rating_outcome
+        
+        rating_id = rating_outcome.data
 
         # Create a new review
-        new_review = Review(uuid4(), book_id, user_id, text, new_rating.id, datetime.now(timezone.utc))
+        new_review = Review(uuid4(), book_id, user_id, text, rating_id, datetime.now(timezone.utc))
         self.review_repository.create_review(new_review)
 
         return Outcome(isSuccess=True)
