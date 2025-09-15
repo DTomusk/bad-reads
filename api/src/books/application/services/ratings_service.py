@@ -47,11 +47,9 @@ class RatingsService(AbstractRatingsService):
         # Updating values on the book itself and the global data shouldn't be blocking
         self.background_task_queue.add_task(self._update_ratings, book, new_rating)
 
-        print("Created rating")
         return Outcome(isSuccess=True, data=new_rating.id)
     
     def _update_ratings(self, book: Book, rating: Rating):
-        print("Running rating side effects")
         book.add_rating(rating)
         weighted_love_rating, weighted_shit_rating = self._calculate_weighted_ratings(book)
         self.book_repository.update_book(book, weighted_love_rating, weighted_shit_rating)
