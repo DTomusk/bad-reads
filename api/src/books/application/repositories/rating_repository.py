@@ -45,6 +45,13 @@ class AbstractRatingRepo(ABC):
         pass
 
     @abstractmethod
+    def get_global_stats() -> GlobalRatingStatsModel:
+        """
+        Gets the global stats entry
+        :return: The global stats entry, including average ratings
+        """
+
+    @abstractmethod
     def add_rating_to_global_stats(rating: Rating) -> None:
         """
         Update global rating stats
@@ -112,9 +119,12 @@ class RatingRepo(AbstractRatingRepo):
         global_stats.num_ratings += 1
 
         global_stats.sum_love_ratings += rating.love_score.value
-        global_stats.mean_love_rating = global_stats.sum_love_ratings / global_stats.num_love_ratings
+        global_stats.mean_love_rating = global_stats.sum_love_ratings / global_stats.num_ratings
 
         global_stats.sum_shit_ratings += rating.shit_score.value
-        global_stats.mean_shit_rating = global_stats.sum_shit_ratings / global_stats.num_shit_ratings
+        global_stats.mean_shit_rating = global_stats.sum_shit_ratings / global_stats.num_ratings
 
         self.session.commit()
+
+    def get_global_stats(self) -> GlobalRatingStatsModel:
+        return self.session.query(GlobalRatingStatsModel).first()

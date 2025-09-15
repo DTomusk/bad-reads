@@ -25,7 +25,8 @@ class BookModel(Base):
     sum_of_shit_ratings = Column(Float, index=False)
     description = Column(String, index=False)
     picture_url = Column(String, index=False)
-    global_weighted_rating = Column(Float, index=True, default=0.0)
+    global_weighted_love_rating = Column(Float, index=True, default=0.0)
+    global_weighted_shit_rating = Column(Float, index=True, default=0.0)
     
     ratings = relationship("RatingModel", back_populates="book")
     authors = relationship("AuthorModel", secondary=book_authors, back_populates="books")

@@ -72,10 +72,12 @@ class AbstractBookRepo(ABC):
         pass
     
     @abstractmethod
-    def update_book(self, book: Book) -> Book:
+    def update_book(self, book: Book, weighted_love_rating: float, weighted_shit_rating: float) -> Book:
         """
         Update a book.
         :param book: The book object to update.
+        :param weighted_love_rating: love rating used for global sorting
+        :param weighted_shit_rating: shit rating used for global sorting
         :return: The updated book object.
         """
         pass
@@ -223,7 +225,7 @@ class BookRepo(AbstractBookRepo):
         self.session.add(self._create_book_model_from_domain_model(book))
         self.session.commit()
 
-    def update_book(self, book: Book) -> Book:
+    def update_book(self, book: Book, weighted_love_rating: float, weighted_shit_rating: float) -> Book:
         """
         Update a book.
         :param book: The book object to update.
@@ -234,7 +236,9 @@ class BookRepo(AbstractBookRepo):
             BookModel.average_shit_rating: book.average_shit_rating,
             BookModel.number_of_ratings: book.number_of_ratings,
             BookModel.sum_of_love_ratings: book.sum_of_love_ratings,
-            BookModel.sum_of_shit_ratings: book.sum_of_shit_ratings
+            BookModel.sum_of_shit_ratings: book.sum_of_shit_ratings,
+            BookModel.global_weighted_love_rating: weighted_love_rating,
+            BookModel.global_weighted_shit_rating: weighted_shit_rating
         })
         self.session.commit()
 

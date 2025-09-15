@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
+from typing import Tuple
 from uuid import UUID, uuid4
 
+from src.books.application.models import GlobalRatingStatsModel
 from src.infrastructure.services.background_task_queue import BackgroundTaskQueue
 from src.books.domain.models import Book, Rating, RatingScore
 from src.books.application.repositories.book_repository import AbstractBookRepo
@@ -51,5 +53,18 @@ class RatingsService(AbstractRatingsService):
     def _update_ratings(self, book: Book, rating: Rating):
         print("Running rating side effects")
         book.add_rating(rating)
-        self.book_repository.update_book(book)
+        weighted_love_rating, weighted_shit_rating = self._calculate_weighted_ratings(book)
+        self.book_repository.update_book(book, weighted_love_rating, weighted_shit_rating)
         self.rating_repository.add_rating_to_global_stats(rating)
+
+    def _calculate_weighted_ratings(self, book: Book) -> Tuple[float, float]:
+        global_stats: GlobalRatingStatsModel = self.rating_repository.get_global_stats()
+        weighted_love = self._calculate_single_weighted_rating(book.average_love_rating, book.number_of_ratings, global_stats.mean_love_rating)
+        weighted_shit = self._calculate_single_weighted_rating(book.average_shit_rating, book.number_of_ratings, global_stats.mean_shit_rating)
+        return (weighted_love, weighted_shit)
+
+    def _calculate_single_weighted_rating(self, average_score: float, num_ratings: int, global_average: float) -> float:
+        tuning_param = 1
+        rating_part = (num_ratings / (num_ratings + tuning_param)) * average_score
+        global_part = (tuning_param / (num_ratings + tuning_param)) * global_average
+        return rating_part + global_part
