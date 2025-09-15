@@ -83,11 +83,11 @@ class GlobalRatingStatsModel(Base):
     __tablename__ = "global_rating_stats"
 
     id = Column(Integer, primary_key=True, default=1)
-    
-    num_love_ratings = Column(Integer, nullable=False, default=0)
+
+    num_ratings = Column(Integer, nullable=False, default=0)
+
     sum_love_ratings = Column(Float, nullable=False, default=0.0)
     mean_love_rating = Column(Float, nullable=False, default=0.0)
 
-    num_shit_ratings = Column(Integer, nullable=False, default=0)
     sum_shit_ratings = Column(Float, nullable=False, default=0.0)
     mean_shit_rating = Column(Float, nullable=False, default=0.0)

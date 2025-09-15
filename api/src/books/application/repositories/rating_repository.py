@@ -109,12 +109,12 @@ class RatingRepo(AbstractRatingRepo):
         if global_stats is None:
             return
         
+        global_stats.num_ratings += 1
+
         global_stats.sum_love_ratings += rating.love_score.value
-        global_stats.num_love_ratings += 1
         global_stats.mean_love_rating = global_stats.sum_love_ratings / global_stats.num_love_ratings
 
         global_stats.sum_shit_ratings += rating.shit_score.value
-        global_stats.num_shit_ratings += 1
         global_stats.mean_shit_rating = global_stats.sum_shit_ratings / global_stats.num_shit_ratings
 
         self.session.commit()
