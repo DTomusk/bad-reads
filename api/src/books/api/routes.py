@@ -1,6 +1,8 @@
 from uuid import UUID
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
+from fastapi.params import Query
 
+from src.books.api.schemas.book_sort_options import BookSortOption
 from src.books.api.schemas.book_detail_response import BookDetailResponse
 from src.books.domain.models import Book
 from src.infrastructure.api.models import Outcome
@@ -18,13 +20,12 @@ async def get_books(
     get_books=Depends(get_books_use_case), 
     page: int = 1, 
     page_size: int = 10, 
-    sort_by: str = "title", 
-    sort_order: str = "asc", 
-    author_id: UUID = None):
+    sort_by: BookSortOption = Query(BookSortOption.alphabetical, description="Sorting option"), 
+    sort_order: str = "asc"):
     """
     Get all books.
     """
-    books = get_books.execute(page, page_size, sort_by, sort_order, author_id)
+    books = get_books.execute(page, page_size, sort_by, sort_order)
     return books
 
 @router.get("/search")
