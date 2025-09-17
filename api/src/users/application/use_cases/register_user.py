@@ -1,4 +1,5 @@
 from uuid import uuid4
+from src.shared.application.profanity_service import AbstractProfanityService
 from src.infrastructure.api.models import Failure, Outcome
 from src.users.application.repositories.user_repository import AbstractUserRepository
 from src.users.application.utilities.hasher import Hasher
@@ -6,9 +7,10 @@ from src.users.domain.models import Email, User, Username
 
 
 class RegisterUser:
-    def __init__(self, user_repository: AbstractUserRepository, hasher: Hasher):
+    def __init__(self, user_repository: AbstractUserRepository, hasher: Hasher, profanity_service: AbstractProfanityService):
         self.user_repository = user_repository
         self.hasher = hasher
+        self.profanity_service = profanity_service
 
     def execute(self, email: str, password: str, username: str) -> Outcome[User]:
         email_outcome = self._validate_and_check_email(email)
@@ -39,6 +41,8 @@ class RegisterUser:
         return Outcome[User](isSuccess=True, data=user)
 
     def _validate_and_check_email(self, email: str) -> Outcome[Email]:
+        if self.profanity_service.string_contains_profanity(email):
+            return Outcome(isSuccess=False, failure=Failure(error="Email contains profanity"))
         try:
             user_email = Email(email=email)
         except ValueError as ve:
@@ -50,6 +54,8 @@ class RegisterUser:
         return Outcome[Email](isSuccess=True, data=user_email)
 
     def _validate_and_check_username(self, username: str) -> Outcome[Username]:
+        if self.profanity_service.string_contains_profanity(username):
+            return Outcome(isSuccess=False, failure=Failure(error="Username contains profanity"))
         try:
             user_username = Username(username=username)
         except ValueError as ve:
