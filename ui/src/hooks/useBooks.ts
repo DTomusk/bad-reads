@@ -15,7 +15,7 @@ type UseBooksParams = {
 export const useBooks = ({
   page = 1,
   page_size = 10,
-  sort_by = "most_loved",
+  sort_by = "most_poos",
   sort_order = "desc",
 }: UseBooksParams = {}) => {
   return useQuery({
