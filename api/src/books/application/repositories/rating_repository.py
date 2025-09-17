@@ -4,7 +4,7 @@ from sqlalchemy import UUID
 from sqlalchemy.orm import Session
 
 from src.books.domain.models import Rating, RatingScore
-from src.books.application.models import RatingModel
+from src.books.application.models import GlobalRatingStatsModel, RatingModel
 
 class AbstractRatingRepo(ABC):
     @abstractmethod
@@ -44,17 +44,27 @@ class AbstractRatingRepo(ABC):
         """
         pass
 
+    @abstractmethod
+    def get_global_stats() -> GlobalRatingStatsModel:
+        """
+        Gets the global stats entry
+        :return: The global stats entry, including average ratings
+        """
+
+    @abstractmethod
+    def add_rating_to_global_stats(rating: Rating) -> None:
+        """
+        Update global rating stats
+        :param rating: The rating needed to be added to the global stats
+        :return: None
+        """
+        pass
+
 class RatingRepo(AbstractRatingRepo):
     def __init__(self, session: Session):
         self.session = session
 
     def get_rating_by_user_and_book(self, user_id: UUID, book_id: UUID) -> Rating:
-        """
-        Get a rating by user ID and book ID.
-        :param user_id: The ID of the user.
-        :param book_id: The ID of the book.
-        :return: The rating object or None if not found.
-        """
         result = (self.session.query(RatingModel)
             .filter(RatingModel.user_id == user_id, RatingModel.book_id == book_id)
             .first()
@@ -70,11 +80,6 @@ class RatingRepo(AbstractRatingRepo):
         return None
     
     def get_ratings_by_book_id(self, book_id: UUID) -> list[Rating]:
-        """
-        Get all ratings for a book.
-        :param book_id: The ID of the book to get ratings for.
-        :return: A list of rating objects.
-        """
         result = self.session.query(RatingModel).filter(RatingModel.book_id == book_id).all()
         return [Rating(
             id=result.id, 
@@ -86,11 +91,6 @@ class RatingRepo(AbstractRatingRepo):
             for result in result]
 
     def create_rating(self, rating: Rating):
-        """
-        Create a new rating in the repository.
-        :param rating: The rating object to create.
-        :return: None
-        """
         rating_model = RatingModel(
             id=rating.id,
             book_id=rating.book_id,
@@ -102,11 +102,6 @@ class RatingRepo(AbstractRatingRepo):
         self.session.commit()
 
     def update_rating(self, rating: Rating):
-        """
-        Update a rating in the repository.
-        :param rating: The rating object to update.
-        :return: None
-        """
         rating_model = self.session.query(RatingModel).filter(RatingModel.id == rating.id).first()
         if rating_model:
             rating_model.love_score = rating.love_score.value
@@ -114,3 +109,22 @@ class RatingRepo(AbstractRatingRepo):
             self.session.commit()
         else:
             raise ValueError("Rating not found")
+        
+    def add_rating_to_global_stats(self, rating: Rating):
+        global_stats = self.session.query(GlobalRatingStatsModel).first()
+        # TODO: this should be logged 
+        if global_stats is None:
+            return
+        
+        global_stats.num_ratings += 1
+
+        global_stats.sum_love_ratings += rating.love_score.value
+        global_stats.mean_love_rating = global_stats.sum_love_ratings / global_stats.num_ratings
+
+        global_stats.sum_shit_ratings += rating.shit_score.value
+        global_stats.mean_shit_rating = global_stats.sum_shit_ratings / global_stats.num_ratings
+
+        self.session.commit()
+
+    def get_global_stats(self) -> GlobalRatingStatsModel:
+        return self.session.query(GlobalRatingStatsModel).first()

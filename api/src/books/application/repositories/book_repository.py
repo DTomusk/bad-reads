@@ -28,13 +28,29 @@ class AbstractBookRepo(ABC):
         pass
 
     @abstractmethod
-    def get_books(self, page: int = 1, page_size: int = 10, sort_by: str = "title", sort_order: str = "asc") -> list[Book]:
+    def get_books_alphabetically(self, page: int = 1, page_size: int = 10, sort_order: str = "asc") -> list[Book]:
         """
-        Get all books.
+        Get a page of books ordered by title.
         :param page: The page number to retrieve.
         :param page_size: The number of books per page.
         :param sort_by: The field to sort the books by.
         :param sort_order: The order to sort the books by.
+        :return: A list of book objects.
+        """
+        pass
+
+    @abstractmethod
+    def get_books_by_hearts(self, page: int = 1, page_size: int = 10, sort_order: str = "asc") -> list[Book]:
+        """
+        Get all books ordered by weighted heart rating.
+        :return: A list of book objects.
+        """
+        pass
+
+    @abstractmethod
+    def get_books_by_poos(self, page: int = 1, page_size: int = 10, sort_order: str = "asc") -> list[Book]:
+        """
+        Get all books ordered by weighted poo rating.
         :return: A list of book objects.
         """
         pass
@@ -72,10 +88,12 @@ class AbstractBookRepo(ABC):
         pass
     
     @abstractmethod
-    def update_book(self, book: Book) -> Book:
+    def update_book(self, book: Book, weighted_love_rating: float, weighted_shit_rating: float) -> Book:
         """
         Update a book.
         :param book: The book object to update.
+        :param weighted_love_rating: love rating used for global sorting
+        :param weighted_shit_rating: shit rating used for global sorting
         :return: The updated book object.
         """
         pass
@@ -166,13 +184,41 @@ class BookRepo(AbstractBookRepo):
         result = self.session.query(BookModel).filter(BookModel.id.in_(book_ids)).all()
         return [self._create_book_from_db_result(book) for book in result]
     
-    def get_books(self, page: int = 1, page_size: int = 10, sort_by: str = "title", sort_order: str = "asc") -> list[Book]:
+    def get_books_alphabetically(self, page: int = 1, page_size: int = 10, sort_order: str = "asc") -> list[Book]:
         """
         Get all books.
         :return: A list of book objects.
         """
         result = (self.session.query(BookModel)
-            .order_by(getattr(BookModel, sort_by).asc() if sort_order == "asc" else getattr(BookModel, sort_by).desc())
+            .order_by(getattr(BookModel, "title").asc() if sort_order == "asc" else getattr(BookModel, "sort_by").desc())
+            .offset((page - 1) * page_size)
+            .limit(page_size)
+            .all())
+        return [self._create_book_from_db_result(book) for book in result]
+    
+    def get_books_by_hearts(self, page: int = 1, page_size: int = 10, sort_order: str = "asc") -> list[Book]:
+        """
+        Get all books ordered by weighted heart rating.
+        :return: A list of book objects.
+        """
+        result = (self.session.query(BookModel)
+            .filter(BookModel.global_weighted_love_rating.isnot(None),
+                BookModel.number_of_ratings != 0)
+            .order_by(getattr(BookModel, "global_weighted_love_rating").asc() if sort_order == "asc" else getattr(BookModel, "global_weighted_love_rating").desc())
+            .offset((page - 1) * page_size)
+            .limit(page_size)
+            .all())
+        return [self._create_book_from_db_result(book) for book in result]
+    
+    def get_books_by_poos(self, page: int = 1, page_size: int = 10, sort_order: str = "asc") -> list[Book]:
+        """
+        Get all books ordered by weighted poo rating.
+        :return: A list of book objects.
+        """
+        result = (self.session.query(BookModel)
+            .filter(BookModel.global_weighted_shit_rating.isnot(None),
+                BookModel.number_of_ratings != 0)
+            .order_by(getattr(BookModel, "global_weighted_shit_rating").asc() if sort_order == "asc" else getattr(BookModel, "global_weighted_shit_rating").desc())
             .offset((page - 1) * page_size)
             .limit(page_size)
             .all())
@@ -223,7 +269,7 @@ class BookRepo(AbstractBookRepo):
         self.session.add(self._create_book_model_from_domain_model(book))
         self.session.commit()
 
-    def update_book(self, book: Book) -> Book:
+    def update_book(self, book: Book, weighted_love_rating: float, weighted_shit_rating: float) -> Book:
         """
         Update a book.
         :param book: The book object to update.
@@ -234,7 +280,9 @@ class BookRepo(AbstractBookRepo):
             BookModel.average_shit_rating: book.average_shit_rating,
             BookModel.number_of_ratings: book.number_of_ratings,
             BookModel.sum_of_love_ratings: book.sum_of_love_ratings,
-            BookModel.sum_of_shit_ratings: book.sum_of_shit_ratings
+            BookModel.sum_of_shit_ratings: book.sum_of_shit_ratings,
+            BookModel.global_weighted_love_rating: weighted_love_rating,
+            BookModel.global_weighted_shit_rating: weighted_shit_rating
         })
         self.session.commit()
 
