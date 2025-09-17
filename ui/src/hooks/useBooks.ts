@@ -8,7 +8,7 @@ import { BookWithReviewResponse } from "../types/bookwithreviewresponse";
 type UseBooksParams = {
   page?: number;
   page_size?: number;
-  sort_by?: string;
+  sort_by?: "alphabetical" | "most_loved" | "most_poos";
   sort_order?: "asc" | "desc";
 };
 
