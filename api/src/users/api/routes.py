@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 
-from src.infrastructure.api.models import Failure, Outcome
+from src.shared.api.dependencies import get_profanity_service
+from src.infrastructure.api.models import Outcome
 from src.users.api.dependencies import get_login_use_case, get_register_user_use_case
 from src.users.api.schemas.registration_request import RegistrationRequest
 

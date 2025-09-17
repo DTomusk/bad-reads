@@ -1,7 +1,9 @@
 from fastapi import FastAPI, Request
+from fastapi.concurrency import asynccontextmanager
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from src.shared.application.profanity_service import ProfanityService
 from src.config import get_settings
 
 from src.books.api.routes import router as books_router
@@ -9,12 +11,20 @@ from src.users.api.routes import router as users_router
 
 settings = get_settings()
 
+# TODO: put all singletons in here and pull them out into their own file
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    app.state.profanity_service = ProfanityService()
+    yield
+    app.state.profanity_service = None
+
 app = FastAPI(
     title="Book Rating API",
     description="API for rating books",
     version="1.0.0",
     debug=settings.DEBUG,
     redirect_slashes=False,
+    lifespan=lifespan
 )
 
 @app.exception_handler(RequestValidationError)
