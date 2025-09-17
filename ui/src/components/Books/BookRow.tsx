@@ -8,7 +8,7 @@ export default function BookRow({ books }: { books: TBook[] }) {
 
     return (
         <Stack>
-            <Title order={2}>Worst Books of the Month</Title>
+            <Title order={2}>Worst Books of all time</Title>
             <Divider/>
             <Carousel withIndicators slideSize="25%" slideGap="md" emblaOptions={{loop: false, slidesToScroll: 2}}>
             {books?.map((book) => (
