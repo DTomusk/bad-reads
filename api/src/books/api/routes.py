@@ -6,7 +6,7 @@ from src.books.api.schemas.book_sort_options import BookSortOption
 from src.books.api.schemas.book_detail_response import BookDetailResponse
 from src.books.domain.models import Book
 from src.infrastructure.api.models import Outcome
-from src.books.api.dependencies.application import get_book_details_use_case, get_book_rating_use_case, get_book_reviews_use_case, get_books_use_case, get_my_book_reviews_use_case, rate_book_use_case, review_book_use_case, search_books_use_case
+from src.books.api.dependencies.application import create_rating_use_case, create_review_use_case, get_book_details_use_case, get_book_rating_use_case, get_book_reviews_use_case, get_books_use_case, get_my_book_reviews_use_case, search_books_use_case
 from src.books.api.schemas.book_search_response import BookSearchResponse
 from src.books.api.schemas.rate_request import RateRequest
 from src.books.api.schemas.review_request import ReviewRequest
@@ -78,7 +78,7 @@ async def rate_book(
         background_tasks: BackgroundTasks,
         book_id: UUID, 
         rate_request: RateRequest,
-        rate_book=Depends(rate_book_use_case), 
+        rate_book=Depends(create_rating_use_case), 
         user_id=Depends(get_current_user)):
     """
     Rate a book by its ID.
@@ -93,7 +93,7 @@ async def review_book(
         background_tasks: BackgroundTasks,
         book_id: UUID, 
         review_request: ReviewRequest,
-        review_book=Depends(review_book_use_case), 
+        review_book=Depends(create_review_use_case), 
         user_id=Depends(get_current_user)):
     """
     Review a book by its ID.

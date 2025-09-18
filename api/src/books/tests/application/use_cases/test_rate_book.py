@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import MagicMock
 from uuid import uuid4
-from src.books.application.use_cases.ratings.rate_book import RateBook
+from src.books.application.use_cases.ratings.create_rating import CreateRating
 from src.books.domain.models import Rating, Book, Author, RatingScore
 
 @pytest.fixture
@@ -44,7 +44,7 @@ def test_rate_book_creates_new_rating(
     mock_book_repository, mock_rating_repository, book_id, user_id, mock_book
 ):
     # Arrange
-    use_case = RateBook(mock_book_repository, mock_rating_repository)
+    use_case = CreateRating(mock_book_repository, mock_rating_repository)
     mock_rating_repository.get_rating_by_user_and_book.return_value = None
 
     # Act
@@ -65,7 +65,7 @@ def test_rate_book_raises_if_book_already_rated(
     mock_book_repository, mock_rating_repository, book_id, user_id, mock_book
 ):
     # Arrange
-    use_case = RateBook(mock_book_repository, mock_rating_repository)
+    use_case = CreateRating(mock_book_repository, mock_rating_repository)
     initial_rating = Rating(uuid4(), book_id, user_id, RatingScore(4.0), RatingScore(2.0))
     
     # Setup mock for second rating
@@ -79,7 +79,7 @@ def test_rate_book_raises_if_book_not_found(mock_rating_repository, book_id, use
     # Arrange
     mock_book_repository = MagicMock()
     mock_book_repository.get_book_by_id.return_value = None
-    use_case = RateBook(mock_book_repository, mock_rating_repository)
+    use_case = CreateRating(mock_book_repository, mock_rating_repository)
 
     # Act & Assert
     with pytest.raises(ValueError, match="Book not found"):

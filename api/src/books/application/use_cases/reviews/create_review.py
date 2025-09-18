@@ -7,7 +7,7 @@ from src.books.application.repositories.review_repository import AbstractReviewR
 from src.books.domain.models import Review
 
 # TODO: add a case for updating a review and a case for adding a review to a book that has already been rated
-class ReviewBook:
+class CreateReview:
     def __init__(self, rating_service: AbstractRatingsService, review_repository: AbstractReviewRepo, profanity_service: AbstractProfanityService):
         self.rating_service = rating_service
         self.review_repository = review_repository

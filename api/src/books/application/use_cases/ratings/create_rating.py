@@ -4,7 +4,7 @@ from src.books.application.services.ratings_service import AbstractRatingsServic
 from src.infrastructure.api.models import Outcome
 
 
-class RateBook:
+class CreateRating:
     def __init__(self, rating_service: AbstractRatingsService):
         self.rating_service = rating_service
 

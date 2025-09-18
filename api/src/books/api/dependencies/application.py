@@ -8,9 +8,9 @@ from src.books.application.use_cases.reviews.get_reviews_for_book import GetBook
 from src.infrastructure.services.background_task_queue import FastAPIBackgroundTaskQueue
 from src.books.application.use_cases.books.search_books import SearchBooks
 from src.books.application.use_cases.books.get_book_details import GetBookDetails
-from src.books.application.use_cases.reviews.review_book import ReviewBook
+from src.books.application.use_cases.reviews.create_review import CreateReview
 from src.books.application.use_cases.books.get_books import GetBooks
-from src.books.application.use_cases.ratings.rate_book import RateBook
+from src.books.application.use_cases.ratings.create_rating import CreateRating
 from src.books.application.services.external_books_service import GoogleBooksApiService
 from src.books.application.use_cases.ratings.get_rating_for_book_for_user import GetRatingForBookForUser
 
@@ -34,17 +34,17 @@ def get_rating_service(
         book_repository=book_repository,
         background_task_queue=FastAPIBackgroundTaskQueue(background_tasks=background_tasks))
 
-def rate_book_use_case(rating_service=Depends(get_rating_service)):
+def create_rating_use_case(rating_service=Depends(get_rating_service)):
     """
-    Dependency to provide the RateBook use case.
+    Dependency to provide the CreateRating use case.
     """
-    return RateBook(rating_service=rating_service)
+    return CreateRating(rating_service=rating_service)
 
-def review_book_use_case(rating_service=Depends(get_rating_service), review_repo=Depends(get_reviews_repo), profanity_service=Depends(get_profanity_service)):
+def create_review_use_case(rating_service=Depends(get_rating_service), review_repo=Depends(get_reviews_repo), profanity_service=Depends(get_profanity_service)):
     """
-    Dependency to provide the ReviewBook use case.
+    Dependency to provide the CreateReview use case.
     """
-    return ReviewBook(rating_service=rating_service, review_repository=review_repo, profanity_service=profanity_service)
+    return CreateReview(rating_service=rating_service, review_repository=review_repo, profanity_service=profanity_service)
 
 def get_books_use_case(book_repo=Depends(get_books_repo)):
     """
