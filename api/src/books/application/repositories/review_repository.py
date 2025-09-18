@@ -39,7 +39,7 @@ class AbstractReviewRepo(ABC):
         pass
 
     @abstractmethod
-    def get_review_by_id(self, review_id: UUID) -> ReviewResponse:
+    def get_review_by_id(self, review_id: UUID) -> Review:
         """
         Get a review by its ID.
         :param review_id: The ID of the review to get.
@@ -54,6 +54,13 @@ class AbstractReviewRepo(ABC):
         :param user_id: The ID of the user.
         :param book_id: The ID of the book.
         :return: A review response object.
+        """
+        pass
+
+    @abstractmethod
+    def update_review(self, review_id: UUID, text: str):
+        """
+        Update the text of an existing review
         """
         pass
 
@@ -125,11 +132,18 @@ class ReviewRepo(AbstractReviewRepo):
         
         return review_responses
 
-    def get_review_by_id(self, review_id: UUID) -> ReviewResponse:
+    def get_review_by_id(self, review_id: UUID) -> Review:
         result = self.session.query(ReviewModel).filter(ReviewModel.id == review_id).first()
         if not result:
             return None
-        return self._create_review_response(result)
+        return Review(
+            id=result.id,
+            book_id=result.book_id,
+            user_id=result.user_id,
+            text=result.text,
+            rating_id=result.rating_id,
+            date_created=result.date_created
+        )
     
     def get_review_by_user_and_book(self, user_id: UUID, book_id: UUID) -> ReviewResponse:
         result = self.session.query(ReviewModel).filter(
@@ -139,4 +153,13 @@ class ReviewRepo(AbstractReviewRepo):
         if not result:
             return None
         return self._create_review_response(result)
+    
+    def update_review(self, review_id: UUID, text: str):
+        review_model = self.session.query(ReviewModel).filter(ReviewModel.id == review_id).first()
+        if review_model is None:
+            raise ValueError("Review not found")
+        
+        review_model.text = text
+        self.session.commit()
+
     

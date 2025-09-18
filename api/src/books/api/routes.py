@@ -6,7 +6,7 @@ from src.books.api.schemas.book_sort_options import BookSortOption
 from src.books.api.schemas.book_detail_response import BookDetailResponse
 from src.books.domain.models import Book
 from src.infrastructure.api.models import Outcome
-from src.books.api.dependencies.application import create_rating_use_case, create_review_use_case, get_book_details_use_case, get_book_rating_use_case, get_book_reviews_use_case, get_books_use_case, get_my_book_reviews_use_case, search_books_use_case
+from src.books.api.dependencies.application import create_rating_use_case, create_review_use_case, get_book_details_use_case, get_book_rating_use_case, get_book_reviews_use_case, get_books_use_case, get_my_book_reviews_use_case, search_books_use_case, update_rating_use_case, update_review_use_case
 from src.books.api.schemas.book_search_response import BookSearchResponse
 from src.books.api.schemas.rate_request import RateRequest
 from src.books.api.schemas.review_request import ReviewRequest
@@ -87,6 +87,22 @@ async def rate_book(
 
     if not outcome.isSuccess:
         raise HTTPException(status_code=outcome.failure.code, detail=outcome.failure.error)
+    
+@router.post("/{book_id}/rate/{rating_id}/update")
+async def update_rating(
+        background_tasks: BackgroundTasks,
+        book_id: UUID, 
+        rating_id: UUID,
+        rate_request: RateRequest,
+        update_rating=Depends(update_rating_use_case), 
+        user_id=Depends(get_current_user)):
+    """
+    Rate a book by its ID.
+    """
+    outcome: Outcome = update_rating.execute(rating_id=rating_id, book_id=book_id, user_id=user_id, love_score=rate_request.love_score, shit_score=rate_request.shit_score)
+
+    if not outcome.isSuccess:
+        raise HTTPException(status_code=outcome.failure.code, detail=outcome.failure.error)
 
 @router.post("/{book_id}/review")
 async def review_book(
@@ -99,6 +115,30 @@ async def review_book(
     Review a book by its ID.
     """
     outcome: Outcome = review_book.execute(book_id=book_id, user_id=user_id, text=review_request.text, love_score=review_request.love_score, shit_score=review_request.shit_score)
+
+    if not outcome.isSuccess:
+        raise HTTPException(status_code=outcome.failure.code, detail=outcome.failure.error)
+
+    return {"message": "Book reviewed successfully"}
+
+@router.post("/{book_id}/review/{review_id}/update")
+async def update_review(
+        background_tasks: BackgroundTasks,
+        review_id: UUID,
+        book_id: UUID, 
+        review_request: ReviewRequest,
+        update_review=Depends(update_review_use_case), 
+        user_id=Depends(get_current_user)):
+    """
+    Review a book by its ID.
+    """
+    outcome: Outcome = update_review.execute(
+        review_id=review_id,
+        book_id=book_id, 
+        user_id=user_id, 
+        text=review_request.text, 
+        love_score=review_request.love_score, 
+        shit_score=review_request.shit_score)
 
     if not outcome.isSuccess:
         raise HTTPException(status_code=outcome.failure.code, detail=outcome.failure.error)

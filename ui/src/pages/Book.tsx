@@ -26,7 +26,7 @@ export default function Book() {
   const { data: book, isLoading: isLoadingBook, error: errorBook, refetch: refetchBook } = useBook(id || "");
   const [ratingModalOpened, { open: openRatingModal, close: closeRatingModal }] = useDisclosure(false);
   const { isAuthenticated } = useAuth();
-  const { data: userRating, isLoading: isLoadingUserRating, refetch: refetchUserRating } = useUserRating(id || "");
+  const { data: userRating, isLoading: isLoadingUserRating, refetch: refetchUserRating } = useUserRating(id || "", isAuthenticated);
   const [sort, setSort] = useState<string>("Newest");
   const { data: reviews, isLoading: isLoadingReviews, error: errorReviews, refetch: refetchReviews } = useReviews(id || "", sort);
   const updateSort = (value: string) => {

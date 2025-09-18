@@ -1,4 +1,4 @@
-from uuid import UUID, uuid4
+from uuid import UUID
 
 from src.books.application.services.ratings_service import AbstractRatingsService
 from src.infrastructure.api.models import Outcome

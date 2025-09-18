@@ -40,10 +40,12 @@ export const useRating = (bookId: string): UseMutationResult<RatingResponse, Err
   });
 };
 
-export const useUserRating = (bookId: string): UseQueryResult<RatingResponse, Error> => {
+export const useUserRating = (bookId: string, isAuthenticated: boolean): UseQueryResult<RatingData | null, Error> => {
   return useQuery({
     queryKey: ["userRating", bookId],
     queryFn: async () => {
+      if (!isAuthenticated)
+        return null
       const response = await apiClient.get<RatingData>(`/books/${bookId}/rating`);
       return response.data;
     },
