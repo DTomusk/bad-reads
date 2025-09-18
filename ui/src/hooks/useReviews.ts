@@ -23,6 +23,7 @@ export const useUserReview = (
       const response = await apiClient.get<ReviewResponse>(
         `/books/${bookId}/review`
       );
+      console.log(response.data)
       return response.data;
     },
     enabled: isAuthenticated && !!bookId,

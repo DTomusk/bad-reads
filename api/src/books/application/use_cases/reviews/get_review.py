@@ -14,14 +14,10 @@ class GetReview:
     def execute(self, book_id: UUID, user_id: UUID) -> Outcome[ReviewResponse]:
         rating = self.rating_repo.get_rating_by_user_and_book(user_id, book_id)
 
-        print(rating)
-
         if not rating:
             Outcome(isSuccess=False, failure=Failure(error="User has not rated this book"))
         
         review = self.review_repo.get_review_by_rating_id(rating.id)
-
-        print(review)
 
         if review is None:
             return Outcome(isSuccess=True, data=ReviewResponse.from_domain_without_review(rating=rating))

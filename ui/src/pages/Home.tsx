@@ -7,7 +7,8 @@ import { useBooks } from "../hooks/useBooks";
 export default function Home() {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
-  const { data: books } = useBooks();
+  const { data: poo_books } = useBooks();
+  const { data: heart_books } = useBooks({sort_by:'most_loved', sort_order:'desc'})
   return (
     <Stack>
       <Stack gap="lg" mt="5rem" align="center" mb="5rem"> 
@@ -69,7 +70,8 @@ export default function Home() {
         </Text>}
         {!isAuthenticated && <Button w="auto" size="md" mt="lg" onClick={() => navigate("/register")}>Register now and start rating!</Button>}
       </Stack>
-      {isAuthenticated && <BookRow books={books || []} />}
+      {isAuthenticated && <BookRow books={poo_books || []} row_title="Poopiest books of all time"/>}
+      {isAuthenticated && <BookRow books={heart_books || []} row_title="Most loved books of all time"/>}
     </Stack>
   );
 }

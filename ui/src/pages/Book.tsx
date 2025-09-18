@@ -102,6 +102,7 @@ export default function Book() {
       errorReviews={errorReviews as Error | null} 
       />
 
+      {!isLoadingUserRating &&
       <RatingModal
         opened={ratingModalOpened}
         onClose={() => {
@@ -115,7 +116,7 @@ export default function Book() {
         love_score={userReview?.love_score || 0}
         shit_score={userReview?.shit_score || 0}
         text={userReview?.text || ""}
-      />
+      />}
     </Stack>
   );
 }

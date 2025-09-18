@@ -163,8 +163,6 @@ async def get_review_or_rating(
     user_id=Depends(get_current_user)):
     outcome: Outcome = get_review.execute(book_id, user_id)
 
-    print(outcome)
-
     if not outcome.isSuccess:
         raise HTTPException(status_code=outcome.failure.code, detail=outcome.failure.error)
 
