@@ -1,5 +1,6 @@
 export type ReviewResponse = {
-    id: string;
+    review_id: string;
+    rating_id: string;
     book_id: string;
     user_id: string;
     text: string;

@@ -17,6 +17,9 @@ interface RatingModalProps {
   onClose: () => void;
   bookTitle: string;
   bookId: string;
+  love_score: number
+  shit_score: number
+  text: string
 }
 
 const getBadRatingText = (value: number) => {
@@ -37,10 +40,10 @@ const getGoodRatingText = (value: number) => {
   return "It was completely life changing";
 };
 
-export default function RatingModal({ opened, onClose, bookTitle, bookId }: RatingModalProps) {
-  const [hearts, setHearts] = useState(0);
-  const [poos, setPoos] = useState(0);
-  const [review, setReview] = useState("");
+export default function RatingModal({ opened, onClose, bookTitle, bookId, love_score, shit_score, text }: RatingModalProps) {
+  const [hearts, setHearts] = useState(love_score);
+  const [poos, setPoos] = useState(shit_score);
+  const [review, setReview] = useState(text);
   const queryClient = useQueryClient();
   const { mutate: submitRating, isPending: isLoading } = useRating(bookId);
 

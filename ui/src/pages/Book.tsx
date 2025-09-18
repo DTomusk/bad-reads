@@ -17,8 +17,7 @@ import { useAuth } from "../auth/AuthProvider";
 import { ExpandableText } from "../components/Shared/ExpandableText";
 import ReviewContainer from "../components/Reviews/ReviewContainer";
 import EmojiScoreExpanded from "../components/Ratings/EmojiScoreExpanded";
-import { useUserRating } from "../hooks/useRating";
-import { useReviews } from "../hooks/useReviews";
+import { useReviews, useUserReview } from "../hooks/useReviews";
 import { useState } from "react";
 
 export default function Book() {
@@ -26,7 +25,7 @@ export default function Book() {
   const { data: book, isLoading: isLoadingBook, error: errorBook, refetch: refetchBook } = useBook(id || "");
   const [ratingModalOpened, { open: openRatingModal, close: closeRatingModal }] = useDisclosure(false);
   const { isAuthenticated } = useAuth();
-  const { data: userRating, isLoading: isLoadingUserRating, refetch: refetchUserRating } = useUserRating(id || "", isAuthenticated);
+  const { data: userReview, isLoading: isLoadingUserRating, refetch: refetchUserRating } = useUserReview(id || "", isAuthenticated);
   const [sort, setSort] = useState<string>("Newest");
   const { data: reviews, isLoading: isLoadingReviews, error: errorReviews, refetch: refetchReviews } = useReviews(id || "", sort);
   const updateSort = (value: string) => {
@@ -59,12 +58,18 @@ export default function Book() {
           src={book.picture_url}
           alt={`${book.title} image`}
         />
-        {isAuthenticated && <Button
-              onClick={openRatingModal}
-              disabled={isLoadingUserRating || userRating !== null}
-            >
-              Rate
-            </Button>}
+        {isAuthenticated && (
+          <Button
+            onClick={() => {
+              if (!isLoadingUserRating) {
+                openRatingModal();
+              }
+            }}
+            disabled={isLoadingUserRating}
+          >
+            {userReview ? "Update rating" : "Rate"}
+          </Button>
+        )}
         </Stack>
         <Flex direction="column" gap="md">
             <Title order={1}>{book.title}</Title>
@@ -107,6 +112,9 @@ export default function Book() {
         }}
         bookTitle={book.title}
         bookId={id || ""}
+        love_score={userReview?.love_score || 0}
+        shit_score={userReview?.shit_score || 0}
+        text={userReview?.text || ""}
       />
     </Stack>
   );

@@ -29,7 +29,7 @@ class ReviewResponse(BaseModel):
         )
     
     @classmethod
-    def from_domain(cls, rating: Rating) -> "ReviewResponse":
+    def from_domain_without_review(cls, rating: Rating) -> "ReviewResponse":
         return cls(
             rating_id=rating.id,
             review_id=None,

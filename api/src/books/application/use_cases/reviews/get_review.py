@@ -24,6 +24,6 @@ class GetReview:
         print(review)
 
         if review is None:
-            return Outcome(isSuccess=True, data=ReviewResponse.from_domain(rating=rating))
+            return Outcome(isSuccess=True, data=ReviewResponse.from_domain_without_review(rating=rating))
         
         return Outcome(isSuccess=True, data=ReviewResponse.from_domain(review=review, rating=rating))
