@@ -1,5 +1,6 @@
 from fastapi import BackgroundTasks, Depends
 
+from src.books.application.use_cases.reviews.get_review import GetReview
 from src.books.application.use_cases.reviews.update_review import UpdateReview
 from src.books.application.use_cases.ratings.update_rating import UpdateRating
 from src.shared.api.dependencies import get_profanity_service
@@ -47,6 +48,9 @@ def update_rating_use_case(rating_service=Depends(get_rating_service), rating_re
     Dependency to provide the CreateRating use case.
     """
     return UpdateRating(rating_service=rating_service, rating_repo=rating_repo)
+
+def get_review_use_case(review_repo=Depends(get_reviews_repo), rating_repo=Depends(get_ratings_repo)):
+    return GetReview(review_repo=review_repo, rating_repo=rating_repo)
 
 def create_review_use_case(rating_service=Depends(get_rating_service), review_repo=Depends(get_reviews_repo), profanity_service=Depends(get_profanity_service)):
     """

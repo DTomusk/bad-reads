@@ -6,7 +6,7 @@ from src.books.api.schemas.book_sort_options import BookSortOption
 from src.books.api.schemas.book_detail_response import BookDetailResponse
 from src.books.domain.models import Book
 from src.infrastructure.api.models import Outcome
-from src.books.api.dependencies.application import create_rating_use_case, create_review_use_case, get_book_details_use_case, get_book_rating_use_case, get_book_reviews_use_case, get_books_use_case, get_my_book_reviews_use_case, search_books_use_case, update_rating_use_case, update_review_use_case
+from src.books.api.dependencies.application import create_rating_use_case, create_review_use_case, get_book_details_use_case, get_book_rating_use_case, get_book_reviews_use_case, get_books_use_case, get_my_book_reviews_use_case, get_review_use_case, search_books_use_case, update_rating_use_case, update_review_use_case
 from src.books.api.schemas.book_search_response import BookSearchResponse
 from src.books.api.schemas.rate_request import RateRequest
 from src.books.api.schemas.review_request import ReviewRequest
@@ -155,3 +155,17 @@ async def get_book_reviews(
     """
     reviews = get_book_reviews.execute(book_id=book_id, sort=sort)
     return reviews
+
+@router.get("/{book_id}/review")
+async def get_review_or_rating(
+    book_id: UUID,
+    get_review=Depends(get_review_use_case),
+    user_id=Depends(get_current_user)):
+    outcome: Outcome = get_review.execute(book_id, user_id)
+
+    print(outcome)
+
+    if not outcome.isSuccess:
+        raise HTTPException(status_code=outcome.failure.code, detail=outcome.failure.error)
+
+    return outcome.data

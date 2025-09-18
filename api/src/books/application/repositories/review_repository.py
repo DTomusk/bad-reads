@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from src.books.domain.models import Rating, RatingScore, Review
 from src.books.application.models import ReviewModel, RatingModel
+# TODO: the repo shouldn't know about the api schemas 
 from src.books.api.schemas.review_response import ReviewResponse
 
 class AbstractReviewRepo(ABC):
@@ -44,6 +45,13 @@ class AbstractReviewRepo(ABC):
         Get a review by its ID.
         :param review_id: The ID of the review to get.
         :return: A review response object.
+        """
+        pass
+
+    @abstractmethod
+    def get_review_by_rating_id(self, rating_id: UUID) -> Review:
+        """
+        Get a review by its associated rating's ID
         """
         pass
 
@@ -144,6 +152,20 @@ class ReviewRepo(AbstractReviewRepo):
             rating_id=result.rating_id,
             date_created=result.date_created
         )
+    
+    def get_review_by_rating_id(self, rating_id: UUID) -> Review:
+        result = self.session.query(ReviewModel).filter(ReviewModel.rating_id == rating_id).first()
+        if not result:
+            return None
+        return Review(
+            id=result.id,
+            book_id=result.book_id,
+            user_id=result.user_id,
+            text=result.text,
+            rating_id=result.rating_id,
+            date_created=result.date_created
+        )
+    
     
     def get_review_by_user_and_book(self, user_id: UUID, book_id: UUID) -> ReviewResponse:
         result = self.session.query(ReviewModel).filter(
