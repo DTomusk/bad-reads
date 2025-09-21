@@ -15,14 +15,10 @@ class CreateRating:
         self.review_repo = review_repo
 
     def execute(self, book_id: UUID, user_id: UUID, love_score: float, shit_score: float, text: str) -> Outcome[UUID]:
-        print('Creating rating, hearts: ', love_score, ', poos: ', shit_score)
         existing_rating = self.rating_repo.get_rating_by_user_and_book(user_id=user_id, book_id=book_id)
         if existing_rating is None:
-            print('Rating does not exist yet, creating rating')
             return self._handle_new_rating(book_id=book_id, user_id=user_id, love_score=love_score, shit_score=shit_score, text=text)
         else:
-            print('Rating already exists, updating rating')
-            print('Existing rating: ', existing_rating.love_score, ', ', existing_rating.shit_score)
             return self._handle_existing_rating(existing_rating=existing_rating, book_id=book_id, user_id=user_id, love_score=love_score, shit_score=shit_score, text=text)
         
     def _handle_new_rating(self, book_id: UUID, user_id: UUID, love_score: float, shit_score: float, text: str) -> Outcome[UUID]:
@@ -41,12 +37,13 @@ class CreateRating:
 
     def _handle_existing_rating(self, existing_rating: Rating, book_id: UUID, user_id: UUID, love_score: float, shit_score: float, text: str) -> Outcome[UUID]:
         updated_rating = Rating(id=existing_rating.id, book_id=book_id, user_id=user_id, love_score=RatingScore(love_score), shit_score=RatingScore(shit_score))
-        print('Updated rating: ', updated_rating.love_score, ', ', updated_rating.shit_score)
 
-        update_outcome = self.rating_service.update_rating(book_id=book_id, old_rating=existing_rating, new_rating=updated_rating)
+        # If the scores haven't changed, no need to update the rating
+        if existing_rating.love_score != updated_rating.love_score or existing_rating.shit_score != existing_rating.shit_score:
+            update_outcome = self.rating_service.update_rating(book_id=book_id, old_rating=existing_rating, new_rating=updated_rating)
 
-        if not update_outcome.isSuccess:
-            return update_outcome
+            if not update_outcome.isSuccess:
+                return update_outcome
 
         existing_review = self.review_repo.get_review_by_rating_id(existing_rating.id)
 
@@ -67,6 +64,7 @@ class CreateRating:
 
         # update an existing review 
         self.review_repo.update_review(review_id=existing_review.id, text=text)
+        return Outcome(isSuccess=True, data=existing_rating.id)
 
         
         
