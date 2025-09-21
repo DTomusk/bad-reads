@@ -21,7 +21,7 @@ export const useUserReview = (
     queryKey: ["userRating", bookId],
     queryFn: async () => {
       const response = await apiClient.get<ReviewResponse>(
-        `/books/${bookId}/review`
+        `/books/${bookId}/user-rating`
       );
       console.log(response.data)
       return response.data;

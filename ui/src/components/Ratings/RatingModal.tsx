@@ -20,8 +20,6 @@ interface RatingModalProps {
   love_score: number
   shit_score: number
   text: string
-  rating_id: string;
-  review_id: string;
 }
 
 const getBadRatingText = (value: number) => {
