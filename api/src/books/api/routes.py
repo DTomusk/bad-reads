@@ -100,8 +100,8 @@ async def get_book_reviews(
     reviews = get_book_reviews.execute(book_id=book_id, sort=sort)
     return reviews
 
-@router.get("/{book_id}/review")
-async def get_review_or_rating(
+@router.get("/{book_id}/user-rating")
+async def get_rating_for_user(
     book_id: UUID,
     get_review=Depends(get_review_use_case),
     user_id=Depends(get_current_user)):
