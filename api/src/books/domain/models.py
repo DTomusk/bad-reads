@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-import datetime
+from datetime import datetime, timezone
 import re
 from uuid import UUID
 
@@ -31,8 +31,8 @@ class Review:
         self.user_id = user_id
         self.text = text
         self.rating_id = rating_id
-        self.date_created = date_created
-    
+        self.date_created = datetime.now(timezone.utc)
+
 class Author:
     def __init__(self, id: UUID, name: str):
         self.id = id

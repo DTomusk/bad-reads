@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
+from datetime import datetime, timezone
 
 from sqlalchemy.orm import Session
 
@@ -69,6 +70,13 @@ class AbstractReviewRepo(ABC):
     def update_review(self, review_id: UUID, text: str):
         """
         Update the text of an existing review
+        """
+        pass
+
+    @abstractmethod
+    def delete_review(self, review_id: UUID):
+        """
+        Soft delete a review (set date_deleted column to now)
         """
         pass
 
@@ -182,6 +190,14 @@ class ReviewRepo(AbstractReviewRepo):
             raise ValueError("Review not found")
         
         review_model.text = text
+        self.session.commit()
+
+    def delete_review(self, review_id):
+        review_model = self.session.query(ReviewModel).filter(ReviewModel.id == review_id).first()
+        if review_model is None:
+            raise ValueError("Review not found")
+        
+        review_model.date_deleted = datetime.now(timezone.utc)
         self.session.commit()
 
     

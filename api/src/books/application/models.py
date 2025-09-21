@@ -64,6 +64,7 @@ class ReviewModel(Base):
     text = Column(String, index=False)
     rating_id = Column(UUID, ForeignKey("ratings.id"), index=True)
     date_created = Column(DateTime, index=False)
+    date_deleted = Column(DateTime, index=False, default=None)
 
     book = relationship("BookModel", back_populates="reviews")
     user = relationship("UserModel", back_populates="reviews")

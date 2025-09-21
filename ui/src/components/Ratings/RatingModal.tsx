@@ -20,6 +20,8 @@ interface RatingModalProps {
   love_score: number
   shit_score: number
   text: string
+  rating_id: string;
+  review_id: string;
 }
 
 const getBadRatingText = (value: number) => {
@@ -58,6 +60,7 @@ export default function RatingModal({ opened, onClose, bookTitle, bookId, love_s
         },
         onError: () => {
           // Keep modal open on error so user can try again
+          // TODO: show error message
         }
       }
     );

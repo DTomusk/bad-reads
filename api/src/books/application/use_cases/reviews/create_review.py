@@ -30,7 +30,7 @@ class CreateReview:
         rating_id = rating_outcome.data
 
         # Create a new review
-        new_review = Review(uuid4(), book_id, user_id, text, rating_id, datetime.now(timezone.utc))
+        new_review = Review(uuid4(), book_id, user_id, text, rating_id)
         self.review_repository.create_review(new_review)
 
         return Outcome(isSuccess=True)
