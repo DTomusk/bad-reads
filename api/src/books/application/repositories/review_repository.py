@@ -120,7 +120,7 @@ class ReviewRepo(AbstractReviewRepo):
 
     def get_reviews_by_book_id(self, book_id: UUID, sort_by: str = "date_created", sort_order: str = "desc", limit: int = 10) -> list[ReviewResponse]:
         result = (self.session.query(ReviewModel)
-            .filter(ReviewModel.book_id == book_id)
+            .filter(ReviewModel.book_id == book_id, ReviewModel.date_deleted.is_(None))
             .order_by(getattr(ReviewModel, sort_by).asc() if sort_order == "asc" else getattr(ReviewModel, sort_by).desc())
             .limit(limit)
             .all())
@@ -136,7 +136,7 @@ class ReviewRepo(AbstractReviewRepo):
         return review_responses
 
     def get_reviews_by_user_id(self, user_id: UUID) -> list[ReviewResponse]:
-        result = self.session.query(ReviewModel).filter(ReviewModel.user_id == user_id).all()
+        result = self.session.query(ReviewModel).filter(ReviewModel.user_id == user_id, ReviewModel.date_deleted.is_(None)).all()
         if not result:
             return []
         
@@ -184,12 +184,14 @@ class ReviewRepo(AbstractReviewRepo):
             return None
         return self._create_review_response(result)
     
+    # Updating a review also undeletes it
     def update_review(self, review_id: UUID, text: str):
         review_model = self.session.query(ReviewModel).filter(ReviewModel.id == review_id).first()
         if review_model is None:
             raise ValueError("Review not found")
         
         review_model.text = text
+        review_model.date_deleted = None
         self.session.commit()
 
     def delete_review(self, review_id):
