@@ -126,9 +126,9 @@ class RatingRepo(AbstractRatingRepo):
         ) 
     
     def get_ratings_for_ids(self, ids):
-        result: list[RatingModel] = self.session.query(RatingModel).filter(RatingModel.id._in(ids)).all()
+        result: list[RatingModel] = self.session.query(RatingModel).filter(RatingModel.id.in_(ids)).all()
         if not result: 
-            return None
+            return []
         return [Rating(
             id=rating.id, 
             book_id=rating.book_id, 

@@ -52,6 +52,7 @@ class RatingWithReview:
         self.date_created = date_created
 
 class RatingWithReviewFactory: 
+    @staticmethod
     def create(rating: Rating, review: Review) -> RatingWithReview:
         if rating.id != review.rating_id:
             raise ValueError("Used wrong review for rating")
@@ -70,7 +71,10 @@ class RatingWithReviewFactory:
             date_created=review.date_created
             )
     
+    @staticmethod
     def create_list(ratings: list[Rating], reviews: list[Review]) -> list[RatingWithReview]:
+        if ratings == [] and reviews == []:
+            return []
         combined: list[RatingWithReview] = []
         rating_map = {r.id: r for r in ratings}
 

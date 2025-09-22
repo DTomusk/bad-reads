@@ -57,7 +57,7 @@ class UserRepository(AbstractUserRepository):
         return None
     
     def get_by_ids(self, user_ids):
-        results = self.session.query(UserModel).filter_by(UserModel.id.in_(user_ids)).all()
+        results = self.session.query(UserModel).filter(UserModel.id.in_(user_ids)).all()
         users_by_id = {
             row.id: User(
                 id=row.id,

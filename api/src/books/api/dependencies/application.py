@@ -1,5 +1,7 @@
 from fastapi import BackgroundTasks, Depends
 
+from src.books.application.services.rating_with_review_service import RatingWithReviewService
+from src.users.api.dependencies import get_user_repository
 from src.books.application.use_cases.reviews.get_review import GetReview
 from src.shared.api.dependencies import get_profanity_service
 from src.books.application.services.ratings_service import RatingsService
@@ -34,6 +36,9 @@ def get_rating_service(
         rating_repository=rating_repository,
         book_repository=book_repository,
         background_task_queue=FastAPIBackgroundTaskQueue(background_tasks=background_tasks))
+
+def get_rating_with_review_service(rating_repo=Depends(get_ratings_repo)):
+    return RatingWithReviewService(rating_repo=rating_repo)
 
 def create_rating_use_case(rating_service=Depends(get_rating_service), rating_repo=Depends(get_ratings_repo), review_repo=Depends(get_reviews_repo)):
     """
@@ -84,11 +89,11 @@ def get_book_rating_use_case(rating_repo=Depends(get_ratings_repo)):
     """
     return GetRatingForBookForUser(rating_repository=rating_repo)
 
-def get_book_reviews_use_case(review_repo=Depends(get_reviews_repo)):
+def get_book_reviews_use_case(review_repo=Depends(get_reviews_repo), user_repo=Depends(get_user_repository), rr_service=Depends(get_rating_with_review_service)):
     """
     Dependency to provide the GetBookReviews use case.
     """
-    return GetBookReviews(review_repository=review_repo)
+    return GetBookReviews(review_repository=review_repo, user_repo=user_repo, rating_with_review_service=rr_service)
 
 def get_my_book_reviews_use_case(review_repo=Depends(get_reviews_repo), book_repo=Depends(get_books_repo)):
     """

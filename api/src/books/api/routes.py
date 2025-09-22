@@ -2,6 +2,9 @@ from uuid import UUID
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 from fastapi.params import Query
 
+from src.books.application.use_cases.books.search_books import SearchBooks
+from src.books.application.use_cases.books.get_books import GetBooks
+from src.books.application.use_cases.reviews.get_reviews_for_book import GetBookReviews
 from src.books.api.schemas.book_sort_options import BookSortOption
 from src.books.api.schemas.book_detail_response import BookDetailResponse
 from src.books.domain.models import Book
@@ -16,7 +19,7 @@ router = APIRouter()
 
 @router.get("/")
 async def get_books(
-    get_books=Depends(get_books_use_case), 
+    get_books: GetBooks = Depends(get_books_use_case), 
     page: int = 1, 
     page_size: int = 10, 
     sort_by: BookSortOption = Query(BookSortOption.alphabetical, description="Sorting option"), 
@@ -31,7 +34,7 @@ async def get_books(
 async def search_books(
         query: str,
         background_tasks: BackgroundTasks,
-        search_books=Depends(search_books_use_case),
+        search_books: SearchBooks = Depends(search_books_use_case),
         page_size: int = 10,
         page: int = 1) -> BookSearchResponse:
     """
@@ -43,7 +46,7 @@ async def search_books(
 @router.get("/my-reviews")
 async def get_my_book_reviews(
     get_my_book_reviews=Depends(get_my_book_reviews_use_case),
-    user_id=Depends(get_current_user)):
+    user_id: str = Depends(get_current_user)):
     """
     Get reviews of books by the current user.
     """
@@ -51,7 +54,9 @@ async def get_my_book_reviews(
     return reviews
 
 @router.get("/{book_id}")
-async def get_book_details(book_id: UUID, get_book_details=Depends(get_book_details_use_case)):
+async def get_book_details(
+    book_id: UUID, 
+    get_book_details=Depends(get_book_details_use_case)):
     """
     Get details of a book by its ID.
     """
@@ -65,7 +70,10 @@ async def get_book_details(book_id: UUID, get_book_details=Depends(get_book_deta
     return response
 
 @router.get("/{book_id}/rating")
-async def get_book_rating(book_id: UUID, get_book_rating=Depends(get_book_rating_use_case), user_id=Depends(get_current_user)):
+async def get_book_rating(
+    book_id: UUID, 
+    get_book_rating=Depends(get_book_rating_use_case), 
+    user_id=Depends(get_current_user)):
     """
     Get rating of a book by its ID.
     """
@@ -93,7 +101,7 @@ async def rate_book(
 async def get_book_reviews(
     book_id: UUID, 
     sort: str = "newest", 
-    get_book_reviews=Depends(get_book_reviews_use_case)):
+    get_book_reviews: GetBookReviews =Depends(get_book_reviews_use_case)):
     """
     Get reviews of a book by its ID.
     """

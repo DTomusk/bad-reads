@@ -30,6 +30,9 @@ class GetBookReviews():
 
         ratings_with_reviews: list[RatingWithReview] = self.rating_with_review_serivce.get_ratings_with_reviews_from_reviews(reviews)
 
+        if ratings_with_reviews == []:
+            return []
+
         user_details = self.user_repo.get_by_ids([review.id for review in reviews])
 
         response: list[RatingReviewWithUsernameResponse] = []
