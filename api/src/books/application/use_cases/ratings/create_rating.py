@@ -1,4 +1,3 @@
-from datetime import datetime, timezone
 from uuid import UUID, uuid4
 
 from src.books.application.repositories.review_repository import AbstractReviewRepo

@@ -9,7 +9,7 @@ interface ReviewDisplayProps {
 export default function ReviewDisplay({ review }: ReviewDisplayProps) {
     return (
         <Stack>
-            <Title order={3}>{review.user_id} wrote:</Title>
+            <Title order={3}>{review.username} wrote:</Title>
             <Group gap="md">
                 <EmojiScoreExpanded love_score={review.love_score} shit_score={review.shit_score} size="medium" />
                 <Text>{review.text}</Text>

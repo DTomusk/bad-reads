@@ -61,7 +61,7 @@ class RatingReviewWithUsernameResponse(BaseModel):
             rating_id=rating_review.rating_id,
             review_id=rating_review.review_id,
             book_id=rating_review.book_id,
-            username=user.username,
+            username=user.username.username,
             text=rating_review.text,
             date_created=rating_review.date_created,
             love_score=rating_review.love_score.value,

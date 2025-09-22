@@ -11,7 +11,6 @@ from src.books.application.use_cases.reviews.get_reviews_for_book import GetBook
 from src.infrastructure.services.background_task_queue import FastAPIBackgroundTaskQueue
 from src.books.application.use_cases.books.search_books import SearchBooks
 from src.books.application.use_cases.books.get_book_details import GetBookDetails
-from src.books.application.use_cases.reviews.create_review import CreateReview
 from src.books.application.use_cases.books.get_books import GetBooks
 from src.books.application.use_cases.ratings.create_rating import CreateRating
 from src.books.application.services.external_books_service import GoogleBooksApiService
@@ -48,12 +47,6 @@ def create_rating_use_case(rating_service=Depends(get_rating_service), rating_re
 
 def get_review_use_case(review_repo=Depends(get_reviews_repo), rating_repo=Depends(get_ratings_repo)):
     return GetReview(review_repo=review_repo, rating_repo=rating_repo)
-
-def create_review_use_case(rating_service=Depends(get_rating_service), review_repo=Depends(get_reviews_repo), profanity_service=Depends(get_profanity_service)):
-    """
-    Dependency to provide the CreateReview use case.
-    """
-    return CreateReview(rating_service=rating_service, review_repository=review_repo, profanity_service=profanity_service)
 
 def get_books_use_case(book_repo=Depends(get_books_repo)):
     """

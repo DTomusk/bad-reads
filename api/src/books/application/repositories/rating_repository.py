@@ -133,8 +133,8 @@ class RatingRepo(AbstractRatingRepo):
             id=rating.id, 
             book_id=rating.book_id, 
             user_id=rating.user_id, 
-            love_score=rating.love_score, 
-            shit_score=rating.shit_score) for rating in result]
+            love_score=RatingScore(rating.love_score), 
+            shit_score=RatingScore(rating.shit_score)) for rating in result]
 
     def create_rating(self, rating: Rating):
         rating_model = RatingModel(

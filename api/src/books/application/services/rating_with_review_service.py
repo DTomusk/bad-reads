@@ -17,9 +17,4 @@ class RatingWithReviewService(AbstractRatingWithReviewService):
         rating_ids = [review.rating_id for review in reviews]
         ratings = self.rating_repo.get_ratings_for_ids(rating_ids)
 
-        factory = RatingWithReviewFactory()
-
-        print(ratings)
-        print(reviews)
-
-        return factory.create_list(ratings=ratings, reviews=reviews)
+        return RatingWithReviewFactory.create_list(ratings=ratings, reviews=reviews)
