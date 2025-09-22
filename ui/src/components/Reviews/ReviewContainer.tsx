@@ -28,7 +28,7 @@ export default function ReviewContainer({ sort, updateSort, reviews, isLoadingRe
                 {!reviews || reviews.length === 0 && isAuthenticated && <Text mb="xl">No reviews yet, be the first to leave a review!</Text>}
                 {!reviews || reviews.length === 0 && !isAuthenticated && <Text mb="xl">No reviews yet, log in and be the first to leave a review!</Text>}
                 {reviews && reviews.map((review) => (
-                    <ReviewDisplay key={review.id} review={review} />
+                    <ReviewDisplay key={review.review_id} review={review} />
                 ))}
             </Stack>}
         </>

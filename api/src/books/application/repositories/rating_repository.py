@@ -36,6 +36,13 @@ class AbstractRatingRepo(ABC):
         pass
 
     @abstractmethod
+    def get_ratings_for_ids(self, ids: list[UUID]) -> list[Rating]:
+        """
+        Gets a list of ratings for the given ids
+        """
+        pass
+
+    @abstractmethod
     def create_rating(rating: Rating) -> None:
         """
         Create a new rating in the repository.
@@ -117,6 +124,17 @@ class RatingRepo(AbstractRatingRepo):
             love_score=RatingScore(result.love_score),
             shit_score=RatingScore(result.shit_score)
         ) 
+    
+    def get_ratings_for_ids(self, ids):
+        result: list[RatingModel] = self.session.query(RatingModel).filter(RatingModel.id._in(ids)).all()
+        if not result: 
+            return None
+        return [Rating(
+            id=rating.id, 
+            book_id=rating.book_id, 
+            user_id=rating.user_id, 
+            love_score=rating.love_score, 
+            shit_score=rating.shit_score) for rating in result]
 
     def create_rating(self, rating: Rating):
         rating_model = RatingModel(

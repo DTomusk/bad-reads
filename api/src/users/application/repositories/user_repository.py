@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
+from uuid import UUID
 from sqlalchemy.orm import Session
 
 from src.users.domain.models import Email, User, Username
@@ -15,6 +16,13 @@ class AbstractUserRepository(ABC):
     @abstractmethod
     def get_by_username(self, username: str) -> Optional[User]:
         """Get a user by username."""
+        pass
+
+    @abstractmethod
+    def get_by_ids(self, user_ids: list[UUID]) -> dict[str, User]:
+        """
+        Get a list of users by a list of ids
+        """
         pass
 
     @abstractmethod
@@ -47,6 +55,19 @@ class UserRepository(AbstractUserRepository):
                 username=Username(result.username),
             )
         return None
+    
+    def get_by_ids(self, user_ids):
+        results = self.session.query(UserModel).filter_by(UserModel.id.in_(user_ids)).all()
+        users_by_id = {
+            row.id: User(
+                id=row.id,
+                email=Email(row.email),
+                hashed_password=row.hashed_password,
+                username=Username(row.username),
+            )
+            for row in results
+        }
+        return users_by_id
     
     def save(self, user: User):
         db_user = UserModel(
