@@ -87,6 +87,7 @@ class RatingsService(AbstractRatingsService):
         return (weighted_love, weighted_shit)
 
     def _calculate_single_weighted_rating(self, average_score: float, num_ratings: int, global_average: float) -> float:
+        # TODO: we might want to move this into config, it won't be 1 forever 
         tuning_param = 1
         rating_part = (num_ratings / (num_ratings + tuning_param)) * average_score
         global_part = (tuning_param / (num_ratings + tuning_param)) * global_average
