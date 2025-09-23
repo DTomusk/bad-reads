@@ -1,3 +1,4 @@
+from typing import Optional
 from uuid import UUID, uuid4
 
 from src.books.application.repositories.review_repository import AbstractReviewRepo
@@ -13,14 +14,14 @@ class CreateRating:
         self.rating_repo = rating_repo
         self.review_repo = review_repo
 
-    def execute(self, book_id: UUID, user_id: UUID, love_score: float, shit_score: float, text: str) -> Outcome[UUID]:
+    def execute(self, book_id: UUID, user_id: UUID, love_score: float, shit_score: float, text: str = None) -> Outcome[UUID]:
         existing_rating = self.rating_repo.get_rating_by_user_and_book(user_id=user_id, book_id=book_id)
         if existing_rating is None:
             return self._handle_new_rating(book_id=book_id, user_id=user_id, love_score=love_score, shit_score=shit_score, text=text)
         else:
             return self._handle_existing_rating(existing_rating=existing_rating, book_id=book_id, user_id=user_id, love_score=love_score, shit_score=shit_score, text=text)
         
-    def _handle_new_rating(self, book_id: UUID, user_id: UUID, love_score: float, shit_score: float, text: str) -> Outcome[UUID]:
+    def _handle_new_rating(self, book_id: UUID, user_id: UUID, love_score: float, shit_score: float, text: str = None) -> Outcome[UUID]:
         outcome: Outcome[UUID] = self.rating_service.create_rating(book_id=book_id, user_id=user_id, love_score=love_score, shit_score=shit_score)
 
         # If we failed to create a rating, or there is nothing left to do (no review), then return 
@@ -34,7 +35,7 @@ class CreateRating:
 
         return outcome
 
-    def _handle_existing_rating(self, existing_rating: Rating, book_id: UUID, user_id: UUID, love_score: float, shit_score: float, text: str) -> Outcome[UUID]:
+    def _handle_existing_rating(self, existing_rating: Rating, book_id: UUID, user_id: UUID, love_score: float, shit_score: float, text: str = None) -> Outcome[UUID]:
         updated_rating = Rating(id=existing_rating.id, book_id=book_id, user_id=user_id, love_score=RatingScore(love_score), shit_score=RatingScore(shit_score))
 
         # If the scores haven't changed, no need to update the rating
