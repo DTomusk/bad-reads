@@ -45,7 +45,7 @@ def test_get_book_details_returns_book(mock_book_repository, book_id, mock_book)
     assert result is not None
     assert result.isSuccess
     assert result.data.title == mock_book.title
-    assert result.data.authors == [author.name for author in mock_book.authors]
+    assert result.data.authors == mock_book.authors
     assert result.data.average_love_rating == mock_book.average_love_rating
     assert result.data.average_shit_rating == mock_book.average_shit_rating
     assert result.data.number_of_ratings == mock_book.number_of_ratings
