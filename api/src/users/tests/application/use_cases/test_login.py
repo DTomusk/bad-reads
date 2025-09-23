@@ -56,24 +56,35 @@ def test_login_success(login, mock_user_repository, mock_hasher, mock_token_serv
     mock_hasher.verify.assert_called_once_with(password, "hashed_password")
     mock_token_service.create_token.assert_called_once_with(data={"sub": str(mock_user_repository.get_by_email.return_value.id), "username":username}, expires_minutes=30)
 
-# def test_login_invalid_email(login):
-#     # Arrange
-#     email = "test@example.com"
-#     password = "securepassword"
+def test_login_invalid_email(login, mock_user_repository, mock_token_service):
+    # Arrange
+    email = "test@example.com"
+    password = "securepassword"
 
-#     # Act & Assert
-#     with pytest.raises(ValueError, match="Invalid credentials."):
-#         login.execute(email=email, password=password)
+    # Act
+    outcome = login.execute(email=email, password=password)
 
-# def test_login_invalid_password(login, mock_user_repository, mock_hasher):
-#     # Arrange
-#     mock_user_repository.get_by_email.return_value = User(
-#         id=uuid4(), email=Email(email="test@example.com"), hashed_password="hashed_password", username="validUser"
-#     )
-#     mock_hasher.verify.return_value = False
-#     email = "test@example.com"
-#     password = "securepassword"
+    # Assert 
+    assert outcome is not None
+    assert outcome.isSuccess is False
+    assert outcome.failure.error == "Invalid credentials."
+    mock_user_repository.get_by_email.assert_called_once_with(email)
+    mock_token_service.create_token.assert_not_called()
 
-#     # Act & Assert
-#     with pytest.raises(ValueError, match="Invalid credentials."):
-#         login.execute(email=email, password=password)
+def test_login_invalid_password(login, mock_user_repository, mock_hasher, mock_token_service):
+    # Arrange
+    mock_user_repository.get_by_email.return_value = User(
+        id=uuid4(), email=Email(email="test@example.com"), hashed_password="hashed_password", username="validUser"
+    )
+    mock_hasher.verify.return_value = False
+    email = "test@example.com"
+    password = "securepassword"
+
+    outcome = login.execute(email=email, password=password)
+
+    # Assert 
+    assert outcome is not None
+    assert outcome.isSuccess is False
+    assert outcome.failure.error == "Invalid credentials."
+    mock_hasher.verify.assert_called_once_with(password, "hashed_password")
+    mock_token_service.create_token.assert_not_called()
