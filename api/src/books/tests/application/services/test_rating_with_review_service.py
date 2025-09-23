@@ -47,6 +47,7 @@ def mock_rating_repo(mock_ratings):
 def test_get_ratings_with_reviews_from_reviews_no_reviews(mock_rating_repo):
     # Arrange
     service = RatingWithReviewService(rating_repo=mock_rating_repo)
+    mock_rating_repo.get_ratings_for_ids.return_value = []
 
     # Act
     result = service.get_ratings_with_reviews_from_reviews([])
@@ -55,7 +56,7 @@ def test_get_ratings_with_reviews_from_reviews_no_reviews(mock_rating_repo):
     mock_rating_repo.get_ratings_for_ids.assert_called_once_with([])
     assert len(result) == 0
 
-def test_get_ratings_with_reviews_from_reviews(mock_rating_repo, mock_reviews, mock_ratings):
+def test_get_ratings_with_reviews_from_reviews(mock_rating_repo, mock_reviews):
     # Arrange
     service = RatingWithReviewService(rating_repo=mock_rating_repo)
 

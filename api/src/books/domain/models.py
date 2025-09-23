@@ -75,6 +75,10 @@ class RatingWithReviewFactory:
     def create_list(ratings: list[Rating], reviews: list[Review]) -> list[RatingWithReview]:
         if ratings == [] and reviews == []:
             return []
+        
+        if len(ratings) != len(reviews):
+            raise ValueError("Ratings must be one-to-one with reviews")
+
         combined: list[RatingWithReview] = []
         rating_map = {r.id: r for r in ratings}
 
