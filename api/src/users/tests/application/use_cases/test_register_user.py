@@ -49,36 +49,48 @@ def test_register_user_success(register_user, mock_user_repository, mock_hasher,
     assert outcome.data.hashed_password is not None, "User hashed password should be set"
     assert outcome.data.username
     mock_user_repository.get_by_email.assert_called_once_with(email)
+    mock_user_repository.get_by_username.assert_called_once_with(username)
     mock_user_repository.save.assert_called_once_with(outcome.data)
     mock_hasher.hash.assert_called_once_with(password)
     mock_profanity_service.string_contains_profanity.called_once_with(username)
 
-# def test_register_user_existing_email(register_user, mock_user_repository, mock_hasher):
-#     # Arrange
-#     mock_user_repository.get_by_email.return_value = User(
-#         id=uuid4(), email=Email(email="test@example.com"), hashed_password="hashed_password", username="validUser"
-#     )
-#     email = "test@example.com"
-#     password = "securepassword"
-#     username = "validUser"
+def test_register_user_existing_email(register_user, mock_user_repository, mock_hasher):
+    # Arrange
+    mock_user_repository.get_by_email.return_value = User(
+        id=uuid4(), email=Email(email="test@example.com"), hashed_password="hashed_password", username="validUser"
+    )
+    email = "test@example.com"
+    password = "securepassword"
+    username = "validUser"
 
-#     # Act & Assert
-#     with pytest.raises(ValueError, match="Email already in use."):
-#         register_user.execute(email=email, password=password, username=username)
+    # Act
+    outcome = register_user.execute(email=email, password=password, username=username)
 
-#     mock_user_repository.get_by_email.assert_called_once_with(email)
-#     mock_user_repository.save.assert_not_called()
-#     mock_hasher.hash.assert_not_called()
+    # Assert 
+    assert outcome is not None
+    assert outcome.isSuccess is not True
+    assert outcome.failure is not None
+    assert outcome.failure.error == "Email already in use."
+    mock_user_repository.get_by_email.assert_called_once_with(email)
+    mock_user_repository.get_by_username.assert_not_called()
+    mock_user_repository.save.assert_not_called()
+    mock_hasher.hash.assert_not_called()
 
-# def test_register_user_invalid_email(register_user, mock_user_repository, mock_hasher):
-#     # Arrange
-#     email = "invalid-email"
-#     password = "securepassword"
+def test_register_user_invalid_email(register_user, mock_user_repository, mock_hasher):
+    # Arrange
+    email = "invalid-email"
+    password = "securepassword"
+    username = "validUser"
 
-#     # Act & Assert
-#     with pytest.raises(ValueError, match="Invalid email format"):
-#         register_user.execute(email=email, password=password, username="validUser")
+    # Act
+    outcome = register_user.execute(email=email, password=password, username=username)
 
-#     mock_user_repository.get_by_email.assert_not_called()
-#     mock_user_repository.save.assert_not_called()
-#     mock_hasher.hash.assert_not_called()
+    # Assert
+    assert outcome is not None
+    assert outcome.isSuccess is not True
+    assert outcome.failure is not None
+    assert outcome.failure.error == "Invalid email format: invalid-email"
+    mock_user_repository.get_by_email.assert_not_called()
+    mock_user_repository.get_by_username.assert_not_called()
+    mock_user_repository.save.assert_not_called()
+    mock_hasher.hash.assert_not_called()
