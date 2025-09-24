@@ -15,7 +15,7 @@ class GetReview:
         rating = self.rating_repo.get_rating_by_user_and_book(user_id, book_id)
 
         if not rating:
-            Outcome(isSuccess=False, failure=Failure(error="User has not rated this book"))
+            return Outcome(isSuccess=True, data=None)
         
         review = self.review_repo.get_review_by_rating_id(rating.id)
 

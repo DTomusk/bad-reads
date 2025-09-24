@@ -30,16 +30,14 @@ class CreateRating:
         
         # TODO: we should have some kind of transaction that if we create a rating but fail to create a review, we roll back the rating
         # Do we need that? 
-        review = Review(id=uuid4(), book_id=book_id, user_id=user_id, text=text)
+        review = Review(id=uuid4(), book_id=book_id, user_id=user_id, text=text, rating_id=outcome.data)
         self.review_repo.create_review(review)
 
         return outcome
 
     def _handle_existing_rating(self, existing_rating: Rating, book_id: UUID, user_id: UUID, love_score: float, shit_score: float, text: str = None) -> Outcome[UUID]:
         updated_rating = Rating(id=existing_rating.id, book_id=book_id, user_id=user_id, love_score=RatingScore(love_score), shit_score=RatingScore(shit_score))
-
-        # If the scores haven't changed, no need to update the rating
-        if existing_rating.love_score != updated_rating.love_score or existing_rating.shit_score != existing_rating.shit_score:
+        if existing_rating.love_score.value != updated_rating.love_score.value or existing_rating.shit_score.value != updated_rating.shit_score.value:
             update_outcome = self.rating_service.update_rating(book_id=book_id, old_rating=existing_rating, new_rating=updated_rating)
 
             if not update_outcome.isSuccess:
