@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-import datetime
+from datetime import datetime, timezone
 import re
 from uuid import UUID
 
@@ -20,19 +20,77 @@ class Rating:
         self.love_score = love_score
         self.shit_score = shit_score
 
-# Note: reviews are a superset of ratings
-# People can see reviews and interact with them, but not ratings
-# Each review must have a rating, but each rating does not have to have a review
 class Review:
     """ Represents a review given by a user to a book """
-    def __init__(self, id: UUID, book_id: UUID, user_id: UUID, text: str, rating_id: UUID, date_created: datetime):
+    def __init__(self, id: UUID, book_id: UUID, user_id: UUID, text: str, rating_id: UUID, date_created: datetime = datetime.now(timezone.utc)):
         self.id = id
         self.book_id = book_id
         self.user_id = user_id
         self.text = text
         self.rating_id = rating_id
         self.date_created = date_created
+
+class RatingWithReview: 
+    """ Represents a Rating with a Review """
+    def __init__(
+        self, 
+        rating_id: UUID, 
+        review_id: UUID, 
+        book_id: UUID, 
+        user_id: UUID, 
+        love_score: RatingScore, 
+        shit_score: RatingScore, 
+        text: str,
+        date_created: datetime):
+        self.rating_id = rating_id
+        self.review_id = review_id
+        self.book_id = book_id
+        self.user_id = user_id
+        self.love_score = love_score
+        self.shit_score = shit_score
+        self.text = text
+        self.date_created = date_created
+
+class RatingWithReviewFactory: 
+    @staticmethod
+    def create(rating: Rating, review: Review) -> RatingWithReview:
+        if rating.id != review.rating_id:
+            raise ValueError("Used wrong review for rating")
+        if rating.book_id != review.book_id:
+            raise ValueError("Rating and review refer to different books")
+        if rating.user_id != review.user_id:
+            raise ValueError("Rating and review were created by different users")
+        return RatingWithReview(
+            rating_id=rating.id, 
+            review_id=review.id,
+            book_id=rating.book_id,
+            user_id=rating.user_id,
+            love_score=rating.love_score,
+            shit_score=rating.shit_score,
+            text=review.text,
+            date_created=review.date_created
+            )
     
+    @staticmethod
+    def create_list(ratings: list[Rating], reviews: list[Review]) -> list[RatingWithReview]:
+        if ratings == [] and reviews == []:
+            return []
+        
+        if len(ratings) != len(reviews):
+            raise ValueError("Ratings must be one-to-one with reviews")
+
+        combined: list[RatingWithReview] = []
+        rating_map = {r.id: r for r in ratings}
+
+        for review in reviews: 
+            rating = rating_map.get(review.rating_id)
+            if rating is None: 
+                raise ValueError("Rating not found for review in list")
+            rating_with_review: RatingWithReview = RatingWithReviewFactory.create(rating=rating, review=review)
+            combined.append(rating_with_review)
+
+        return combined
+
 class Author:
     def __init__(self, id: UUID, name: str):
         self.id = id

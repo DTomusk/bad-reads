@@ -27,6 +27,22 @@ class AbstractRatingRepo(ABC):
         pass
 
     @abstractmethod
+    def get_rating_by_id(self, rating_id: UUID) -> Rating:
+        """
+        Gets the rating with the given ID
+        :param rating_id: The ID of the rating 
+        :return: A Rating, will return None if it doesn't exist
+        """
+        pass
+
+    @abstractmethod
+    def get_ratings_for_ids(self, ids: list[UUID]) -> list[Rating]:
+        """
+        Gets a list of ratings for the given ids
+        """
+        pass
+
+    @abstractmethod
     def create_rating(rating: Rating) -> None:
         """
         Create a new rating in the repository.
@@ -54,9 +70,16 @@ class AbstractRatingRepo(ABC):
     @abstractmethod
     def add_rating_to_global_stats(rating: Rating) -> None:
         """
-        Update global rating stats
+        Update global rating stats with new rating
         :param rating: The rating needed to be added to the global stats
         :return: None
+        """
+        pass
+
+    @abstractmethod
+    def update_rating_in_global_stats(self, old_rating: Rating, new_rating: Rating) -> None:
+        """
+        Update global rating stats with an updated rating
         """
         pass
 
@@ -69,15 +92,15 @@ class RatingRepo(AbstractRatingRepo):
             .filter(RatingModel.user_id == user_id, RatingModel.book_id == book_id)
             .first()
         )
-        if result:
-            return Rating(
-                id=result.id,
-                book_id=result.book_id,
-                user_id=result.user_id,
-                love_score=RatingScore(result.love_score),
-                shit_score=RatingScore(result.shit_score)
-            )
-        return None
+        if not result:
+            return None
+        return Rating(
+            id=result.id,
+            book_id=result.book_id,
+            user_id=result.user_id,
+            love_score=RatingScore(result.love_score),
+            shit_score=RatingScore(result.shit_score)
+        )
     
     def get_ratings_by_book_id(self, book_id: UUID) -> list[Rating]:
         result = self.session.query(RatingModel).filter(RatingModel.book_id == book_id).all()
@@ -89,6 +112,29 @@ class RatingRepo(AbstractRatingRepo):
             shit_score=RatingScore(result.shit_score)
             ) 
             for result in result]
+    
+    def get_rating_by_id(self, rating_id) -> Rating:
+        result = self.session.query(RatingModel).filter(RatingModel.id == rating_id).first()
+        if not result:
+            return None
+        return Rating(
+            id=result.id,
+            book_id=result.book_id,
+            user_id=result.user_id,
+            love_score=RatingScore(result.love_score),
+            shit_score=RatingScore(result.shit_score)
+        ) 
+    
+    def get_ratings_for_ids(self, ids):
+        result: list[RatingModel] = self.session.query(RatingModel).filter(RatingModel.id.in_(ids)).all()
+        if not result: 
+            return []
+        return [Rating(
+            id=rating.id, 
+            book_id=rating.book_id, 
+            user_id=rating.user_id, 
+            love_score=RatingScore(rating.love_score), 
+            shit_score=RatingScore(rating.shit_score)) for rating in result]
 
     def create_rating(self, rating: Rating):
         rating_model = RatingModel(
@@ -122,6 +168,22 @@ class RatingRepo(AbstractRatingRepo):
         global_stats.mean_love_rating = global_stats.sum_love_ratings / global_stats.num_ratings
 
         global_stats.sum_shit_ratings += rating.shit_score.value
+        global_stats.mean_shit_rating = global_stats.sum_shit_ratings / global_stats.num_ratings
+
+        self.session.commit()
+
+    def update_rating_in_global_stats(self, old_rating: Rating, new_rating: Rating):
+        global_stats = self.session.query(GlobalRatingStatsModel).first()
+        # TODO: this should be logged 
+        if global_stats is None:
+            return
+        
+        love_delta = new_rating.love_score.value - old_rating.love_score.value
+        shit_delta = new_rating.shit_score.value - old_rating.shit_score.value
+
+        global_stats.sum_love_ratings += love_delta
+        global_stats.mean_love_rating = global_stats.sum_love_ratings / global_stats.num_ratings
+        global_stats.sum_shit_ratings += shit_delta
         global_stats.mean_shit_rating = global_stats.sum_shit_ratings / global_stats.num_ratings
 
         self.session.commit()

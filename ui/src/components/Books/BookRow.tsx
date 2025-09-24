@@ -3,12 +3,17 @@ import BookCardSmall from "./BookCardSmall";
 import { TBook } from "../../types/book";
 import { Carousel } from '@mantine/carousel';
 
-export default function BookRow({ books }: { books: TBook[] }) {
+interface BookRowProps {
+    row_title: string;
+    books: TBook[]
+}
+
+export default function BookRow({ row_title, books } : BookRowProps) {
     const CARD_WIDTH = 150; // pixels
 
     return (
         <Stack>
-            <Title order={2}>Worst Books of all time</Title>
+            <Title order={2}>{row_title}</Title>
             <Divider/>
             <Carousel withIndicators slideSize="25%" slideGap="md" emblaOptions={{loop: false, slidesToScroll: 2}}>
             {books?.map((book) => (

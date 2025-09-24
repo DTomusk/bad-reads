@@ -20,10 +20,12 @@ export const useBooks = ({
 }: UseBooksParams = {}) => {
   return useQuery({
     queryKey: ["books", { page, page_size, sort_by, sort_order }],
-    queryFn: () =>
-      fetcher<TBook[]>(
+    queryFn: async () => {
+      const response = await fetcher<TBook[]>(
         `/books/?page=${page}&page_size=${page_size}&sort_by=${sort_by}&sort_order=${sort_order}`
-      ),
+      )
+      return response
+    }
   });
 };
 

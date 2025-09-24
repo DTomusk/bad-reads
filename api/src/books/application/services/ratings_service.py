@@ -19,6 +19,13 @@ class AbstractRatingsService(ABC):
         """
         pass
 
+    @abstractmethod
+    def update_rating(self, book_id: str, old_rating: Rating, new_rating: Rating) -> Outcome[UUID]:
+        """
+        Update an existing rating 
+        """
+        pass
+
 class RatingsService(AbstractRatingsService):
     def __init__(
             self, 
@@ -45,15 +52,33 @@ class RatingsService(AbstractRatingsService):
         self.rating_repository.create_rating(new_rating)
 
         # Updating values on the book itself and the global data shouldn't be blocking
-        self.background_task_queue.add_task(self._update_ratings, book, new_rating)
+        self.background_task_queue.add_task(self._update_external_ratings_with_new_rating, book, new_rating)
 
         return Outcome(isSuccess=True, data=new_rating.id)
     
-    def _update_ratings(self, book: Book, rating: Rating):
+    def update_rating(self, book_id: str, old_rating: Rating, new_rating: Rating):
+        book = self.book_repository.get_book_by_id(book_id)
+        if not book:
+            return Outcome(isSuccess=False, failure=Failure(error="Book not found"))
+
+        self.rating_repository.update_rating(new_rating)
+
+        # Updating values on the book itself and the global data shouldn't be blocking
+        self.background_task_queue.add_task(self._update_external_ratings_with_updated_rating, book, old_rating, new_rating)
+
+        return Outcome(isSuccess=True, data=new_rating.id)
+    
+    def _update_external_ratings_with_new_rating(self, book: Book, rating: Rating):
         book.add_rating(rating)
         weighted_love_rating, weighted_shit_rating = self._calculate_weighted_ratings(book)
         self.book_repository.update_book(book, weighted_love_rating, weighted_shit_rating)
         self.rating_repository.add_rating_to_global_stats(rating)
+
+    def _update_external_ratings_with_updated_rating(self, book: Book, old_rating: Rating, new_rating: Rating):
+        book.update_rating(old_rating=old_rating, new_rating=new_rating)
+        weighted_love_rating, weighted_shit_rating = self._calculate_weighted_ratings(book)
+        self.book_repository.update_book(book, weighted_love_rating, weighted_shit_rating)
+        self.rating_repository.update_rating_in_global_stats(old_rating, new_rating)
 
     def _calculate_weighted_ratings(self, book: Book) -> Tuple[float, float]:
         global_stats: GlobalRatingStatsModel = self.rating_repository.get_global_stats()
@@ -62,6 +87,7 @@ class RatingsService(AbstractRatingsService):
         return (weighted_love, weighted_shit)
 
     def _calculate_single_weighted_rating(self, average_score: float, num_ratings: int, global_average: float) -> float:
+        # TODO: we might want to move this into config, it won't be 1 forever 
         tuning_param = 1
         rating_part = (num_ratings / (num_ratings + tuning_param)) * average_score
         global_part = (tuning_param / (num_ratings + tuning_param)) * global_average

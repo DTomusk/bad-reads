@@ -16,23 +16,12 @@ export const useRating = (bookId: string): UseMutationResult<RatingResponse, Err
     mutationFn: async (data: RatingData) => {
       const trimmedReview = data.review.trim();
       
-      if (!trimmedReview) {
-        const response = await apiClient.post<RatingResponse>(
-          `/books/${bookId}/rate`,
-          {
-            love_score: data.hearts,
-            shit_score: data.poos,
-          }
-        );
-        return response.data;
-      }
-
       const response = await apiClient.post<RatingResponse>(
-        `/books/${bookId}/review`,
+        `/books/${bookId}/rate`,
         {
           love_score: data.hearts,
           shit_score: data.poos,
-          text: data.review,
+          text: trimmedReview
         }
       );
       return response.data;
@@ -40,10 +29,12 @@ export const useRating = (bookId: string): UseMutationResult<RatingResponse, Err
   });
 };
 
-export const useUserRating = (bookId: string): UseQueryResult<RatingResponse, Error> => {
+export const useUserRating = (bookId: string, isAuthenticated: boolean): UseQueryResult<RatingData | null, Error> => {
   return useQuery({
     queryKey: ["userRating", bookId],
     queryFn: async () => {
+      if (!isAuthenticated)
+        return null
       const response = await apiClient.get<RatingData>(`/books/${bookId}/rating`);
       return response.data;
     },
