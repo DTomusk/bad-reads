@@ -63,6 +63,8 @@ def test_rate_book_creates_new_rating_without_review(
     assert outcome is not None
     assert outcome.isSuccess is True
 
+    # TODO: add more tests for new ratings with reviews and updated ratings with different review states
+
 # def test_rate_book_raises_if_book_already_rated(
 #     mock_book_repository, mock_rating_repository, book_id, user_id, mock_book
 # ):
