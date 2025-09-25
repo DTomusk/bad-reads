@@ -26,18 +26,18 @@ export default function Nav() {
     <Flex justify="space-between" align="center" gap="lg" w={isExtraLarge ? "100%" : "70%"} h="100%" wrap="nowrap">
       <Group onClick={() => navigate("/")} style={{ cursor: 'pointer' }}>
         <BadReadLogo />
-        <Title visibleFrom="xs" style={{ color: "white" }}>Bad Reads</Title>
+        <Title visibleFrom="sm" style={{ color: "white" }}>Bad Reads</Title>
       </Group>
-      <Group>
+      <Group wrap="nowrap">
         <TextInput
           placeholder="Search for bad books"
           leftSection={<FontAwesomeIcon icon={faMagnifyingGlass} />}
           value={searchQuery}
           onChange={(event) => setSearchQuery(event.currentTarget.value)}
           onKeyDown={handleKeyPress}
-          style={{ maxWidth: "300px" }}
+          style={{ maxWidth: "300px", width: "auto"}}
         />
-        {!isAuthenticated && <NavLink visibleFrom="sm" onClick={() => navigate("/login", { state: { from: location.pathname }})}
+        {!isAuthenticated && <NavLink onClick={() => navigate("/login", { state: { from: location.pathname }})}
           color="white"
           style={{ padding: "0.5rem" }}
           variant="subtle"
