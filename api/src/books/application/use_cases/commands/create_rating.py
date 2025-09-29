@@ -14,7 +14,7 @@ class CreateRating:
         self.rating_repo = rating_repo
         self.review_repo = review_repo
 
-    def execute(self, book_id: UUID, user_id: UUID, love_score: float, shit_score: float, text: str = None) -> Outcome[UUID]:
+    def execute(self, book_id: UUID, user_id: UUID, love_score: float, shit_score: float, text: str = None) -> Outcome[None]:
         existing_rating = self.rating_repo.get_rating_by_user_and_book(user_id=user_id, book_id=book_id)
         if existing_rating is None:
             return self._handle_new_rating(book_id=book_id, user_id=user_id, love_score=love_score, shit_score=shit_score, text=text)
@@ -22,7 +22,7 @@ class CreateRating:
             return self._handle_existing_rating(existing_rating=existing_rating, book_id=book_id, user_id=user_id, love_score=love_score, shit_score=shit_score, text=text)
         
     def _handle_new_rating(self, book_id: UUID, user_id: UUID, love_score: float, shit_score: float, text: str = None) -> Outcome[UUID]:
-        outcome: Outcome[UUID] = self.rating_service.create_rating(book_id=book_id, user_id=user_id, love_score=love_score, shit_score=shit_score)
+        outcome: Outcome[None] = self.rating_service.create_rating(book_id=book_id, user_id=user_id, love_score=love_score, shit_score=shit_score)
 
         # If we failed to create a rating, or there is nothing left to do (no review), then return 
         if not outcome.isSuccess or not text:

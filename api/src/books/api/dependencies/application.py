@@ -2,19 +2,18 @@ from fastapi import BackgroundTasks, Depends
 
 from src.books.application.services.rating_with_review_service import RatingWithReviewService
 from src.users.api.dependencies import get_user_repository
-from src.books.application.use_cases.reviews.get_review import GetReview
-from src.shared.api.dependencies import get_profanity_service
+from src.books.application.use_cases.queries.reviews.get_review import GetReview
 from src.books.application.services.ratings_service import RatingsService
 from src.books.api.dependencies.repos import get_authors_repo, get_books_repo, get_ratings_repo, get_reviews_repo
-from src.books.application.use_cases.reviews.get_reviews_for_user import GetBookReviewsForUser
-from src.books.application.use_cases.reviews.get_reviews_for_book import GetBookReviews
+from src.books.application.use_cases.queries.reviews.get_reviews_for_user import GetBookReviewsForUser
+from src.books.application.use_cases.queries.reviews.get_reviews_for_book import GetBookReviews
 from src.infrastructure.services.background_task_queue import FastAPIBackgroundTaskQueue
-from src.books.application.use_cases.books.search_books import SearchBooks
-from src.books.application.use_cases.books.get_book_details import GetBookDetails
-from src.books.application.use_cases.books.get_books import GetBooks
-from src.books.application.use_cases.ratings.create_rating import CreateRating
+from src.books.application.use_cases.queries.books.search_books import SearchBooks
+from src.books.application.use_cases.queries.books.get_book_details import GetBookDetails
+from src.books.application.use_cases.queries.books.get_books import GetBooks
+from src.books.application.use_cases.commands.create_rating import CreateRating
 from src.books.application.services.external_books_service import GoogleBooksApiService
-from src.books.application.use_cases.ratings.get_rating_for_book_for_user import GetRatingForBookForUser
+from src.books.application.use_cases.queries.ratings.get_rating_for_book_for_user import GetRatingForBookForUser
 
 # TODO: split out use cases once there are too many of them
 def get_external_books_service(author_repo=Depends(get_authors_repo)):

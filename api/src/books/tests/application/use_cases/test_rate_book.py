@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import MagicMock
 from uuid import uuid4
 from src.infrastructure.api.models import Outcome
-from src.books.application.use_cases.ratings.create_rating import CreateRating
+from src.books.application.use_cases.commands.create_rating import CreateRating
 from src.books.domain.models import Book, Author
 
 @pytest.fixture

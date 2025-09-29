@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from datetime import datetime, timezone
-import re
 from uuid import UUID
 
 @dataclass(frozen=True)

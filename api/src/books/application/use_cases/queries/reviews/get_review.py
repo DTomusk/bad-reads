@@ -1,8 +1,7 @@
 from uuid import UUID
-from src.books.api.schemas.review_response import ReviewResponse
-from src.infrastructure.api.models import Failure, Outcome
+from src.books.api.schemas.responses.review_response import ReviewResponse
+from src.infrastructure.api.models import Outcome
 from src.books.application.repositories.review_repository import AbstractReviewRepo
-from src.books.api.schemas.rating_response import RatingResponse
 from src.books.application.repositories.rating_repository import AbstractRatingRepo
 
 

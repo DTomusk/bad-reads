@@ -1,5 +1,5 @@
 from uuid import UUID
-from src.books.api.schemas.rating_response import RatingResponse
+from src.books.api.schemas.responses.rating_response import RatingResponse
 from src.books.application.repositories.rating_repository import AbstractRatingRepo
 
 

@@ -2,16 +2,16 @@ from uuid import UUID
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 from fastapi.params import Query
 
-from src.books.application.use_cases.books.search_books import SearchBooks
-from src.books.application.use_cases.books.get_books import GetBooks
-from src.books.application.use_cases.reviews.get_reviews_for_book import GetBookReviews
+from src.books.application.use_cases.queries.books.search_books import SearchBooks
+from src.books.application.use_cases.queries.books.get_books import GetBooks
+from src.books.application.use_cases.queries.reviews.get_reviews_for_book import GetBookReviews
 from src.books.api.schemas.book_sort_options import BookSortOption
-from src.books.api.schemas.book_detail_response import BookDetailResponse
+from src.books.api.schemas.responses.book_detail_response import BookDetailResponse
 from src.books.domain.models import Book
 from src.infrastructure.api.models import Outcome
 from src.books.api.dependencies.application import create_rating_use_case, get_book_details_use_case, get_book_rating_use_case, get_book_reviews_use_case, get_books_use_case, get_my_book_reviews_use_case, get_review_use_case, search_books_use_case
-from src.books.api.schemas.book_search_response import BookSearchResponse
-from src.books.api.schemas.rating_request import RatingRequest
+from src.books.api.schemas.responses.book_search_response import BookSearchResponse
+from src.books.api.schemas.requests.rating_request import RatingRequest
 from src.users.api.auth import get_current_user
 
 

@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from src.books.api.schemas.book_response import BookResponse
+from src.books.api.schemas.responses.book_response import BookResponse
 from src.books.domain.models import Book
 
 class BookSearchResponse(BaseModel):

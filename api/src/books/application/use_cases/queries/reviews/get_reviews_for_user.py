@@ -1,6 +1,6 @@
 from uuid import UUID
-from src.books.api.schemas.book_response import BookResponse
-from src.books.api.schemas.review_with_book_response import ReviewWithBookResponse
+from src.books.api.schemas.responses.book_response import BookResponse
+from src.books.api.schemas.responses.review_with_book_response import ReviewWithBookResponse
 from src.books.application.repositories.review_repository import AbstractReviewRepo
 from src.books.application.repositories.book_repository import AbstractBookRepo
 

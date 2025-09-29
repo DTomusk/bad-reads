@@ -3,7 +3,7 @@ from src.books.application.services.rating_with_review_service import AbstractRa
 from src.books.domain.models import RatingWithReview, Review
 from src.users.application.repositories.user_repository import AbstractUserRepository
 from src.books.application.repositories.review_repository import AbstractReviewRepo
-from src.books.api.schemas.review_response import RatingReviewWithUsernameResponse, ReviewResponse
+from src.books.api.schemas.responses.review_response import RatingReviewWithUsernameResponse
 
 class GetBookReviews():
     def __init__(
