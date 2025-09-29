@@ -30,6 +30,7 @@ class ReviewResponse(BaseModel):
             shit_score=rating.shit_score.value
         )
     
+    # TODO: ReviewResponse without review makes no sense, consider changing
     @classmethod
     def from_domain_without_review(cls, rating: Rating) -> "ReviewResponse":
         return cls(
@@ -41,6 +42,19 @@ class ReviewResponse(BaseModel):
             date_created=None,
             love_score=rating.love_score.value,
             shit_score=rating.shit_score.value
+        )
+    
+    @classmethod
+    def from_domain_with_rating_review(cls, rating_with_review: RatingWithReview) -> "ReviewResponse":
+        return cls(
+            rating_id=rating_with_review.rating_id,
+            review_id=rating_with_review.review_id,
+            book_id=rating_with_review.book_id,
+            user_id=rating_with_review.user_id,
+            text=rating_with_review.text,
+            date_created=rating_with_review.date_created,
+            love_score=rating_with_review.love_score.value,
+            shit_score=rating_with_review.shit_score.value
         )
     
 class RatingReviewWithUsernameResponse(BaseModel):

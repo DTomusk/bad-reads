@@ -88,8 +88,8 @@ def get_book_reviews_use_case(review_repo=Depends(get_reviews_repo), user_repo=D
     """
     return GetBookReviews(review_repository=review_repo, user_repo=user_repo, rating_with_review_service=rr_service)
 
-def get_my_book_reviews_use_case(review_repo=Depends(get_reviews_repo), book_repo=Depends(get_books_repo)):
+def get_my_book_reviews_use_case(review_repo=Depends(get_reviews_repo), book_repo=Depends(get_books_repo), rr_service=Depends(get_rating_with_review_service)):
     """
     Dependency to provide the GetBooReviewsForUser use case.
     """
-    return GetBookReviewsForUser(review_repository=review_repo, book_repository=book_repo)
+    return GetBookReviewsForUser(review_repository=review_repo, book_repository=book_repo, rr_service=rr_service)
