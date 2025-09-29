@@ -2,12 +2,12 @@ from uuid import UUID
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 from fastapi.params import Query
 
+from api.src.books.application.use_cases.queries.books.get_book_details import GetBookDetails
 from src.books.application.use_cases.queries.books.search_books import SearchBooks
 from src.books.application.use_cases.queries.books.get_books import GetBooks
 from src.books.application.use_cases.queries.reviews.get_reviews_for_book import GetBookReviews
 from src.books.api.schemas.book_sort_options import BookSortOption
 from src.books.api.schemas.responses.book_detail_response import BookDetailResponse
-from src.books.domain.models import Book
 from src.infrastructure.api.models import Outcome
 from src.books.api.dependencies.application import create_rating_use_case, get_book_details_use_case, get_book_rating_use_case, get_book_reviews_use_case, get_books_use_case, get_my_book_reviews_use_case, get_review_use_case, search_books_use_case
 from src.books.api.schemas.responses.book_search_response import BookSearchResponse
@@ -56,16 +56,16 @@ async def get_my_book_reviews(
 @router.get("/{book_id}")
 async def get_book_details(
     book_id: UUID, 
-    get_book_details=Depends(get_book_details_use_case)):
+    get_book_details: GetBookDetails=Depends(get_book_details_use_case)):
     """
     Get details of a book by its ID.
     """
-    book_details: Outcome[Book] = get_book_details.execute(book_id=book_id)
+    book_details = get_book_details.execute(book_id=book_id)
 
-    if not book_details.isSuccess:
-        raise HTTPException(status_code=book_details.failure.code, detail=book_details.failure.error)
+    if not book_details:
+        raise HTTPException(status_code=404, detail="Book not found")
     
-    response: BookDetailResponse = BookDetailResponse.from_domain(book_details.data)
+    response: BookDetailResponse = BookDetailResponse.from_domain(book_details)
 
     return response
 

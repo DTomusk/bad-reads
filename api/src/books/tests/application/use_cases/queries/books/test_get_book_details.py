@@ -2,7 +2,7 @@ from unittest.mock import MagicMock
 from uuid import uuid4
 import pytest
 
-from src.books.application.use_cases.books.get_book_details import GetBookDetails
+from src.books.application.use_cases.queries.books.get_book_details import GetBookDetails
 from src.books.domain.models import Author
 
 
@@ -43,14 +43,13 @@ def test_get_book_details_returns_book(mock_book_repository, book_id, mock_book)
     # Assert
     mock_book_repository.get_book_by_id.assert_called_once_with(book_id)
     assert result is not None
-    assert result.isSuccess
-    assert result.data.title == mock_book.title
-    assert result.data.authors == mock_book.authors
-    assert result.data.average_love_rating == mock_book.average_love_rating
-    assert result.data.average_shit_rating == mock_book.average_shit_rating
-    assert result.data.number_of_ratings == mock_book.number_of_ratings
-    assert result.data.sum_of_love_ratings == mock_book.sum_of_love_ratings
-    assert result.data.sum_of_shit_ratings == mock_book.sum_of_shit_ratings
+    assert result.title == mock_book.title
+    assert result.authors == mock_book.authors
+    assert result.average_love_rating == mock_book.average_love_rating
+    assert result.average_shit_rating == mock_book.average_shit_rating
+    assert result.number_of_ratings == mock_book.number_of_ratings
+    assert result.sum_of_love_ratings == mock_book.sum_of_love_ratings
+    assert result.sum_of_shit_ratings == mock_book.sum_of_shit_ratings
 
 def test_get_book_details_raises_if_book_not_found(book_id):
     # Arrange
@@ -63,7 +62,4 @@ def test_get_book_details_raises_if_book_not_found(book_id):
 
     # Assert
     mock_book_repository.get_book_by_id.assert_called_once_with(book_id)
-    assert result is not None
-    assert result.isSuccess is not True
-    assert result.failure is not None
-    assert result.failure.error == "Book not found"
+    assert result is None

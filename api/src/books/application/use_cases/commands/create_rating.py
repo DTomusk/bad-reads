@@ -47,22 +47,22 @@ class CreateRating:
 
         # If there is no review to update and no review update to make, return
         if not text and not existing_review:
-            return Outcome(isSuccess=True, data=existing_rating.id)
+            return Outcome(isSuccess=True)
         
         if not text and existing_review: 
             # delete review (soft)
             self.review_repo.delete_review(existing_review.id)
-            return Outcome(isSuccess=True, data=existing_rating.id)
+            return Outcome(isSuccess=True)
 
         if text and not existing_review:
             # create new review 
             review = Review(id=uuid4(), book_id=book_id, user_id=user_id, text=text, rating_id=existing_rating.id)
             self.review_repo.create_review(review)
-            return Outcome(isSuccess=True, data=existing_rating.id)
+            return Outcome(isSuccess=True)
 
         # update an existing review 
         self.review_repo.update_review(review_id=existing_review.id, text=text)
-        return Outcome(isSuccess=True, data=existing_rating.id)
+        return Outcome(isSuccess=True)
 
         
         
