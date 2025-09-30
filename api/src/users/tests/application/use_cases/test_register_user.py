@@ -1,7 +1,7 @@
 from uuid import uuid4
 import pytest
 from unittest.mock import MagicMock
-from src.users.application.use_cases.register_user import RegisterUser
+from api.src.users.application.commands.register_user import RegisterUser
 from src.users.domain.models import Email, User
 
 @pytest.fixture

@@ -1,12 +1,12 @@
 from fastapi import Depends
 
-from src.infrastructure.api.dependencies import get_profanity_service
-from src.infrastructure.db.database import get_session
-from src.users.application.use_cases.login import Login
-from src.users.application.use_cases.register_user import RegisterUser
-from src.users.application.repositories.user_repository import UserRepository
-from src.users.application.utilities.hasher import BCryptHasher
-from src.users.application.utilities.token_service import JWTTokenService
+from ...infrastructure.api.dependencies import get_profanity_service
+from ...infrastructure.db.database import get_session
+from ..application.commands.login import Login
+from ..application.commands.register_user import RegisterUser
+from ..data.user_repository import UserRepository
+from ..application.utilities.hasher import BCryptHasher
+from ..application.utilities.token_service import JWTTokenService
 
 
 def get_user_repository(session=Depends(get_session)):

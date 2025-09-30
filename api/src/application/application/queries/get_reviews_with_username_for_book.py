@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from ....users.application.repositories.user_repository import AbstractUserRepository
+from ....users.data.user_repository import AbstractUserRepository
 
 from ....books.data.rating_with_review_reader import AbstractRatingWithReviewReader
 

@@ -1,7 +1,7 @@
-from src.infrastructure.api.models import Failure, Outcome
-from src.users.application.repositories.user_repository import AbstractUserRepository
-from src.users.application.utilities.hasher import Hasher
-from src.users.application.utilities.token_service import TokenService
+from ....infrastructure.api.models import Failure, Outcome
+from ...data.user_repository import AbstractUserRepository
+from ..utilities.hasher import Hasher
+from ..utilities.token_service import TokenService
 
 
 class Login:

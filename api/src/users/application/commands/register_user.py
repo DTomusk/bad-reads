@@ -1,7 +1,7 @@
 from uuid import uuid4
 from ....infrastructure.services.profanity_service import AbstractProfanityService
 from ....infrastructure.api.models import Failure, Outcome
-from ..repositories.user_repository import AbstractUserRepository
+from ...data.user_repository import AbstractUserRepository
 from ..utilities.hasher import Hasher
 from ...domain.models import Email, User, Username
 
