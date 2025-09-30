@@ -17,7 +17,8 @@ export const useBooks = ({
   page_size = 10,
   sort_by = "most_poos",
   sort_order = "desc",
-}: UseBooksParams = {}) => {
+}: UseBooksParams = {},
+  options?: { enabled?: boolean }) => {
   return useQuery({
     queryKey: ["books", { page, page_size, sort_by, sort_order }],
     queryFn: async () => {
@@ -25,7 +26,8 @@ export const useBooks = ({
         `/books/?page=${page}&page_size=${page_size}&sort_by=${sort_by}&sort_order=${sort_order}`
       )
       return response
-    }
+    },
+    enabled: options?.enabled ?? true
   });
 };
 
