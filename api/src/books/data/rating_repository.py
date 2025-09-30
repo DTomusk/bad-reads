@@ -3,8 +3,8 @@ from abc import ABC, abstractmethod
 from sqlalchemy import UUID
 from sqlalchemy.orm import Session
 
-from src.books.domain.models import Rating, RatingScore
-from api.src.books.data.models import GlobalRatingStatsModel, RatingModel
+from ..domain.models import Rating, RatingScore
+from .models import GlobalRatingStatsModel, RatingModel
 
 class AbstractRatingRepo(ABC):
     @abstractmethod

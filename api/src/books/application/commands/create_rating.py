@@ -1,10 +1,10 @@
 from uuid import UUID, uuid4
 
-from src.books.application.repositories.review_repository import AbstractReviewRepo
-from src.books.domain.models import Rating, RatingScore, Review
-from src.books.application.repositories.rating_repository import AbstractRatingRepo
-from src.books.application.services.ratings_service import AbstractRatingsService
-from src.infrastructure.api.models import Outcome
+from ...data.review_repository import AbstractReviewRepo
+from ...domain.models import Rating, RatingScore, Review
+from ...data.rating_repository import AbstractRatingRepo
+from ..services.ratings_service import AbstractRatingsService
+from ....infrastructure.api.models import Outcome
 
 
 class CreateRating:

@@ -3,12 +3,12 @@ from fastapi.concurrency import asynccontextmanager
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from api.src.infrastructure.services.profanity_service import ProfanityService
-from src.config import get_settings
+from .infrastructure.services.profanity_service import ProfanityService
+from .config import get_settings
 
-from src.books.api.routes import router as books_router
-from src.users.api.routes import router as users_router
-from src.application.api.routes import router as cross_domain_router
+from .books.api.routes import router as books_router
+from .users.api.routes import router as users_router
+from .application.api.routes import router as cross_domain_router
 
 settings = get_settings()
 

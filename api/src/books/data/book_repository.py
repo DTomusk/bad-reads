@@ -4,9 +4,9 @@ from sqlalchemy import UUID, func
 from sqlalchemy.orm import Session
 
 
-from src.books.domain.models import Book
-from api.src.books.data.models import BookModel, AuthorModel
-from src.infrastructure.utilities.text_normalizer import normalize_text
+from ..domain.models import Book
+from .models import BookModel, AuthorModel
+from ...infrastructure.utilities.text_normalizer import normalize_text
 
 class AbstractBookRepo(ABC):
     @abstractmethod

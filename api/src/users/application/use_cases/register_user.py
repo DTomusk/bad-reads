@@ -1,9 +1,9 @@
 from uuid import uuid4
-from api.src.infrastructure.services.profanity_service import AbstractProfanityService
-from src.infrastructure.api.models import Failure, Outcome
-from src.users.application.repositories.user_repository import AbstractUserRepository
-from src.users.application.utilities.hasher import Hasher
-from src.users.domain.models import Email, User, Username
+from ....infrastructure.services.profanity_service import AbstractProfanityService
+from ....infrastructure.api.models import Failure, Outcome
+from ..repositories.user_repository import AbstractUserRepository
+from ..utilities.hasher import Hasher
+from ...domain.models import Email, User, Username
 
 
 class RegisterUser:

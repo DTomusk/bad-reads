@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 
 import uuid
 import httpx
-from src.books.application.repositories.author_repository import AbstractAuthorRepo
-from src.books.domain.models import Book, Author
+from ...data.author_repository import AbstractAuthorRepo
+from ...domain.models import Book, Author
 
 class AbstractBooksService(ABC):
     @abstractmethod

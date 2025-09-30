@@ -3,9 +3,9 @@ from abc import ABC, abstractmethod
 from sqlalchemy import UUID
 from sqlalchemy.orm import Session
 
-from src.books.domain.models import Author
-from api.src.books.data.models import AuthorModel
-from src.infrastructure.utilities.text_normalizer import normalize_text
+from ..domain.models import Author
+from .models import AuthorModel
+from ...infrastructure.utilities.text_normalizer import normalize_text
 
 class AbstractAuthorRepo(ABC):
     @abstractmethod

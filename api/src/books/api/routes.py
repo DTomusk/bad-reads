@@ -2,18 +2,19 @@ from uuid import UUID
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 from fastapi.params import Query
 
-from src.books.application.use_cases.queries.ratings_with_reviews.get_reviews_for_user import GetBookReviewsForUser
-from src.books.application.use_cases.queries.books.get_book_details import GetBookDetails
-from src.books.application.use_cases.queries.books.search_books import SearchBooks
-from src.books.application.use_cases.queries.books.get_books import GetBooks
-from src.books.application.use_cases.queries.ratings_with_reviews.get_reviews_for_book import GetBookReviews
-from src.books.api.schemas.book_sort_options import BookSortOption
-from src.books.api.schemas.responses.book_detail_response import BookDetailResponse
-from src.infrastructure.api.models import Outcome
-from src.books.api.dependencies.application import create_rating_use_case, get_book_details_use_case, get_book_reviews_use_case, get_books_use_case, get_my_book_reviews_use_case, get_review_use_case, search_books_use_case
-from src.books.api.schemas.responses.book_search_response import BookSearchResponse
-from src.books.api.schemas.requests.rating_request import RatingRequest
-from src.users.api.auth import get_current_user
+from ..application.queries.ratings_with_reviews.get_review_for_book_for_user import GetReview
+from ..application.queries.ratings_with_reviews.get_reviews_for_user import GetBookReviewsForUser
+from ..application.queries.books.get_book_details import GetBookDetails
+from ..application.queries.books.search_books import SearchBooks
+from ..application.queries.books.get_books import GetBooks
+from .schemas.book_sort_options import BookSortOption
+from .schemas.responses.book_detail_response import BookDetailResponse
+from ...infrastructure.api.models import Outcome
+from .dependencies.application import create_rating_use_case, get_book_details_use_case, get_books_use_case, get_my_book_reviews_use_case, get_review_use_case, search_books_use_case
+from .schemas.responses.book_search_response import BookSearchResponse
+from .schemas.requests.rating_request import RatingRequest
+# TODO: maybe this should be in infrastructure or somewhere shared because it will be used everywhere
+from ...users.api.auth import get_current_user
 
 
 router = APIRouter()
@@ -90,21 +91,10 @@ async def get_my_book_reviews(
     reviews = get_my_book_reviews.execute(user_id=user_id)
     return reviews
 
-@router.get("/{book_id}/reviews")
-async def get_book_reviews(
-    book_id: UUID, 
-    sort: str = "newest", 
-    get_book_reviews: GetBookReviews = Depends(get_book_reviews_use_case)):
-    """
-    Get reviews of a book by its ID.
-    """
-    reviews = get_book_reviews.execute(book_id=book_id, sort=sort)
-    return reviews
-
 @router.get("/{book_id}/rating")
 async def get_rating_for_user(
     book_id: UUID,
-    get_review: GetRatingForUser=Depends(get_review_use_case),
+    get_review: GetReview=Depends(get_review_use_case),
     user_id=Depends(get_current_user)):
     outcome: Outcome = get_review.execute(book_id, user_id)
 
