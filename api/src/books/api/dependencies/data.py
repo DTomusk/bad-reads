@@ -1,10 +1,11 @@
 from fastapi import Depends
 
-from src.books.data.author_repository import AuthorRepo
-from src.books.data.book_repository import BookRepo
-from src.books.data.rating_repository import RatingRepo
-from src.books.data.review_repository import ReviewRepo
-from src.infrastructure.db.database import get_session
+from ...data.rating_with_review_reader import RatingWithReviewReader
+from ...data.author_repository import AuthorRepo
+from ...data.book_repository import BookRepo
+from ...data.rating_repository import RatingRepo
+from ...data.review_repository import ReviewRepo
+from ....infrastructure.db.database import get_session
 
 
 def get_ratings_repo(session=Depends(get_session)):
@@ -12,6 +13,12 @@ def get_ratings_repo(session=Depends(get_session)):
     Dependency to provide the Ratings repository.
     """
     return RatingRepo(session=session)
+
+def get_rating_with_review_reader(session=Depends(get_session)):
+    """
+    Dependency to provide the Rating with Review reader.
+    """
+    return RatingWithReviewReader(session=session)
 
 def get_reviews_repo(session=Depends(get_session)):
     """

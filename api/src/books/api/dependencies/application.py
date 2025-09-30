@@ -11,7 +11,7 @@ from ...application.commands.create_rating import CreateRating
 from ...application.services.ratings_service import RatingsService
 from ...application.services.external_books_service import GoogleBooksApiService
 
-from ..dependencies.data import get_authors_repo, get_books_repo, get_ratings_repo, get_reviews_repo
+from ..dependencies.data import get_authors_repo, get_books_repo, get_rating_with_review_reader, get_ratings_repo, get_reviews_repo
 from ....infrastructure.services.background_task_queue import FastAPIBackgroundTaskQueue
 
 # TODO: split out use cases once there are too many of them
@@ -40,8 +40,8 @@ def create_rating_use_case(rating_service=Depends(get_rating_service), rating_re
     """
     return CreateRating(rating_service=rating_service, rating_repo=rating_repo, review_repo=review_repo)
 
-def get_review_use_case(review_repo=Depends(get_reviews_repo), rating_repo=Depends(get_ratings_repo)):
-    return GetReview(review_repo=review_repo, rating_repo=rating_repo)
+def get_review_use_case(rating_with_review_reader=Depends(get_rating_with_review_reader)):
+    return GetReview(rating_with_review_reader=rating_with_review_reader)
 
 def get_books_use_case(book_repo=Depends(get_books_repo)):
     """

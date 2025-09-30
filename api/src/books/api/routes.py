@@ -96,9 +96,6 @@ async def get_rating_for_user(
     book_id: UUID,
     get_review: GetReview=Depends(get_review_use_case),
     user_id=Depends(get_current_user)):
-    outcome: Outcome = get_review.execute(book_id, user_id)
+    rating_with_review = get_review.execute(book_id, user_id)
 
-    if not outcome.isSuccess:
-        raise HTTPException(status_code=outcome.failure.code, detail=outcome.failure.error)
-
-    return outcome.data
+    return rating_with_review
