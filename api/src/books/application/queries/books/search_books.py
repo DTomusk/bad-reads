@@ -1,6 +1,6 @@
-from src.books.application.services.external_books_service import AbstractBooksService
-from src.books.application.repositories.book_repository import AbstractBookRepo
-from src.books.application.repositories.author_repository import AbstractAuthorRepo
+from ...services.external_books_service import AbstractBooksService
+from ....data.book_repository import AbstractBookRepo
+from ....data.author_repository import AbstractAuthorRepo
 from src.books.api.schemas.responses.book_search_response import BookSearchResponse
 from src.infrastructure.services.background_task_queue import BackgroundTaskQueue
 

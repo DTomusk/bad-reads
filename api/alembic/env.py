@@ -7,7 +7,7 @@ from sqlalchemy import pool
 from alembic import context
 from src.infrastructure.db.database import Base
 # Import all models to ensure they are registered with Base.metadata
-from src.books.application.models import BookModel, RatingModel, ReviewModel, AuthorModel, GlobalRatingStatsModel
+from api.src.books.data.models import BookModel, RatingModel, ReviewModel, AuthorModel, GlobalRatingStatsModel
 from src.users.application.models import UserModel
 
 # this is the Alembic Config object, which provides

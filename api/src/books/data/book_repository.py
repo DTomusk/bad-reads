@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 
 from src.books.domain.models import Book
-from src.books.application.models import BookModel, AuthorModel
+from api.src.books.data.models import BookModel, AuthorModel
 from src.infrastructure.utilities.text_normalizer import normalize_text
 
 class AbstractBookRepo(ABC):

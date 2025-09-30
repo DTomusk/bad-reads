@@ -1,6 +1,6 @@
 from fastapi import Depends
 
-from src.shared.api.dependencies import get_profanity_service
+from src.infrastructure.api.dependencies import get_profanity_service
 from src.infrastructure.db.database import get_session
 from src.users.application.use_cases.login import Login
 from src.users.application.use_cases.register_user import RegisterUser

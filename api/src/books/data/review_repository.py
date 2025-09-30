@@ -4,8 +4,8 @@ from datetime import datetime, timezone
 
 from sqlalchemy.orm import Session
 
-from src.books.domain.models import Review
-from src.books.application.models import ReviewModel
+from ..domain.models import Review
+from .models import ReviewModel
 
 class AbstractReviewRepo(ABC):
     @abstractmethod

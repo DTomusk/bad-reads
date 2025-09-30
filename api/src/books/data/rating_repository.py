@@ -4,7 +4,7 @@ from sqlalchemy import UUID
 from sqlalchemy.orm import Session
 
 from src.books.domain.models import Rating, RatingScore
-from src.books.application.models import GlobalRatingStatsModel, RatingModel
+from api.src.books.data.models import GlobalRatingStatsModel, RatingModel
 
 class AbstractRatingRepo(ABC):
     @abstractmethod

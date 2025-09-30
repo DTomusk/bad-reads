@@ -4,7 +4,7 @@
 import random
 from sqlalchemy.orm import Session
 from src.infrastructure.db.database import Base, engine, SessionLocal
-from src.books.application.models import AuthorModel, BookModel
+from api.src.books.data.models import AuthorModel, BookModel
 import uuid
 
 from api.src.users.application.models import UserModel

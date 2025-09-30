@@ -1,6 +1,6 @@
 from uuid import UUID
 from src.books.domain.models import Book
-from src.books.application.repositories.book_repository import AbstractBookRepo
+from src.books.data.book_repository import AbstractBookRepo
 
 class GetBookDetails:
     def __init__(self, book_repository: AbstractBookRepo):

@@ -1,19 +1,17 @@
 from fastapi import BackgroundTasks, Depends
 
 from src.books.application.services.rating_with_review_service import RatingWithReviewService
-from src.users.api.dependencies import get_user_repository
-from src.books.application.use_cases.queries.reviews.get_review import GetReview
+from src.books.application.use_cases.queries.ratings_with_reviews.get_review_for_book_for_user import GetReview
 from src.books.application.services.ratings_service import RatingsService
-from src.books.api.dependencies.repos import get_authors_repo, get_books_repo, get_ratings_repo, get_reviews_repo
-from src.books.application.use_cases.queries.reviews.get_reviews_for_user import GetBookReviewsForUser
-from src.books.application.use_cases.queries.reviews.get_reviews_for_book import GetBookReviews
+from src.books.api.dependencies.data import get_authors_repo, get_books_repo, get_ratings_repo, get_reviews_repo
+from src.books.application.use_cases.queries.ratings_with_reviews.get_reviews_for_user import GetBookReviewsForUser
+from src.books.application.use_cases.queries.ratings_with_reviews.get_reviews_for_book import GetBookReviews
 from src.infrastructure.services.background_task_queue import FastAPIBackgroundTaskQueue
 from src.books.application.use_cases.queries.books.search_books import SearchBooks
 from src.books.application.use_cases.queries.books.get_book_details import GetBookDetails
 from src.books.application.use_cases.queries.books.get_books import GetBooks
 from src.books.application.use_cases.commands.create_rating import CreateRating
 from src.books.application.services.external_books_service import GoogleBooksApiService
-from src.books.application.use_cases.queries.ratings.get_rating_for_book_for_user import GetRatingForBookForUser
 
 # TODO: split out use cases once there are too many of them
 def get_external_books_service(author_repo=Depends(get_authors_repo)):
@@ -74,12 +72,6 @@ def search_books_use_case(
         author_repository=author_repo, 
         background_task_queue=FastAPIBackgroundTaskQueue(background_tasks=background_tasks)
     )
-
-def get_book_rating_use_case(rating_repo=Depends(get_ratings_repo)):
-    """
-    Dependency to provide the GetBookRating use case.
-    """
-    return GetRatingForBookForUser(rating_repository=rating_repo)
 
 def get_book_reviews_use_case(review_repo=Depends(get_reviews_repo), user_repo=Depends(get_user_repository), rr_service=Depends(get_rating_with_review_service)):
     """

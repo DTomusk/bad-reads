@@ -1,6 +1,6 @@
 from src.books.api.schemas.book_sort_options import BookSortOption
-from src.books.application.repositories.book_repository import AbstractBookRepo
-from src.books.domain.models import Book
+from ....data.book_repository import AbstractBookRepo
+from ....domain.models import Book
 
 class GetBooks:
     def __init__(self, book_repository: AbstractBookRepo):

@@ -1,9 +1,9 @@
 from fastapi import Depends
 
-from src.books.application.repositories.author_repository import AuthorRepo
-from src.books.application.repositories.book_repository import BookRepo
-from src.books.application.repositories.rating_repository import RatingRepo
-from src.books.application.repositories.review_repository import ReviewRepo
+from src.books.data.author_repository import AuthorRepo
+from src.books.data.book_repository import BookRepo
+from src.books.data.rating_repository import RatingRepo
+from src.books.data.review_repository import ReviewRepo
 from src.infrastructure.db.database import get_session
 
 

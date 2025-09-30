@@ -1,5 +1,5 @@
 from fastapi import Request
-from src.shared.application.profanity_service import ProfanityService
+from src.infrastructure.services.profanity_service import ProfanityService
 
 
 def get_profanity_service(request: Request) -> ProfanityService:

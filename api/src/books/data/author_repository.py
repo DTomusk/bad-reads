@@ -4,7 +4,7 @@ from sqlalchemy import UUID
 from sqlalchemy.orm import Session
 
 from src.books.domain.models import Author
-from src.books.application.models import AuthorModel
+from api.src.books.data.models import AuthorModel
 from src.infrastructure.utilities.text_normalizer import normalize_text
 
 class AbstractAuthorRepo(ABC):

@@ -2,11 +2,11 @@ from abc import ABC, abstractmethod
 from typing import Tuple
 from uuid import UUID, uuid4
 
-from src.books.application.models import GlobalRatingStatsModel
+from src.books.data.models import GlobalRatingStatsModel
 from src.infrastructure.services.background_task_queue import BackgroundTaskQueue
 from src.books.domain.models import Book, Rating, RatingScore
-from src.books.application.repositories.book_repository import AbstractBookRepo
-from src.books.application.repositories.rating_repository import AbstractRatingRepo
+from src.books.data.book_repository import AbstractBookRepo
+from src.books.data.rating_repository import AbstractRatingRepo
 from src.infrastructure.api.models import Failure, Outcome
 
 
