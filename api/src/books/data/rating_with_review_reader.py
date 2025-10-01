@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session, joinedload
 
 from ..application.models import ReviewWithBookDetailsDTO, RatingWithReviewDTO
 
-from .models import BookModel, RatingModel, ReviewModel
+from .models import RatingModel, ReviewModel
 
 
 class AbstractRatingWithReviewReader(ABC):
@@ -23,6 +23,7 @@ class AbstractRatingWithReviewReader(ABC):
         """
         pass
 
+    # TODO: needs pagination and sorting
     @abstractmethod
     def get_reviews_with_ratings_for_book(self, book_id: UUID) -> list[RatingWithReviewDTO]:
         """
@@ -36,7 +37,7 @@ class RatingWithReviewReader(AbstractRatingWithReviewReader):
 
     def get_rating_with_review_for_user_and_book(self, user_id, book_id):
         rating, review = (self.session.query(RatingModel, ReviewModel)
-            .join(ReviewModel, RatingModel.id == ReviewModel.rating_id)
+            .outerjoin(ReviewModel, RatingModel.id == ReviewModel.rating_id)
             .filter(
                 RatingModel.book_id == book_id,
                 RatingModel.user_id == user_id

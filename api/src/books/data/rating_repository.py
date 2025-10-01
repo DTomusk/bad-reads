@@ -18,24 +18,6 @@ class AbstractRatingRepo(ABC):
         pass
 
     @abstractmethod
-    def get_ratings_by_book_id(self, book_id: UUID) -> list[Rating]:
-        """
-        Get all ratings for a book.
-        :param book_id: The ID of the book to get ratings for.
-        :return: A list of rating objects.
-        """
-        pass
-
-    @abstractmethod
-    def get_rating_by_id(self, rating_id: UUID) -> Rating:
-        """
-        Gets the rating with the given ID
-        :param rating_id: The ID of the rating 
-        :return: A Rating, will return None if it doesn't exist
-        """
-        pass
-
-    @abstractmethod
     def get_ratings_for_ids(self, ids: list[UUID]) -> list[Rating]:
         """
         Gets a list of ratings for the given ids
@@ -43,7 +25,7 @@ class AbstractRatingRepo(ABC):
         pass
 
     @abstractmethod
-    def create_rating(rating: Rating) -> None:
+    def create_rating(rating: Rating):
         """
         Create a new rating in the repository.
         :param rating: The rating object to create.
@@ -52,7 +34,7 @@ class AbstractRatingRepo(ABC):
         pass
 
     @abstractmethod
-    def update_rating(rating: Rating) -> None:
+    def update_rating(rating: Rating):
         """
         Update a rating in the repository.
         :param rating: The rating object to update.
@@ -68,7 +50,7 @@ class AbstractRatingRepo(ABC):
         """
 
     @abstractmethod
-    def add_rating_to_global_stats(rating: Rating) -> None:
+    def add_rating_to_global_stats(rating: Rating):
         """
         Update global rating stats with new rating
         :param rating: The rating needed to be added to the global stats
@@ -101,29 +83,6 @@ class RatingRepo(AbstractRatingRepo):
             love_score=RatingScore(result.love_score),
             shit_score=RatingScore(result.shit_score)
         )
-    
-    def get_ratings_by_book_id(self, book_id: UUID) -> list[Rating]:
-        result = self.session.query(RatingModel).filter(RatingModel.book_id == book_id).all()
-        return [Rating(
-            id=result.id, 
-            book_id=result.book_id, 
-            user_id=result.user_id, 
-            love_score=RatingScore(result.love_score),
-            shit_score=RatingScore(result.shit_score)
-            ) 
-            for result in result]
-    
-    def get_rating_by_id(self, rating_id) -> Rating:
-        result = self.session.query(RatingModel).filter(RatingModel.id == rating_id).first()
-        if not result:
-            return None
-        return Rating(
-            id=result.id,
-            book_id=result.book_id,
-            user_id=result.user_id,
-            love_score=RatingScore(result.love_score),
-            shit_score=RatingScore(result.shit_score)
-        ) 
     
     def get_ratings_for_ids(self, ids):
         result: list[RatingModel] = self.session.query(RatingModel).filter(RatingModel.id.in_(ids)).all()

@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 
-from sqlalchemy import UUID
 from sqlalchemy.orm import Session
 
 from ..domain.models import Author
@@ -8,10 +7,6 @@ from .models import AuthorModel
 from ...infrastructure.utilities.text_normalizer import normalize_text
 
 class AbstractAuthorRepo(ABC):
-    @abstractmethod
-    def get_author_by_id(self, author_id: UUID) -> Author:
-        pass
-
     @abstractmethod
     def get_author_by_name(self, name: str) -> Author:
         pass
@@ -37,12 +32,7 @@ class AuthorRepo(AbstractAuthorRepo):
             name=author.name,
             normalized_name=normalized_name
         )
-
-    def get_author_by_id(self, author_id: UUID) -> Author:
-        result = self.session.query(AuthorModel).filter(AuthorModel.id == author_id).first()
-        if result:
-            return self._create_author_from_db_result(result)
-
+    
     def get_author_by_name(self, name: str) -> Author:
         normalized_name = normalize_text(name)
         result = self.session.query(AuthorModel).filter(AuthorModel.normalized_name == normalized_name).first()

@@ -19,15 +19,6 @@ class AbstractBookRepo(ABC):
         pass
 
     @abstractmethod
-    def get_books_by_ids(self, book_ids: list[UUID]) -> list[Book]:
-        """
-        Get books by their IDs.
-        :param book_ids: The IDs of the books to retrieve.
-        :return: A list of book objects.
-        """
-        pass
-
-    @abstractmethod
     def get_books_alphabetically(self, page: int = 1, page_size: int = 10, sort_order: str = "asc") -> list[Book]:
         """
         Get a page of books ordered by title.
@@ -51,19 +42,6 @@ class AbstractBookRepo(ABC):
     def get_books_by_poos(self, page: int = 1, page_size: int = 10, sort_order: str = "asc") -> list[Book]:
         """
         Get all books ordered by weighted poo rating.
-        :return: A list of book objects.
-        """
-        pass
-
-    @abstractmethod
-    def get_books_by_author(self, author_id: UUID, page: int = 1, page_size: int = 10, sort_by: str = "title", sort_order: str = "asc") -> list[Book]:
-        """
-        Get books by author.
-        :param author_id: The ID of the author to retrieve books for.
-        :param page: The page number to retrieve.
-        :param page_size: The number of books per page.
-        :param sort_by: The field to sort the books by.
-        :param sort_order: The order to sort the books by.
         :return: A list of book objects.
         """
         pass
@@ -175,15 +153,6 @@ class BookRepo(AbstractBookRepo):
         if result:
             return self._create_book_from_db_result(result)
     
-    def get_books_by_ids(self, book_ids: list[UUID]) -> list[Book]:
-        """
-        Get books by their IDs.
-        :param book_ids: The IDs of the books to retrieve.
-        :return: A list of book objects.
-        """
-        result = self.session.query(BookModel).filter(BookModel.id.in_(book_ids)).all()
-        return [self._create_book_from_db_result(book) for book in result]
-    
     def get_books_alphabetically(self, page: int = 1, page_size: int = 10, sort_order: str = "asc") -> list[Book]:
         """
         Get all books.
@@ -224,25 +193,6 @@ class BookRepo(AbstractBookRepo):
             .all())
         return [self._create_book_from_db_result(book) for book in result]
     
-    def get_books_by_author(self, author_id: UUID, page: int = 1, page_size: int = 10, sort_by: str = "title", sort_order: str = "asc") -> list[Book]:
-        """
-        Get books by author.
-        :param author_id: The ID of the author to filter by
-        :param page: The page number for pagination
-        :param page_size: The number of items per page
-        :param sort_by: The field to sort by
-        :param sort_order: The sort order ('asc' or 'desc')
-        :return: A list of book objects.
-        """
-        result = (self.session.query(BookModel)
-            .join(BookModel.authors)
-            .filter(AuthorModel.id == author_id)
-            .order_by(getattr(BookModel, sort_by).asc() if sort_order == "asc" else getattr(BookModel, sort_by).desc())
-            .offset((page - 1) * page_size)
-            .limit(page_size)
-            .all())
-        return [self._create_book_from_db_result(book) for book in result]
-        
     def get_book_by_title_and_author(self, title: str, author_name: str) -> Book:
         """
         Get a book by its title and author.
