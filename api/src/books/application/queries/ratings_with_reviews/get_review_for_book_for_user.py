@@ -1,9 +1,9 @@
 from uuid import UUID
 
 from ....data.rating_with_review_reader import AbstractRatingWithReviewReader
-from ...models.rating_with_review_dto import RatingWithReviewDTO
+from ...models import RatingWithReviewDTO
 
-class GetReview:
+class GetReviewForBookForUser:
     def __init__(self, rating_with_review_reader: AbstractRatingWithReviewReader):
         self.rating_with_review_reader = rating_with_review_reader
 

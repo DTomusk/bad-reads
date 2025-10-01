@@ -4,8 +4,8 @@ from typing import Optional
 from uuid import UUID
 from sqlalchemy.orm import Session
 
-from src.users.domain.models import Email, User, Username
-from src.users.application.models import UserModel
+from ..domain.models import Email, User, Username
+from .models import UserModel
 
 class AbstractUserRepository(ABC):
     @abstractmethod

@@ -2,11 +2,6 @@ from uuid import UUID
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 from fastapi.params import Query
 
-from ..application.queries.ratings_with_reviews.get_review_for_book_for_user import GetReview
-from ..application.queries.ratings_with_reviews.get_reviews_for_user import GetBookReviewsForUser
-from ..application.queries.books.get_book_details import GetBookDetails
-from ..application.queries.books.search_books import SearchBooks
-from ..application.queries.books.get_books import GetBooks
 from .schemas.book_sort_options import BookSortOption
 from .schemas.responses.book_detail_response import BookDetailResponse
 from ...infrastructure.api.models import Outcome
@@ -22,7 +17,7 @@ router = APIRouter()
 # Books: 
 @router.get("/")
 async def get_books(
-    get_books: GetBooks = Depends(get_books_use_case), 
+    get_books = Depends(get_books_use_case), 
     page: int = 1, 
     page_size: int = 10, 
     sort_by: BookSortOption = Query(BookSortOption.alphabetical, description="Sorting option"), 
@@ -37,7 +32,7 @@ async def get_books(
 async def search_books(
         query: str,
         background_tasks: BackgroundTasks,
-        search_books: SearchBooks = Depends(search_books_use_case),
+        search_books = Depends(search_books_use_case),
         page_size: int = 10,
         page: int = 1) -> BookSearchResponse:
     """
@@ -46,10 +41,20 @@ async def search_books(
     book_search_response = search_books.execute(query, page_size, page)
     return book_search_response
 
+@router.get("/my-reviews")
+async def get_my_book_reviews(
+    get_my_book_reviews = Depends(get_my_book_reviews_use_case),
+    user_id=Depends(get_current_user)):
+    """
+    Get reviews of books by the current user.
+    """
+    reviews = get_my_book_reviews.execute(user_id=user_id)
+    return reviews
+
 @router.get("/{book_id}")
 async def get_book_details(
     book_id: UUID, 
-    get_book_details: GetBookDetails = Depends(get_book_details_use_case)):
+    get_book_details = Depends(get_book_details_use_case)):
     """
     Get details of a book by its ID.
     """
@@ -81,20 +86,12 @@ async def rate_book(
         raise HTTPException(status_code=outcome.failure.code, detail=outcome.failure.error)
 
 # Reviews
-@router.get("/my-reviews")
-async def get_my_book_reviews(
-    get_my_book_reviews: GetBookReviewsForUser = Depends(get_my_book_reviews_use_case),
-    user_id: str = Depends(get_current_user)):
-    """
-    Get reviews of books by the current user.
-    """
-    reviews = get_my_book_reviews.execute(user_id=user_id)
-    return reviews
+
 
 @router.get("/{book_id}/rating")
 async def get_rating_for_user(
     book_id: UUID,
-    get_review: GetReview=Depends(get_review_use_case),
+    get_review= Depends(get_review_use_case),
     user_id=Depends(get_current_user)):
     rating_with_review = get_review.execute(book_id, user_id)
 

@@ -11,3 +11,13 @@ class RatingWithReviewDTO:
     shit_score: float
     text: str
     date_created: datetime
+
+@dataclass
+class ReviewWithBookDetailsDTO:
+    love_score: float
+    shit_score: float
+    text: str
+    book_id: UUID
+    picture_url: str
+    title: str
+    

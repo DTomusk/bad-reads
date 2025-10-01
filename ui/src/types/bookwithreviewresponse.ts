@@ -1,7 +1,8 @@
-import { TBook } from "./book";
-import { ReviewResponse } from "./reviewResponse";
-
 export type BookWithReviewResponse = {
-    review: ReviewResponse;
-    book: TBook
+    love_score: number
+    shit_score: number
+    text: string
+    book_id: string
+    picture_url: string
+    title: string
 }

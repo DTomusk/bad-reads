@@ -1,6 +1,6 @@
 from sqlalchemy import UUID, Column, String, Index
 from sqlalchemy.orm import relationship
-from src.infrastructure.db.database import Base
+from ...infrastructure.db.database import Base
 
 
 class UserModel(Base):

@@ -4,7 +4,7 @@ from ...application.queries.books.get_book_details import GetBookDetails
 from ...application.queries.books.get_books import GetBooks
 from ...application.queries.books.search_books import SearchBooks
 from ...application.queries.ratings_with_reviews.get_reviews_for_user import GetBookReviewsForUser
-from ...application.queries.ratings_with_reviews.get_review_for_book_for_user import GetReview
+from ...application.queries.ratings_with_reviews.get_review_for_book_for_user import GetReviewForBookForUser
 
 from ...application.commands.create_rating import CreateRating
 
@@ -41,7 +41,7 @@ def create_rating_use_case(rating_service=Depends(get_rating_service), rating_re
     return CreateRating(rating_service=rating_service, rating_repo=rating_repo, review_repo=review_repo)
 
 def get_review_use_case(rating_with_review_reader=Depends(get_rating_with_review_reader)):
-    return GetReview(rating_with_review_reader=rating_with_review_reader)
+    return GetReviewForBookForUser(rating_with_review_reader=rating_with_review_reader)
 
 def get_books_use_case(book_repo=Depends(get_books_repo)):
     """
@@ -71,8 +71,8 @@ def search_books_use_case(
         background_task_queue=FastAPIBackgroundTaskQueue(background_tasks=background_tasks)
     )
 
-def get_my_book_reviews_use_case(review_repo=Depends(get_reviews_repo), book_repo=Depends(get_books_repo)):
+def get_my_book_reviews_use_case(rating_with_review_reader=Depends(get_rating_with_review_reader)):
     """
     Dependency to provide the GetBooReviewsForUser use case.
     """
-    return GetBookReviewsForUser(review_repository=review_repo, book_repository=book_repo)
+    return GetBookReviewsForUser(rating_with_review_reader=rating_with_review_reader)

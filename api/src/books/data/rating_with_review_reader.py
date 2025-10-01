@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
-from .models import RatingModel, ReviewModel
+from ..application.models import ReviewWithBookDetailsDTO, RatingWithReviewDTO
 
-from ..application.models.rating_with_review_dto import RatingWithReviewDTO
+from .models import BookModel, RatingModel, ReviewModel
 
 
 class AbstractRatingWithReviewReader(ABC):
@@ -17,7 +17,7 @@ class AbstractRatingWithReviewReader(ABC):
         pass
 
     @abstractmethod
-    def get_reviews_with_ratings_for_user(self, user_id: UUID) -> list[RatingWithReviewDTO]:
+    def get_reviews_with_ratings_for_user(self, user_id: UUID) -> list[ReviewWithBookDetailsDTO]:
         """
         Get all the user's reviews and their corresponding ratings
         """
@@ -51,18 +51,28 @@ class RatingWithReviewReader(AbstractRatingWithReviewReader):
         
         return _get_dto_from_models(rating, review)
     
-    def get_reviews_with_ratings_for_user(self, user_id):
+    def get_reviews_with_ratings_for_user(self, user_id) -> list[ReviewWithBookDetailsDTO]:
         results = (
-            self.session.query(RatingModel, ReviewModel)
-            .join(ReviewModel, RatingModel.id == ReviewModel.rating_id)
-            .filter(RatingModel.user_id == user_id)
+            self.session.query(ReviewModel)
+            .filter(ReviewModel.user_id == user_id)
+            .options(
+                    joinedload(ReviewModel.rating), 
+                    joinedload(ReviewModel.book)
+                )
             .all()
         )
 
-        dtos: list[RatingWithReviewDTO] = []
+        dtos: list[ReviewWithBookDetailsDTO] = []
 
-        for rating, review in results: 
-            dtos.append(_get_dto_from_models(rating, review))
+        for review in results: 
+            dtos.append(ReviewWithBookDetailsDTO(
+                love_score=review.rating.love_score,
+                shit_score=review.rating.shit_score,
+                text=review.text,
+                book_id=review.book_id,
+                picture_url=review.book.picture_url,
+                title=review.book.title
+            ))
 
         return dtos
     
