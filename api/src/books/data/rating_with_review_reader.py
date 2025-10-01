@@ -47,15 +47,9 @@ class RatingWithReviewReader(AbstractRatingWithReviewReader):
             return None
         
         if not review:
-            return RatingWithReviewDTO(
-                love_score=rating.love_score,
-                shit_score=rating.shit_score,
-                text=None)
+            return _get_dto_from_rating(rating)
         
-        return RatingWithReviewDTO(
-                love_score=rating.love_score,
-                shit_score=rating.shit_score,
-                text=review.text)
+        return _get_dto_from_models(rating, review)
     
     def get_reviews_with_ratings_for_user(self, user_id):
         results = (
@@ -68,11 +62,7 @@ class RatingWithReviewReader(AbstractRatingWithReviewReader):
         dtos: list[RatingWithReviewDTO] = []
 
         for rating, review in results: 
-            dtos.append(RatingWithReviewDTO(
-                love_score=rating.love_score,
-                shit_score=rating.shit_score,
-                text=review.text
-            ))
+            dtos.append(_get_dto_from_models(rating, review))
 
         return dtos
     
@@ -87,10 +77,26 @@ class RatingWithReviewReader(AbstractRatingWithReviewReader):
         dtos: list[RatingWithReviewDTO] = []
 
         for rating, review in results: 
-            dtos.append(RatingWithReviewDTO(
-                love_score=rating.love_score,
-                shit_score=rating.shit_score,
-                text=review.text
-            ))
+            dtos.append(_get_dto_from_models(rating, review))
 
         return dtos
+    
+def _get_dto_from_rating(rating: RatingModel):
+    return RatingWithReviewDTO(
+        book_id=rating.book_id,
+        user_id=rating.user_id,
+        love_score=rating.love_score,
+        shit_score=rating.shit_score,
+        date_created=None,
+        text=None
+    )
+
+def _get_dto_from_models(rating: RatingModel, review: ReviewModel):
+    return RatingWithReviewDTO(
+        book_id=rating.book_id,
+        user_id=rating.user_id,
+        love_score=rating.love_score,
+        shit_score=rating.shit_score,
+        date_created=review.date_created,
+        text=review.text
+    )

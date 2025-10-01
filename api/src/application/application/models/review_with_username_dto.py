@@ -6,5 +6,6 @@ from datetime import datetime
 class ReviewWithUsernameDTO:
     love_score: float
     shit_score: float
-    review: str
+    text: str
     date_created: datetime
+    username: str
