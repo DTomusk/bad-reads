@@ -2,8 +2,8 @@ from unittest.mock import MagicMock
 from uuid import uuid4
 import pytest
 
-from src.users.application.repositories.user_repository import AbstractUserRepository
-from src.users.application.use_cases.login import Login
+from api.src.users.data.user_repository import AbstractUserRepository
+from api.src.users.application.commands.login import Login
 from src.users.application.utilities.hasher import Hasher
 from src.users.application.utilities.token_service import TokenService
 from src.users.domain.models import Email, User, Username

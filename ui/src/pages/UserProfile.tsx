@@ -17,7 +17,7 @@ export default function UserProfile() {
             )}
             {bookReviews && <Stack>
                 {bookReviews?.map((bookReview) => (
-                    <Fragment key={bookReview.book.id}>
+                    <Fragment key={bookReview.book_id}>
                         <BookWithReview {...bookReview} />
                         <Divider my="md" />
                     </Fragment>

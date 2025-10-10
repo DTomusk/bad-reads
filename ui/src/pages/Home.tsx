@@ -7,8 +7,8 @@ import { useBooks } from "../hooks/useBooks";
 export default function Home() {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
-  const { data: poo_books } = useBooks();
-  const { data: heart_books } = useBooks({sort_by:'most_loved', sort_order:'desc'})
+  const { data: poo_books } = useBooks({}, { enabled: isAuthenticated });
+  const { data: heart_books } = useBooks({sort_by:'most_loved', sort_order:'desc'}, { enabled: isAuthenticated })
   return (
     <Stack>
       <Stack gap="lg" mt="5rem" align="center" mb="5rem"> 
