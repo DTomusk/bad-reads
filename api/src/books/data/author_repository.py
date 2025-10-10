@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from ..domain.models import Author
 from .models import AuthorModel
-from ...infrastructure.utilities.text_normalizer import normalize_text
+from ...infrastructure.application.text_normalizer import normalize_text
 
 class AbstractAuthorRepo(ABC):
     @abstractmethod

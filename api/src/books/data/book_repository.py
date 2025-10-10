@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from ..domain.models import Book
 from .models import BookModel, AuthorModel
-from ...infrastructure.utilities.text_normalizer import normalize_text
+from ...infrastructure.application.text_normalizer import normalize_text
 
 class AbstractBookRepo(ABC):
     @abstractmethod

@@ -8,7 +8,6 @@ from ...infrastructure.api.models import Outcome
 from .dependencies.application import create_rating_use_case, get_book_details_use_case, get_books_use_case, get_my_book_reviews_use_case, get_review_use_case, search_books_use_case
 from .schemas.responses.book_search_response import BookSearchResponse
 from .schemas.requests.rating_request import RatingRequest
-# TODO: maybe this should be in infrastructure or somewhere shared because it will be used everywhere
 from ...users.api.auth import get_current_user
 
 
@@ -25,6 +24,10 @@ async def get_books(
     """
     Get all books.
     """
+    if page_size < 1: 
+        raise HTTPException(status_code=400, detail="Items per page must be greater than 0")
+    if page < 1: 
+        raise HTTPException(status_code=400, detail="Page number must be greater than 0")
     books = get_books.execute(page, page_size, sort_by, sort_order)
     return books
 
@@ -38,6 +41,10 @@ async def search_books(
     """
     Search for books by title.
     """
+    if page_size < 1: 
+        raise HTTPException(status_code=400, detail="Items per page must be greater than 0")
+    if page < 1: 
+        raise HTTPException(status_code=400, detail="Page number must be greater than 0")
     book_search_response = search_books.execute(query, page_size, page)
     return book_search_response
 
@@ -93,6 +100,9 @@ async def get_rating_for_user(
     book_id: UUID,
     get_review= Depends(get_review_use_case),
     user_id=Depends(get_current_user)):
+    """
+    Get the rating and review (if one exists) a user has left a book
+    """
     rating_with_review = get_review.execute(book_id, user_id)
 
     return rating_with_review
