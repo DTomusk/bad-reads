@@ -14,7 +14,7 @@ export function ExpandableText({ text, maxChars = 500 }: ExpandableTextProps) {
 
   return (
     <Box>
-      <Text>{displayText}</Text>
+      <Text mb="md">{displayText}</Text>
       {isLong && (
         <Button variant="outline" size="xs" onClick={() => setExpanded((prev) => !prev)}>
           {expanded ? 'Show less' : 'Read more'}

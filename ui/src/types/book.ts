@@ -1,3 +1,4 @@
+// TODO: we need to decide on a naming convention 
 export type TBook = {
     title: string;
     authors: string[];

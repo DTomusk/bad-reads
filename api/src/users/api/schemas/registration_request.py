@@ -5,6 +5,7 @@ class RegistrationRequest(BaseModel):
     email: str
     password: str
     confirm_password: str
+    username: str
 
     @field_validator('email')
     @classmethod
@@ -27,6 +28,13 @@ class RegistrationRequest(BaseModel):
             raise ValueError('Password is required')
         if v != info.data['password']:
             raise ValueError('Passwords do not match')
+        return v
+    
+    @field_validator('username')
+    @classmethod
+    def validate_username(cls, v):
+        if not re.match(r'^[a-zA-Z0-9_.-]{3,20}$', v):
+            raise ValueError('Username must be 3-20 characters long and can only contain letters, numbers, underscores, hyphens, and periods')
         return v
     
     

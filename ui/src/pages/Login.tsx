@@ -1,73 +1,105 @@
-import { Center } from "@mantine/core";
+import { Anchor, Button, Center, PasswordInput, Stack, TextInput, Title, Group } from "@mantine/core"
+import { useForm } from "@mantine/form";
 import { useLogin } from "../hooks/useLogin";
-import { useNavigate } from "react-router-dom";
-import AuthForm from "./AuthForm";
 import { useAuth } from "../auth/AuthProvider";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import AlertBanner from "../components/Shared/AlertBanner";
+import { useApiErrorHandler } from "../hooks/useApiError";
 
 export default function Login() {
-  const navigate = useNavigate();
-  const { mutate: login, isPending } = useLogin();
-  const { isAuthenticated, login: loginAuth } = useAuth();
+    const location = useLocation();
+    const navigate = useNavigate();
+    const from = location.state?.from || "/";
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/");
-    }
-  }, [isAuthenticated, navigate]);
+    const { mutate: login, isPending } = useLogin();
+    const { isAuthenticated, login: loginAuth } = useAuth();
 
-  const fields = [
-    {
-      name: "email",
-      label: "Email",
-      placeholder: "bad@bad-reads.com",
-      type: "text" as const,
-      validation: (val: string) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
-    },
-    {
-      name: "password",
-      label: "Password",
-      placeholder: "Your password",
-      type: "password" as const,
-      validation: (val: string) =>
-        val.length <= 6
-          ? "Password should include at least 6 characters"
-          : null,
-    },
-  ];
+    const {
+        showErrorAlert,
+        errorMessage,
+        handleError,
+        clearError
+    } = useApiErrorHandler();
 
-  const handleSubmit = (values: Record<string, string>) => {
-    login(
-      {
-        username: values.email,
-        password: values.password,
-      },
-      {
-        onSuccess: (data) => {
-          // Store the token in localStorage
-          loginAuth(data.access_token);
-          // Redirect to home page
-          navigate("/");
+    const form = useForm({
+        initialValues: {
+            email: "",
+            password: "",
         },
-        onError: (error) => {
-          // TODO: Show error message to user
-          console.error("Login failed:", error);
-        },
-      }
-    );
-  };
 
-  return (
-    <Center>
-      <AuthForm
-        title="💅Welcome back💅"
-        fields={fields}
-        submitLabel="Login"
-        alternateLabel="Don't have an account? Register"
-        alternatePath="/register"
-        onSubmit={handleSubmit}
-        isPending={isPending}
-      />
-    </Center>
-  );
+        validate: {
+            email: (value) => /^\S+@\S+$/.test(value) ? null : "Invalid email",
+            password: (value) => value.length <= 6 ? "Password should include at least 6 characters" : null,
+        },
+    });
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate(from, { replace: true });
+        }
+    }, [isAuthenticated, navigate, from]);
+
+    const handleSubmit = (values: typeof form.values) => {
+        
+        login({
+            username: values.email,
+            password: values.password,
+        },
+        {
+            onSuccess: (data) => {
+                loginAuth(data.access_token);
+                navigate(from, { replace: true });
+            },
+            onError: handleError
+        });
+    };
+
+    return (
+        <Center>
+            <form onSubmit={form.onSubmit(handleSubmit)}>
+                <Stack>
+                    <Title ta="center" order={1} mb="sm" mt="xl">💅Welcome back💅</Title>
+                    {showErrorAlert && <AlertBanner title="Login failed" message={errorMessage} type="error" />}
+                    <TextInput 
+                        required 
+                        label="Email" 
+                        placeholder="Email"
+                        {...form.getInputProps('email')}
+                        radius="md"
+                        size="lg"
+                        onFocus={() => clearError()}
+                    />
+                    <PasswordInput 
+                        required 
+                        label="Password" 
+                        placeholder="Password" 
+                        {...form.getInputProps('password')}
+                        radius="md"
+                        size="lg"
+                        onFocus={() => clearError()}
+                    />
+                </Stack>
+
+                <Group justify="space-between" mt="xl">
+                    <Anchor
+                        component="button"
+                        type="button"
+                        onClick={() => navigate("/register")}
+                        size="md"
+                    >
+                    Don't have an account yet? Register
+                    </Anchor>
+                    <Button 
+                        type="submit" 
+                        radius="xl" 
+                        size="lg" 
+                        loading={isPending}
+                    >
+                    Login
+                    </Button>
+                </Group>
+            </form>
+        </Center>
+    )
 }

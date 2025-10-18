@@ -1,8 +1,7 @@
-import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { faHome } from "@fortawesome/free-solid-svg-icons/faHome";
+import { faHome, faUser } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { NavLink, TextInput, Group } from "@mantine/core";
+import { NavLink, TextInput, Group, Flex, Title } from "@mantine/core";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthProvider";

@@ -79,6 +79,12 @@ export const theme = createTheme({
       defaultProps: {
         c: '#FFFFFF',
       },
+      styles: {
+        root: {
+          overflowWrap: 'break-word',
+          maxWidth: '100%',
+        }
+      }
     },
     Title: {
       defaultProps: {
@@ -94,6 +100,10 @@ export const theme = createTheme({
       defaultProps: {
         c: 'white',
         shadow: 'xl',
+      },
+      // 👇 use `classNames` or `vars` instead of `styles`
+      classNames: {
+        root: "custom-button-root",
       },
     },
     Divider: {

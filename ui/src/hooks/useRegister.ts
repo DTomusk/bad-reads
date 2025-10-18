@@ -1,7 +1,10 @@
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import { apiClient } from "../api/apiClient";
+import { AxiosError } from "axios";
+import { ErrorResponse } from "../types/ErrorResponse";
 
 interface RegisterCredentials {
+    username: string;
     password: string;
     confirm_password: string;
     email: string;
@@ -13,7 +16,7 @@ interface RegisterResponse {
     email: string;
 }
 
-export const useRegister = (): UseMutationResult<RegisterResponse, Error, RegisterCredentials> => {
+export const useRegister = (): UseMutationResult<RegisterResponse, AxiosError<ErrorResponse>, RegisterCredentials> => {
     return useMutation({
         mutationFn: async (credentials: RegisterCredentials) => {
             const response = await apiClient.post("/users/register", credentials);

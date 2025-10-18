@@ -17,6 +17,9 @@ import Nav from "./components/Structure/Nav";
 import Footer from "./components/Structure/Footer";
 import BadReadLogo from "./components/BadReadLogo";
 import { useMediaQuery } from "@mantine/hooks";
+import PageNotFound from "./pages/PageNotFound";
+import UserProfile from "./pages/UserProfile";
+import PrivateRoute from "./components/Structure/PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +46,14 @@ const router = createBrowserRouter([
         path: "/search",
         element: <Search />,
       },
+      {
+        path: "/me",
+        element: <PrivateRoute><UserProfile /></PrivateRoute>,
+      },
+      {
+        path: "*",
+        element: <PageNotFound />,
+      }
     ],
   },
 ]);
@@ -107,7 +118,7 @@ function SiteShell() {
         }}
       >
         {/* Note: Container is used to center the content and limit the width */}
-        <Container size="md">
+        <Container size="sm">
           <Outlet />
         </Container>
       </AppShell.Main>
