@@ -1,5 +1,5 @@
 import { Center, Loader, Stack, Title, Text } from "@mantine/core";
-import BookClubCard from "../components/BookClubCard";
+import BookClubCard from "../components/BookClubs/BookClubCard";
 import { useBookClubs } from "../hooks/useBookClubs";
 
 export default function BookClubHome() {

@@ -11,13 +11,13 @@ import {
   Text,
   Loader,
 } from "@mantine/core";
-import MeetingCard from "../components/MeetingCard";
 import { TMeeting } from "../types/meeting";
 import { useDisclosure } from "@mantine/hooks";
-import { AddMeetingForm } from "../components/AddMeetingForm";
-import { AddMemberForm } from "../components/AddMemberForm";
+import { AddMeetingForm } from "../components/BookClubs/Meetings/AddMeetingForm";
+import { AddMemberForm } from "../components/BookClubs/Meetings/AddMemberForm";
 import { useParams } from "react-router-dom";
 import { useBookClub } from "../hooks/useBookClubs";
+import MeetingCard from "../components/BookClubs/Meetings/MeetingCard";
 
 export default function BookClub() {
   let params = useParams();

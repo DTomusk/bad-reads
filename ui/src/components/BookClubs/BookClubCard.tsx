@@ -8,7 +8,7 @@ import {
   Box,
 } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
-import { TBookClub } from "../types/bookClub";
+import { TBookClub } from "../../types/bookClub";
 const stats = [
   { value: 447, label: "Remaining" },
   { value: 76, label: "In progress" },
