@@ -1,4 +1,4 @@
-import { faHome, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faBook, faHome, faUser } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink, TextInput, Group, Flex, Title } from "@mantine/core";
@@ -20,6 +20,11 @@ export default function Nav() {
       label: isAuthenticated ? "Account" : "Login",
       icon: <FontAwesomeIcon icon={faUser} />,
       link: isAuthenticated ? "/account" : "/login",
+    },
+    {
+      label: "Book Clubs",
+      icon: <FontAwesomeIcon icon={faBook} />,
+      link: "/book-clubs",
     },
   ];
 

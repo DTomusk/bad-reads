@@ -9,6 +9,7 @@ from .config import get_settings
 from .books.api.routes import router as books_router
 from .users.api.routes import router as users_router
 from .application.api.routes import router as cross_domain_router
+from .bookclubs.api.routes import router as book_club_router
 
 settings = get_settings()
 
@@ -46,7 +47,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],  # Allow both localhost and 127.0.0.1
+    allow_origins=["http://localhost:5174", "http://127.0.0.1:5174"],  # Allow both localhost and 127.0.0.1
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -65,6 +66,13 @@ app.include_router(
 )
 
 app.include_router(
+    book_club_router,
+    prefix="/api/book-clubs",
+    tags=["book-clubs"]
+)
+
+app.include_router(
     cross_domain_router,
     prefix="/api"
 )
+

@@ -20,6 +20,8 @@ import { useMediaQuery } from "@mantine/hooks";
 import PageNotFound from "./pages/PageNotFound";
 import UserProfile from "./pages/UserProfile";
 import PrivateRoute from "./components/Structure/PrivateRoute";
+import BookClub from "./pages/BookClub";
+import BookClubHome from "./pages/BookClubHome";
 
 const router = createBrowserRouter([
   {
@@ -48,12 +50,24 @@ const router = createBrowserRouter([
       },
       {
         path: "/me",
-        element: <PrivateRoute><UserProfile /></PrivateRoute>,
+        element: (
+          <PrivateRoute>
+            <UserProfile />
+          </PrivateRoute>
+        ),
       },
       {
         path: "*",
         element: <PageNotFound />,
-      }
+      },
+      {
+        path: "/book-clubs",
+        element: <BookClubHome />,
+      },
+      {
+        path: "/book-club/:id",
+        element: <BookClub />,
+      },
     ],
   },
 ]);
