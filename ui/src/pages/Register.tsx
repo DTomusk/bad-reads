@@ -22,7 +22,10 @@ export default function Register() {
       label: "Email",
       placeholder: "bad@bad-reads.com",
       type: "text" as const,
-      validation: (val: string) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
+      validation: (val: string) =>
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(val)
+          ? null
+          : "Invalid email",
     },
     {
       name: "password",
@@ -30,9 +33,9 @@ export default function Register() {
       placeholder: "Your password",
       type: "password" as const,
       validation: (val: string) =>
-        val.length <= 6
-          ? "Password should include at least 6 characters"
-          : null,
+        /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(val)
+          ? null
+          : "Password should include at least 8 characters, a capital and lowercase letter, a special character and a number",
     },
     {
       name: "confirm_password",
@@ -78,4 +81,4 @@ export default function Register() {
       />
     </Center>
   );
-} 
+}

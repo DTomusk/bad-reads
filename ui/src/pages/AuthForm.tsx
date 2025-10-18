@@ -15,7 +15,10 @@ interface FormField {
   label: string;
   placeholder: string;
   type: "text" | "password";
-  validation?: (value: string, values?: Record<string, string>) => string | null;
+  validation?: (
+    value: string,
+    values?: Record<string, string>
+  ) => string | null;
 }
 
 interface AuthFormProps {
@@ -40,13 +43,19 @@ export default function AuthForm({
   const navigate = useNavigate();
 
   const form = useForm({
-    initialValues: fields.reduce((acc, field) => ({ ...acc, [field.name]: "" }), {} as Record<string, string>),
+    initialValues: fields.reduce(
+      (acc, field) => ({ ...acc, [field.name]: "" }),
+      {} as Record<string, string>
+    ),
     validate: fields.reduce(
       (acc, field) => ({
         ...acc,
         [field.name]: field.validation || (() => null),
       }),
-      {} as Record<string, (value: string, values?: Record<string, string>) => string | null>
+      {} as Record<
+        string,
+        (value: string, values?: Record<string, string>) => string | null
+      >
     ),
   });
 
@@ -63,7 +72,8 @@ export default function AuthForm({
           </Title>
         </Group>
         {fields.map((field) => {
-          const InputComponent = field.type === "password" ? PasswordInput : TextInput;
+          const InputComponent =
+            field.type === "password" ? PasswordInput : TextInput;
           return (
             <InputComponent
               key={field.name}
@@ -91,15 +101,10 @@ export default function AuthForm({
         >
           {alternateLabel}
         </Anchor>
-        <Button 
-          type="submit" 
-          radius="xl" 
-          size="lg" 
-          loading={isPending}
-        >
+        <Button type="submit" radius="xl" size="lg" loading={isPending}>
           {submitLabel}
         </Button>
       </Group>
     </form>
   );
-} 
+}
